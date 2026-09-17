@@ -3,26 +3,291 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Personal Hub</title>
+    <title>C2 Vocabulary & Idiom Practice</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: #0f172a; color: #f8fafc; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
-        .container { background-color: #1e293b; padding: 2.5rem; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); max-width: 500px; width: 100%; text-align: center; border: 1px solid #334155; }
-        h1 { color: #38bdf8; font-size: 2rem; margin-bottom: 0.5rem; }
-        p { color: #94a3b8; font-size: 1rem; margin-bottom: 1.5rem; line-height: 1.5; }
-        .links { display: flex; flex-direction: column; gap: 12px; }
-        .btn { background: #0284c7; color: white; text-decoration: none; padding: 12px; border-radius: 8px; font-weight: 600; transition: background 0.2s ease; }
-        .btn:hover { background: #0369a1; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .card {
+            background-color: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 16px;
+            padding: 2rem;
+            max-width: 550px;
+            width: 100%;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+            background-color: #334155;
+            color: #38bdf8;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            color: #38bdf8;
+            margin-bottom: 0.5rem;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .phonetic {
+            color: #94a3b8;
+            font-style: italic;
+            margin-bottom: 1.5rem;
+            min-height: 24px;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            font-size: 0.9rem;
+            color: #94a3b8;
+            margin-bottom: 0.5rem;
+        }
+
+        textarea {
+            width: 100%;
+            height: 90px;
+            background-color: #0f172a;
+            border: 1px solid #475569;
+            border-radius: 8px;
+            padding: 10px;
+            color: #f8fafc;
+            font-size: 0.95rem;
+            resize: none;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        textarea:focus {
+            border-color: #38bdf8;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 1.5rem;
+        }
+
+        button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background-color: #0284c7;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #0369a1;
+        }
+
+        .btn-secondary {
+            background-color: #334155;
+            color: #f8fafc;
+        }
+
+        .btn-secondary:hover {
+            background-color: #475569;
+        }
+
+        .answer-box {
+            background-color: #0f172a;
+            border: 1px dashed #38bdf8;
+            border-radius: 8px;
+            padding: 1.2rem;
+            text-align: left;
+            display: none;
+        }
+
+        .answer-box.visible {
+            display: block;
+        }
+
+        .answer-title {
+            color: #38bdf8;
+            font-size: 0.85rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 0.4rem;
+        }
+
+        .definition {
+            font-size: 1rem;
+            margin-bottom: 0.8rem;
+            line-height: 1.4;
+        }
+
+        .example {
+            font-size: 0.9rem;
+            color: #94a3b8;
+            font-style: italic;
+            border-left: 2px solid #38bdf8;
+            padding-left: 8px;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Welcome</h1>
-        <p>Custom landing page running on GitHub Pages.</p>
-        <div class="links">
-            <a href="https://github.com" class="btn">GitHub Profile</a>
-            <a href="#" class="btn">Project Link</a>
+
+    <div class="card">
+        <span class="badge" id="type-badge">C2 Vocabulary</span>
+        <h1 id="term-display">Loading...</h1>
+        <div class="phonetic" id="phonetic-display"></div>
+
+        <div class="input-group">
+            <label for="user-guess">Type your definition or meaning below:</label>
+            <textarea id="user-guess" placeholder="Write what you think this word/idiom means..."></textarea>
+        </div>
+
+        <div class="btn-group">
+            <button class="btn-secondary" onclick="toggleAnswer()">Reveal Meaning</button>
+            <button class="btn-primary" onclick="generateNewTerm()">Next Word</button>
+        </div>
+
+        <div class="answer-box" id="answer-box">
+            <div class="answer-title">Official Meaning</div>
+            <div class="definition" id="definition-display"></div>
+            <div class="example" id="example-display"></div>
         </div>
     </div>
+
+    <script>
+        const dataset = [
+            {
+                term: "Ubiquitous",
+                type: "C2 Vocabulary",
+                phonetic: "/juːˈbɪk.wə.təs/",
+                definition: "Present, appearing, or found everywhere.",
+                example: "Mobile phones have become ubiquitous in modern society."
+            },
+            {
+                term: "Burn the midnight oil",
+                type: "Idiom",
+                phonetic: "[ Idiom ]",
+                definition: "To work or study late into the night.",
+                example: "The user had to burn the midnight oil to prepare for the upcoming examination."
+            },
+            {
+                term: "Ebullient",
+                type: "C2 Vocabulary",
+                phonetic: "/ɪˈbʊl.i.ənt/",
+                definition: "Cheerful and full of energy; exuberant.",
+                example: "The student was in an ebullient mood after receiving outstanding exam results."
+            },
+            {
+                term: "Bite the bullet",
+                type: "Idiom",
+                phonetic: "[ Idiom ]",
+                definition: "To face a difficult situation with courage and accept the unavoidable consequences.",
+                example: "It was time to bite the bullet and complete the challenging task."
+            },
+            {
+                term: "Ephemeral",
+                type: "C2 Vocabulary",
+                phonetic: "/əˈfem.ər.əl/",
+                definition: "Lasting for a very short time; fleeting.",
+                example: "Fame in the digital age can often be surprisingly ephemeral."
+            },
+            {
+                term: "Fastidious",
+                type: "C2 Vocabulary",
+                phonetic: "/fæsˈtɪd.i.əs/",
+                definition: "Very attentive to and concerned about accuracy and detail.",
+                example: "A fastidious approach to hardware selection ensures optimal PC performance."
+            },
+            {
+                term: "Hit the nail on the head",
+                type: "Idiom",
+                phonetic: "[ Idiom ]",
+                definition: "To describe exactly what is causing a situation or problem.",
+                example: "The analysis hit the nail on the head regarding system requirements."
+            },
+            {
+                term: "Obscure",
+                type: "C2 Vocabulary",
+                phonetic: "/əbˈskjʊər/",
+                definition: "Not discovered or known about; uncertain or difficult to understand.",
+                example: "The text contained several obscure references that required research."
+            },
+            {
+                term: "Throw in the towel",
+                type: "Idiom",
+                phonetic: "[ Idiom ]",
+                definition: "To give up or admit defeat.",
+                example: "Despite the high difficulty, the candidate refused to throw in the towel."
+            },
+            {
+                term: "Synergistic",
+                type: "C2 Vocabulary",
+                phonetic: "/ˌsɪn.əˈdʒɪs.tɪk/",
+                definition: "Working together to create an effect greater than the sum of individual parts.",
+                example: "Combining high-performance components produces a synergistic speed boost."
+            }
+        ];
+
+        let currentItem = null;
+
+        function generateNewTerm() {
+            // Pick a random term from dataset
+            const randomIndex = Math.floor(Math.random() * dataset.length);
+            currentItem = dataset[randomIndex];
+
+            // Update UI text
+            document.getElementById('type-badge').innerText = currentItem.type;
+            document.getElementById('term-display').innerText = currentItem.term;
+            document.getElementById('phonetic-display').innerText = currentItem.phonetic;
+            document.getElementById('definition-display').innerText = currentItem.definition;
+            document.getElementById('example-display').innerText = `"${currentItem.example}"`;
+
+            // Reset input and answer box
+            document.getElementById('user-guess').value = '';
+            document.getElementById('answer-box').classList.remove('visible');
+        }
+
+        function toggleAnswer() {
+            const answerBox = document.getElementById('answer-box');
+            answerBox.classList.toggle('visible');
+        }
+
+        // Initialize on page load
+        window.onload = generateNewTerm;
+    </script>
+
 </body>
 </html>
