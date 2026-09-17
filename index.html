@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nick.yotris1tg | Vocab & Idioms </title>
+    <title>Nick.yotris1tg | C2 Vocab & Idioms</title>
     <style>
         * {
             box-sizing: border-box;
@@ -94,7 +94,7 @@
         }
 
         .input-group {
-            margin-bottom: 1.2rem;
+            margin-bottom: 1rem;
         }
 
         label {
@@ -174,27 +174,26 @@
         }
 
         .feedback-banner {
-            padding: 10px 14px;
+            padding: 12px 14px;
             border-radius: 10px;
             font-size: 0.9rem;
             font-weight: 600;
             margin-bottom: 1rem;
             display: none;
             align-items: center;
-            gap: 8px;
             animation: fadeIn 0.3s ease;
         }
 
         .feedback-correct {
-            background: rgba(16, 185, 129, 0.15);
-            border: 1px solid rgba(16, 185, 129, 0.4);
-            color: #34d399;
+            background: rgba(16, 185, 129, 0.2) !important;
+            border: 1px solid rgba(16, 185, 129, 0.5) !important;
+            color: #34d399 !important;
         }
 
         .feedback-incorrect {
-            background: rgba(239, 68, 68, 0.15);
-            border: 1px solid rgba(239, 68, 68, 0.4);
-            color: #f87171;
+            background: rgba(239, 68, 68, 0.2) !important;
+            border: 1px solid rgba(239, 68, 68, 0.5) !important;
+            color: #f87171 !important;
         }
 
         .answer-box {
@@ -272,8 +271,8 @@
         </div>
 
         <div class="input-group">
-            <label for="user-guess">Your definition guess (English or Vietnamese):</label>
-            <textarea id="user-guess" placeholder="Write your guess here..."></textarea>
+            <label for="user-guess">Your definition guess (Press Enter to check):</label>
+            <textarea id="user-guess" placeholder="Write your guess here and press Enter..."></textarea>
         </div>
 
         <div id="feedback-banner" class="feedback-banner"></div>
@@ -359,6 +358,7 @@
                 phonetic: "/fæsˈtɪd.i.əs/",
                 defEN: "Very attentive to detail and accuracy; meticulous.",
                 defVI: "Cẩn trọng, tỉ mỉ, đòi hỏi cao về độ chính xác.",
+                keywords: ["detail", "meticulous", "accurate", "tỉ mỉ", "cẩn trọng", "chính xác"],
                 example: "A fastidious approach to code writing prevents layout errors."
             },
             {
@@ -402,7 +402,8 @@
             if (!userGuess) {
                 feedback.innerText = "⚠️ Please type a guess first before checking!";
                 feedback.className = "feedback-banner feedback-incorrect";
-                feedback.style.display = "flex";
+                feedback.style.display = "block";
+                revealMeaning();
                 return;
             }
 
@@ -416,13 +417,21 @@
                 feedback.className = "feedback-banner feedback-incorrect";
             }
 
-            feedback.style.display = "flex";
+            feedback.style.display = "block";
             revealMeaning();
         }
 
         function revealMeaning() {
             document.getElementById('answer-box').classList.add('visible');
         }
+
+        // Add Enter key listener to textarea
+        document.getElementById('user-guess').addEventListener('keydown', function(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                checkAnswer();
+            }
+        });
 
         window.onload = generateNewTerm;
     </script>
