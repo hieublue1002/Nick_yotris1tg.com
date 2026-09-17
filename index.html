@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>C2 Vocabulary & Idiom Practice</title>
+    <title>Nick.yotris1tg | C2 Vocab & Idioms</title>
     <style>
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
         }
 
         body {
-            background-color: #0f172a;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
             color: #f8fafc;
             display: flex;
             justify-content: center;
@@ -23,74 +23,105 @@
         }
 
         .card {
-            background-color: #1e293b;
-            border: 1px solid #334155;
-            border-radius: 16px;
-            padding: 2rem;
-            max-width: 550px;
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2.5rem 2rem;
+            max-width: 580px;
             width: 100%;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+            position: relative;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding-bottom: 1rem;
+        }
+
+        .brand {
+            font-weight: 800;
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
+            background: linear-gradient(90deg, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .badge-group {
+            display: flex;
+            gap: 8px;
         }
 
         .badge {
-            display: inline-block;
-            padding: 4px 12px;
-            font-size: 0.8rem;
+            padding: 4px 10px;
+            font-size: 0.75rem;
             font-weight: 700;
             border-radius: 20px;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 1rem;
-            background-color: #334155;
+            letter-spacing: 0.5px;
+            background: rgba(56, 189, 248, 0.1);
             color: #38bdf8;
+            border: 1px solid rgba(56, 189, 248, 0.2);
+        }
+
+        .badge-type {
+            background: rgba(129, 140, 248, 0.1);
+            color: #a5b4fc;
+            border: 1px solid rgba(129, 140, 248, 0.2);
+        }
+
+        .term-container {
+            text-align: center;
+            margin-bottom: 1.5rem;
         }
 
         h1 {
-            font-size: 2.2rem;
-            color: #38bdf8;
-            margin-bottom: 0.5rem;
-            min-height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 0.2rem;
         }
 
         .phonetic {
             color: #94a3b8;
+            font-size: 1rem;
             font-style: italic;
-            margin-bottom: 1.5rem;
-            min-height: 24px;
         }
 
         .input-group {
-            margin-bottom: 1.5rem;
-            text-align: left;
+            margin-bottom: 1.2rem;
         }
 
         label {
             display: block;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: #94a3b8;
             margin-bottom: 0.5rem;
+            font-weight: 500;
         }
 
         textarea {
             width: 100%;
-            height: 90px;
-            background-color: #0f172a;
-            border: 1px solid #475569;
-            border-radius: 8px;
-            padding: 10px;
+            height: 80px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 12px;
             color: #f8fafc;
             font-size: 0.95rem;
             resize: none;
             outline: none;
-            transition: border-color 0.2s;
+            transition: border-color 0.2s, box-shadow 0.2s;
         }
 
         textarea:focus {
             border-color: #38bdf8;
+            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
         }
 
         .btn-group {
@@ -103,87 +134,169 @@
             flex: 1;
             padding: 12px;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+
+        .btn-check {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+        }
+
+        .btn-check:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
         }
 
         .btn-primary {
-            background-color: #0284c7;
+            background: linear-gradient(135deg, #0284c7 0%, #2563eb 100%);
             color: white;
+            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
         }
 
         .btn-primary:hover {
-            background-color: #0369a1;
+            opacity: 0.9;
+            transform: translateY(-1px);
         }
 
         .btn-secondary {
-            background-color: #334155;
+            background: rgba(51, 65, 85, 0.6);
             color: #f8fafc;
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .btn-secondary:hover {
-            background-color: #475569;
+            background: rgba(71, 85, 105, 0.8);
+        }
+
+        .feedback-banner {
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: none;
+            align-items: center;
+            gap: 8px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .feedback-correct {
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.4);
+            color: #34d399;
+        }
+
+        .feedback-incorrect {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            color: #f87171;
         }
 
         .answer-box {
-            background-color: #0f172a;
-            border: 1px dashed #38bdf8;
-            border-radius: 8px;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            border-radius: 12px;
             padding: 1.2rem;
-            text-align: left;
             display: none;
+            animation: fadeIn 0.3s ease;
         }
 
         .answer-box.visible {
             display: block;
         }
 
-        .answer-title {
-            color: #38bdf8;
-            font-size: 0.85rem;
-            font-weight: bold;
-            text-transform: uppercase;
-            margin-bottom: 0.4rem;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .definition {
-            font-size: 1rem;
+        .section-title {
+            color: #38bdf8;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.3rem;
+        }
+
+        .definition-en {
+            font-size: 0.95rem;
             margin-bottom: 0.8rem;
             line-height: 1.4;
+            color: #e2e8f0;
+        }
+
+        .definition-vi {
+            font-size: 0.95rem;
+            margin-bottom: 0.8rem;
+            line-height: 1.4;
+            color: #34d399;
+            font-weight: 500;
         }
 
         .example {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: #94a3b8;
             font-style: italic;
             border-left: 2px solid #38bdf8;
-            padding-left: 8px;
+            padding-left: 10px;
+        }
+
+        .footer {
+            margin-top: 1.5rem;
+            text-align: center;
+            font-size: 0.75rem;
+            color: #64748b;
         }
     </style>
 </head>
 <body>
 
     <div class="card">
-        <span class="badge" id="type-badge">C2 Vocabulary</span>
-        <h1 id="term-display">Loading...</h1>
-        <div class="phonetic" id="phonetic-display"></div>
-
-        <div class="input-group">
-            <label for="user-guess">Type your definition or meaning below:</label>
-            <textarea id="user-guess" placeholder="Write what you think this word/idiom means..."></textarea>
+        <div class="header">
+            <div class="brand">Nick.yotris1tg</div>
+            <div class="badge-group">
+                <span class="badge" id="level-badge">C2</span>
+                <span class="badge badge-type" id="type-badge">Adjective</span>
+            </div>
         </div>
 
+        <div class="term-container">
+            <h1 id="term-display">Loading...</h1>
+            <div class="phonetic" id="phonetic-display"></div>
+        </div>
+
+        <div class="input-group">
+            <label for="user-guess">Your definition guess (English or Vietnamese):</label>
+            <textarea id="user-guess" placeholder="Write your guess here..."></textarea>
+        </div>
+
+        <div id="feedback-banner" class="feedback-banner"></div>
+
         <div class="btn-group">
-            <button class="btn-secondary" onclick="toggleAnswer()">Reveal Meaning</button>
+            <button class="btn-check" onclick="checkAnswer()">Check Answer</button>
+            <button class="btn-secondary" onclick="revealMeaning()">Reveal Only</button>
             <button class="btn-primary" onclick="generateNewTerm()">Next Word</button>
         </div>
 
         <div class="answer-box" id="answer-box">
-            <div class="answer-title">Official Meaning</div>
-            <div class="definition" id="definition-display"></div>
+            <div class="section-title">English Meaning</div>
+            <div class="definition-en" id="definition-en-display"></div>
+
+            <div class="section-title">Nghĩa Tiếng Việt</div>
+            <div class="definition-vi" id="definition-vi-display"></div>
+
+            <div class="section-title">Example</div>
             <div class="example" id="example-display"></div>
+        </div>
+
+        <div class="footer">
+            Powered by GitHub Pages • Nick.yotris1tg
         </div>
     </div>
 
@@ -191,101 +304,126 @@
         const dataset = [
             {
                 term: "Ubiquitous",
-                type: "C2 Vocabulary",
+                level: "C2 Vocab",
+                type: "Adjective",
                 phonetic: "/juːˈbɪk.wə.təs/",
-                definition: "Present, appearing, or found everywhere.",
+                defEN: "Present, appearing, or found everywhere.",
+                defVI: "Có mặt ở khắp mọi nơi, phổ biến rộng rãi.",
+                keywords: ["everywhere", "present", "khắp nơi", "phổ biến", "toàn bộ"],
                 example: "Mobile phones have become ubiquitous in modern society."
             },
             {
                 term: "Burn the midnight oil",
-                type: "Idiom",
-                phonetic: "[ Idiom ]",
-                definition: "To work or study late into the night.",
-                example: "The user had to burn the midnight oil to prepare for the upcoming examination."
+                level: "Idiom",
+                type: "Phrase",
+                phonetic: "[ Phrase / Idiom ]",
+                defEN: "To work or study late into the night.",
+                defVI: "Thức khuya để học tập hoặc làm việc.",
+                keywords: ["late", "night", "work", "study", "thức khuya", "học", "đêm"],
+                example: "Students often burn the midnight oil before major entrance exams."
             },
             {
                 term: "Ebullient",
-                type: "C2 Vocabulary",
+                level: "C2 Vocab",
+                type: "Adjective",
                 phonetic: "/ɪˈbʊl.i.ənt/",
-                definition: "Cheerful and full of energy; exuberant.",
-                example: "The student was in an ebullient mood after receiving outstanding exam results."
+                defEN: "Cheerful and full of energy; exuberant.",
+                defVI: "Sôi nổi, hăng hái, tràn đầy năng lượng.",
+                keywords: ["cheerful", "energy", "sôi nổi", "hăng hái", "năng lượng"],
+                example: "The class was in an ebullient mood after completing the test."
             },
             {
                 term: "Bite the bullet",
-                type: "Idiom",
-                phonetic: "[ Idiom ]",
-                definition: "To face a difficult situation with courage and accept the unavoidable consequences.",
-                example: "It was time to bite the bullet and complete the challenging task."
+                level: "Idiom",
+                type: "Phrase",
+                phonetic: "[ Phrase / Idiom ]",
+                defEN: "To face a difficult situation with courage and get it over with.",
+                defVI: "Cắn răng chịu đựng, dũng cảm đối mặt với khó khăn.",
+                keywords: ["face", "courage", "difficult", "cắn răng", "đối mặt", "chịu đựng"],
+                example: "It was time to bite the bullet and complete the revision task."
             },
             {
                 term: "Ephemeral",
-                type: "C2 Vocabulary",
+                level: "C2 Vocab",
+                type: "Adjective",
                 phonetic: "/əˈfem.ər.əl/",
-                definition: "Lasting for a very short time; fleeting.",
-                example: "Fame in the digital age can often be surprisingly ephemeral."
+                defEN: "Lasting for a very short time; fleeting.",
+                defVI: "Phù du, chóng khánh, chỉ tồn tại trong thời gian ngắn.",
+                keywords: ["short", "fleeting", "phù du", "chóng khánh", "ngắn"],
+                example: "Trends on social media are often ephemeral."
             },
             {
                 term: "Fastidious",
-                type: "C2 Vocabulary",
+                level: "C2 Vocab",
+                type: "Adjective",
                 phonetic: "/fæsˈtɪd.i.əs/",
-                definition: "Very attentive to and concerned about accuracy and detail.",
-                example: "A fastidious approach to hardware selection ensures optimal PC performance."
+                defEN: "Very attentive to detail and accuracy; meticulous.",
+                defVI: "Cẩn trọng, tỉ mỉ, đòi hỏi cao về độ chính xác.",
+                example: "A fastidious approach to code writing prevents layout errors."
             },
             {
                 term: "Hit the nail on the head",
-                type: "Idiom",
-                phonetic: "[ Idiom ]",
-                definition: "To describe exactly what is causing a situation or problem.",
+                level: "Idiom",
+                type: "Phrase",
+                phonetic: "[ Phrase / Idiom ]",
+                defEN: "To describe exactly what is causing a situation or problem.",
+                defVI: "Nói chính xác, đoán trúng phóc vấn đề.",
+                keywords: ["exact", "correct", "trúng", "chính xác", "đúng"],
                 example: "The analysis hit the nail on the head regarding system requirements."
-            },
-            {
-                term: "Obscure",
-                type: "C2 Vocabulary",
-                phonetic: "/əbˈskjʊər/",
-                definition: "Not discovered or known about; uncertain or difficult to understand.",
-                example: "The text contained several obscure references that required research."
-            },
-            {
-                term: "Throw in the towel",
-                type: "Idiom",
-                phonetic: "[ Idiom ]",
-                definition: "To give up or admit defeat.",
-                example: "Despite the high difficulty, the candidate refused to throw in the towel."
-            },
-            {
-                term: "Synergistic",
-                type: "C2 Vocabulary",
-                phonetic: "/ˌsɪn.əˈdʒɪs.tɪk/",
-                definition: "Working together to create an effect greater than the sum of individual parts.",
-                example: "Combining high-performance components produces a synergistic speed boost."
             }
         ];
 
         let currentItem = null;
 
         function generateNewTerm() {
-            // Pick a random term from dataset
             const randomIndex = Math.floor(Math.random() * dataset.length);
             currentItem = dataset[randomIndex];
 
-            // Update UI text
+            document.getElementById('level-badge').innerText = currentItem.level;
             document.getElementById('type-badge').innerText = currentItem.type;
             document.getElementById('term-display').innerText = currentItem.term;
             document.getElementById('phonetic-display').innerText = currentItem.phonetic;
-            document.getElementById('definition-display').innerText = currentItem.definition;
+            document.getElementById('definition-en-display').innerText = currentItem.defEN;
+            document.getElementById('definition-vi-display').innerText = currentItem.defVI;
             document.getElementById('example-display').innerText = `"${currentItem.example}"`;
 
-            // Reset input and answer box
             document.getElementById('user-guess').value = '';
             document.getElementById('answer-box').classList.remove('visible');
+            
+            const feedback = document.getElementById('feedback-banner');
+            feedback.style.display = 'none';
+            feedback.className = 'feedback-banner';
         }
 
-        function toggleAnswer() {
-            const answerBox = document.getElementById('answer-box');
-            answerBox.classList.toggle('visible');
+        function checkAnswer() {
+            const userGuess = document.getElementById('user-guess').value.trim().toLowerCase();
+            const feedback = document.getElementById('feedback-banner');
+
+            if (!userGuess) {
+                feedback.innerText = "⚠️ Please type a guess first before checking!";
+                feedback.className = "feedback-banner feedback-incorrect";
+                feedback.style.display = "flex";
+                return;
+            }
+
+            const isMatch = currentItem.keywords.some(kw => userGuess.includes(kw.toLowerCase()));
+
+            if (isMatch) {
+                feedback.innerText = "✓ Great job! Your guess matches key definitions.";
+                feedback.className = "feedback-banner feedback-correct";
+            } else {
+                feedback.innerText = "✕ Not quite right! Compare your guess with the official meaning below.";
+                feedback.className = "feedback-banner feedback-incorrect";
+            }
+
+            feedback.style.display = "flex";
+            revealMeaning();
         }
 
-        // Initialize on page load
+        function revealMeaning() {
+            document.getElementById('answer-box').classList.add('visible');
+        }
+
         window.onload = generateNewTerm;
     </script>
 
