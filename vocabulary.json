@@ -1,1 +1,402 @@
 
+[
+  {
+    "term": "Bottleneck",
+    "level": "C1",
+    "type": "Noun",
+    "phonetic": "/ˈbɑː.t̬əl.nek/",
+    "defEN": "A point of congestion or blockage, especially in a system.",
+    "defVI": "Điểm nghẽn, nút thắt.",
+    "keywords": ["congestion", "blockage", "nghẽn"],
+    "example": "Pairing a low-end processor with an RTX 5060 creates a severe performance bottleneck."
+  },
+  {
+    "term": "Actuation",
+    "level": "C2",
+    "type": "Noun",
+    "phonetic": "/ˌæk.tʃuˈeɪ.ʃən/",
+    "defEN": "The action of causing a machine or device to operate.",
+    "defVI": "Sự kích hoạt, sự truyền động.",
+    "keywords": ["trigger", "operate", "kích hoạt"],
+    "example": "Magnetic Hall Effect switches allow for precise adjustments to the actuation point."
+  },
+  {
+    "term": "Omniscient",
+    "level": "C2",
+    "type": "Adjective",
+    "phonetic": "/ɑːmˈnɪs.i.ənt/",
+    "defEN": "Knowing everything.",
+    "defVI": "Toàn tri, thông suốt mọi điều.",
+    "keywords": ["all-knowing", "toàn tri"],
+    "example": "The webtoon features a protagonist with an almost omniscient viewpoint of future events."
+  },
+  {
+    "term": "Proficiency",
+    "level": "C1",
+    "type": "Noun",
+    "phonetic": "/prəˈfɪʃ.ən.si/",
+    "defEN": "A high degree of competence or skill; expertise.",
+    "defVI": "Sự thành thạo, sự tài giỏi.",
+    "keywords": ["skill", "competence", "thành thạo"],
+    "example": "Achieving an 8.0 overall band score demonstrates advanced language proficiency."
+  },
+  {
+    "term": "Skeletal",
+    "level": "C1",
+    "type": "Adjective",
+    "phonetic": "/ˈskel.ə.t̬əl/",
+    "defEN": "Relating to or functioning as a skeleton; very thin.",
+    "defVI": "Thuộc bộ xương, dạng khung xương.",
+    "keywords": ["bones", "frame", "khung xương"],
+    "example": "The gaming mouse utilizes a skeletal mecha-style chassis to minimize weight."
+  },
+  {
+    "term": "Immersive",
+    "level": "B2",
+    "type": "Adjective",
+    "phonetic": "/ɪˈmɝː.sɪv/",
+    "defEN": "Providing information or stimulation for a number of senses, completely surrounding an audience.",
+    "defVI": "Đắm chìm, sống động.",
+    "keywords": ["engaging", "surrounding", "đắm chìm"],
+    "example": "Wired in-ear monitors provide a highly immersive audio experience during tactical matches."
+  },
+  {
+    "term": "Thermal",
+    "level": "B2",
+    "type": "Adjective",
+    "phonetic": "/ˈθɝː.məl/",
+    "defEN": "Relating to heat.",
+    "defVI": "Thuộc về nhiệt.",
+    "keywords": ["heat", "temperature", "nhiệt"],
+    "example": "Applying high-quality thermal paste ensures the workstation laptop does not overheat."
+  },
+  {
+    "term": "Mitigate",
+    "level": "C1",
+    "type": "Verb",
+    "phonetic": "/ˈmɪt̬.ə.ɡeɪt/",
+    "defEN": "Make less severe, serious, or painful.",
+    "defVI": "Giảm nhẹ, làm dịu bớt.",
+    "keywords": ["reduce", "lessen", "giảm nhẹ"],
+    "example": "Proper airflow inside the PC case helps mitigate temperature spikes."
+  },
+  {
+    "term": "Unfathomable",
+    "level": "C2",
+    "type": "Adjective",
+    "phonetic": "/ʌnˈfæð.ə.mə.bəl/",
+    "defEN": "Incapable of being fully explored or understood.",
+    "defVI": "Không thể hiểu nổi, không thể đo lường.",
+    "keywords": ["impossible", "understand", "không thể hiểu"],
+    "example": "The scale of the dragon mutations in the game was unfathomable to new players."
+  },
+  {
+    "term": "Bypass",
+    "level": "B2",
+    "type": "Verb",
+    "phonetic": "/ˈbaɪ.pæs/",
+    "defEN": "To go past or around something; to ignore a rule or official system.",
+    "defVI": "Vượt qua, đi vòng qua.",
+    "keywords": ["avoid", "skip", "vượt qua"],
+    "example": "Custom DNS profiles can be configured to bypass certain network restrictions."
+  },
+  {
+    "term": "Revoke",
+    "level": "C1",
+    "type": "Verb",
+    "phonetic": "/rɪˈvoʊk/",
+    "defEN": "To officially cancel a decree, decision, or promise.",
+    "defVI": "Thu hồi, hủy bỏ.",
+    "keywords": ["cancel", "withdraw", "thu hồi"],
+    "example": "Enterprise certificates can be revoked suddenly, breaking sideloaded applications."
+  },
+  {
+    "term": "Precise",
+    "level": "B2",
+    "type": "Adjective",
+    "phonetic": "/prəˈsaɪs/",
+    "defEN": "Exact and accurate.",
+    "defVI": "Chính xác, tỉ mỉ.",
+    "keywords": ["exact", "accurate", "chính xác"],
+    "example": "Rapid trigger technology ensures precise input registration in timing-based games."
+  },
+  {
+    "term": "Inverted",
+    "level": "C1",
+    "type": "Adjective",
+    "phonetic": "/ɪnˈvɝː.t̬ɪd/",
+    "defEN": "Turned upside down or in the opposite position, order, or arrangement.",
+    "defVI": "Đảo ngược.",
+    "keywords": ["reversed", "opposite", "đảo ngược"],
+    "example": "An inverted silhouette creates a striking and mysterious profile picture."
+  },
+  {
+    "term": "Tactical",
+    "level": "B2",
+    "type": "Adjective",
+    "phonetic": "/ˈtæk.tɪ.kəl/",
+    "defEN": "Relating to actions carefully planned to gain a specific military or strategic end.",
+    "defVI": "Thuộc về chiến thuật.",
+    "keywords": ["strategy", "planning", "chiến thuật"],
+    "example": "Success in the shooter requires precise aiming and tactical positioning."
+  },
+  {
+    "term": "Crossover",
+    "level": "B2",
+    "type": "Noun",
+    "phonetic": "/ˈkrɑːsˌoʊ.vɚ/",
+    "defEN": "The combination of two or more distinct styles, ideas, or fictional universes.",
+    "defVI": "Sự kết hợp, sự giao thoa.",
+    "keywords": ["mix", "combination", "giao thoa"],
+    "example": "Fans eagerly analyze narrative crossovers between popular webtoon series."
+  },
+  {
+    "term": "Adaptation",
+    "level": "B2",
+    "type": "Noun",
+    "phonetic": "/ˌæd.əpˈteɪ.ʃən/",
+    "defEN": "A film, television drama, or stage play that has been adapted from a written work.",
+    "defVI": "Bản chuyển thể.",
+    "keywords": ["version", "change", "chuyển thể"],
+    "example": "Live-action drama adaptations often alter the pacing of the original manhwa."
+  },
+  {
+    "term": "Cut corners",
+    "level": "B2",
+    "type": "Idiom",
+    "phonetic": "/kʌt ˈkɔːr.nɚz/",
+    "defEN": "To do something perfunctorily so as to save time or money.",
+    "defVI": "Đốt cháy giai đoạn, làm qua loa.",
+    "keywords": ["cheap", "save time", "qua loa"],
+    "example": "It is never advisable to cut corners when purchasing a computer power supply."
+  },
+  {
+    "term": "In the loop",
+    "level": "C1",
+    "type": "Idiom",
+    "phonetic": "/ɪn ðə luːp/",
+    "defEN": "Aware of information about a particular matter.",
+    "defVI": "Được cập nhật thông tin.",
+    "keywords": ["informed", "aware", "cập nhật"],
+    "example": "Writing letters to friends is a great way to keep them in the loop regarding daily routines."
+  },
+  {
+    "term": "Go back to the drawing board",
+    "level": "B2",
+    "type": "Idiom",
+    "phonetic": "/ɡoʊ bæk tuː ðə ˈdrɑː.ɪŋ bɔːrd/",
+    "defEN": "To start planning a project over from the beginning after a failure.",
+    "defVI": "Bắt đầu lại từ đầu.",
+    "keywords": ["restart", "plan", "bắt đầu lại"],
+    "example": "If the custom DNS profile fails to connect, it is necessary to go back to the drawing board."
+  },
+  {
+    "term": "Acquisition",
+    "level": "C1",
+    "type": "Noun",
+    "phonetic": "/ˌæk.wəˈzɪʃ.ən/",
+    "defEN": "The learning or developing of a skill, habit, or quality.",
+    "defVI": "Sự tiếp thu, sự đạt được.",
+    "keywords": ["learning", "gaining", "tiếp thu"],
+    "example": "Language acquisition requires consistent practice in listening, reading, writing, and speaking."
+  },
+  {
+    "term": "Compatibility",
+    "level": "B2",
+    "type": "Noun",
+    "phonetic": "/kəmˌpæt̬.əˈbɪl.ə.t̬i/",
+    "defEN": "A state in which two things are able to exist or occur together without problems or conflict.",
+    "defVI": "Sự tương thích.",
+    "keywords": ["matching", "working together", "tương thích"],
+    "example": "Motherboard compatibility must be verified before purchasing a DDR5 memory kit."
+  },
+  {
+    "term": "Diagnose",
+    "level": "C1",
+    "type": "Verb",
+    "phonetic": "/ˌdaɪ.əɡˈnoʊz/",
+    "defEN": "To identify the nature of an illness or other problem by examination of the symptoms.",
+    "defVI": "Chẩn đoán.",
+    "keywords": ["identify", "figure out", "chẩn đoán"],
+    "example": "System crashes require careful testing to diagnose underlying hardware faults."
+  },
+  {
+    "term": "Integrate",
+    "level": "B2",
+    "type": "Verb",
+    "phonetic": "/ˈɪn.t̬ə.ɡreɪt/",
+    "defEN": "To combine one thing with another so that they become a whole.",
+    "defVI": "Tích hợp.",
+    "keywords": ["combine", "add", "tích hợp"],
+    "example": "Establishing a routine helps integrate a new domestic pet into the household smoothly."
+  },
+  {
+    "term": "Convoluted",
+    "level": "C1",
+    "type": "Adjective",
+    "phonetic": "/ˈkɑːn.və.luː.t̬ɪd/",
+    "defEN": "Extremely complex and difficult to follow.",
+    "defVI": "Phức tạp, rắc rối.",
+    "keywords": ["complex", "complicated", "phức tạp"],
+    "example": "The lore of long-running anime franchises can become quite convoluted."
+  },
+  {
+    "term": "Elucidate",
+    "level": "C1",
+    "type": "Verb",
+    "phonetic": "/iˈluː.sə.deɪt/",
+    "defEN": "To make something clear; explain.",
+    "defVI": "Làm sáng tỏ, giải thích.",
+    "keywords": ["clear", "explain", "sáng tỏ"],
+    "example": "The technical manual elucidates the process of installing the cooling unit."
+  }
+  {
+    "term": "Equanimity",
+    "level": "C2",
+    "type": "Noun",
+    "phonetic": "/ˌiː.kwəˈnɪm.ə.t̬i/",
+    "defEN": "Mental calmness, composure, and evenness of temper, especially in a difficult situation.",
+    "defVI": "Sự bình tĩnh, thản nhiên, điềm tĩnh.",
+    "keywords": ["calmness", "composure", "bình tĩnh"],
+    "example": "The user handled unexpected hardware failures with remarkable equanimity."
+  },
+  {
+    "term": "Alacrity",
+    "level": "C2",
+    "type": "Noun",
+    "phonetic": "/əˈlæk.rə.t̬i/",
+    "defEN": "Brisk and cheerful readiness.",
+    "defVI": "Sự hăng hái, sốt sắng.",
+    "keywords": ["readiness", "speed", "hăng hái"],
+    "example": "The user accepted the new programming task with great alacrity."
+  },
+  {
+    "term": "Recalcitrant",
+    "level": "C2",
+    "type": "Adjective",
+    "phonetic": "/rɪˈkæl.sə.trənt/",
+    "defEN": "Having an obstinately uncooperative attitude toward authority or discipline.",
+    "defVI": "Ngang bướng, cứng đầu, chống đối.",
+    "keywords": ["stubborn", "uncooperative", "bướng bỉnh"],
+    "example": "Troubleshooting the recalcitrant driver error took several hours."
+  },
+  {
+    "term": "Spurious",
+    "level": "C2",
+    "type": "Adjective",
+    "phonetic": "/ˈspjʊr.i.əs/",
+    "defEN": "Not being what it purports to be; false or fake.",
+    "defVI": "Giả mạo, không có thật.",
+    "keywords": ["fake", "false", "giả"],
+    "example": "Anomalous readings were traced back to spurious data signals."
+  },
+  {
+    "term": "Esoteric",
+    "level": "C2",
+    "type": "Adjective",
+    "phonetic": "/ˌes.əˈter.ɪk/",
+    "defEN": "Intended for or likely to be understood by only a small number of people with a specialized knowledge.",
+    "defVI": "Mang tính chuyên sâu, ít người hiểu.",
+    "keywords": ["obscure", "specialized", "chuyên sâu"],
+    "example": "The user enjoys reading esoteric details about mechanical keyboard switch physics."
+  },
+  {
+    "term": "Burn the candle at both ends",
+    "level": "C1",
+    "type": "Idiom",
+    "phonetic": "/bɝːn ðə ˈkæn.dəl ət boʊθ endz/",
+    "defEN": "To work excessively hard, staying up late and getting up early, risking exhaustion.",
+    "defVI": "Làm việc vắt kiệt sức lực, thức khuya dậy sớm.",
+    "keywords": ["exhaustion", "overwork", "vắt kiệt sức"],
+    "example": "Preparing for specialized high school examinations meant the user was burning the candle at both ends."
+  },
+  {
+    "term": "Hit the books",
+    "level": "B2",
+    "type": "Idiom",
+    "phonetic": "/hɪt ðə bʊks/",
+    "defEN": "To begin studying hard.",
+    "defVI": "Cắm cổ học tập, vùi đầu vào sách vở.",
+    "keywords": ["study", "hard", "học"],
+    "example": "After finishing the gaming session, it was time to hit the books."
+  },
+  {
+    "term": "A blessing in disguise",
+    "level": "C1",
+    "type": "Idiom",
+    "phonetic": "/ə ˈbles.ɪŋ ɪn dɪsˈɡaɪz/",
+    "defEN": "Something that seems bad or unlucky at first, but results in something good later.",
+    "defVI": "Trong cái rủi có cái may.",
+    "keywords": ["fortunate", "luck", "rủi ro"],
+    "example": "Missing the initial app store update window proved to be a blessing in disguise."
+  },
+  {
+    "term": "Once in a blue moon",
+    "level": "B2",
+    "type": "Idiom",
+    "phonetic": "/wʌns ɪn ə bluː muːn/",
+    "defEN": "Very rarely.",
+    "defVI": "Rất hiếm khi, hiếm hoi.",
+    "keywords": ["rarely", "seldom", "hiếm khi"],
+    "example": "High-end hardware components experience critical failures only once in a blue moon."
+  },
+  {
+    "term": "Bite off more than you can chew",
+    "level": "B2",
+    "type": "Idiom",
+    "phonetic": "/baɪt ɔːf mɔːr ðæn juː kæn tʃuː/",
+    "defEN": "To take on a commitment or task that is too large or difficult to handle.",
+    "defVI": "Ôm đồm quá nhiều việc vượt quá khả năng.",
+    "keywords": ["overcommit", "too much", "ôm đồm"],
+    "example": "Attempting to master multiple complex game engines simultaneously is biting off more than one can chew."
+  },
+  {
+    "term": "Peculiarity",
+    "level": "C1",
+    "type": "Noun",
+    "phonetic": "/pɪˌkjuː.liˈær.ə.t̬i/",
+    "defEN": "An odd or unusual feature or habit.",
+    "defVI": "Đặc tính riêng biệt, điểm kỳ lạ.",
+    "keywords": ["oddity", "trait", "điểm lạ"],
+    "example": "A minor software peculiarity required a custom configuration fix."
+  },
+  {
+    "term": "Consolidate",
+    "level": "C1",
+    "type": "Verb",
+    "phonetic": "/kənˈsɑː.lə.deɪt/",
+    "defEN": "To combine (a number of things) into a single more effective or coherent whole.",
+    "defVI": "Củng cố, hợp nhất.",
+    "keywords": ["combine", "merge", "hợp nhất"],
+    "example": "The user decided to consolidate digital storage drives to clear up clutter."
+  },
+  {
+    "term": "Mitigation",
+    "level": "C1",
+    "type": "Noun",
+    "phonetic": "/ˌmɪt̬.əˈɡeɪ.ʃən/",
+    "defEN": "The action of reducing the severity, seriousness, or painfulness of something.",
+    "defVI": "Sự giảm nhẹ, biện pháp giảm thiểu.",
+    "keywords": ["reduction", "easing", "giảm thiểu"],
+    "example": "Proper thermal paste application serves as an effective heat mitigation strategy."
+  },
+  {
+    "term": "Spontaneous",
+    "level": "B2",
+    "type": "Adjective",
+    "phonetic": "/spɑːnˈtân.i.əs/",
+    "defEN": "Performed or occurring as a result of a sudden inner impulse or inclination.",
+    "defVI": "Tự phát, tự nhiên.",
+    "keywords": ["impulsive", "natural", "tự nhiên"],
+    "example": "The user made a spontaneous decision to upgrade the PC graphic card."
+  },
+  {
+    "term": "Scrutinize",
+    "level": "C1",
+    "type": "Verb",
+    "phonetic": "/ˈskruː.tən.aɪz/",
+    "defEN": "To examine or inspect closely and thoroughly.",
+    "defVI": "Xem xét kỹ lưỡng, soi mói.",
+    "keywords": ["examine", "inspect", "xem xét"],
+    "example": "Every single hardware component specification was scrutinized before purchase."
+]
