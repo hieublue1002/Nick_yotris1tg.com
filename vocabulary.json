@@ -1,4 +1,3 @@
-
 [
   {
     "term": "Bottleneck",
@@ -249,7 +248,7 @@
     "defVI": "Làm sáng tỏ, giải thích.",
     "keywords": ["clear", "explain", "sáng tỏ"],
     "example": "The technical manual elucidates the process of installing the cooling unit."
-  }
+  },
   {
     "term": "Equanimity",
     "level": "C2",
@@ -399,4 +398,5 @@
     "defVI": "Xem xét kỹ lưỡng, soi mói.",
     "keywords": ["examine", "inspect", "xem xét"],
     "example": "Every single hardware component specification was scrutinized before purchase."
+  }
 ]
