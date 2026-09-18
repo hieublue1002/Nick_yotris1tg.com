@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CyberAim Pro - Advanced Aim Trainer</title>
+    <title>Nick's Aim Trainer - Cyber Precision Suite</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -25,10 +25,10 @@
             }
         }
     </script>
-    <!-- FontAwesome for futuristic icons -->
+    <!-- FontAwesome icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts: Inter & Rajdhani -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Rajdhani:wght@500;600;700;800&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -40,15 +40,13 @@
         .font-cyber {
             font-family: 'Rajdhani', sans-serif;
         }
-        /* Custom Crosshairs */
         .crosshair-container {
             position: fixed;
             pointer-events: none;
             transform: translate(-50%, -50%);
-            z-index: 99999;
+            z-index: 9999;
             display: none;
         }
-        /* Glassmorphism Cyber Card */
         .cyber-card {
             background: rgba(18, 21, 32, 0.9);
             backdrop-filter: blur(12px);
@@ -61,7 +59,12 @@
             border: 1px solid rgba(255, 0, 127, 0.2);
             box-shadow: 0 0 20px rgba(255, 0, 127, 0.05);
         }
-        /* Neon Button Glow */
+        .cyber-card-yellow {
+            background: rgba(18, 21, 32, 0.9);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(243, 230, 0, 0.2);
+            box-shadow: 0 0 20px rgba(243, 230, 0, 0.05);
+        }
         .btn-cyber-cyan {
             background: linear-gradient(135deg, rgba(0,240,255,0.25), rgba(0,240,255,0.05));
             border: 1px solid #00f0ff;
@@ -88,7 +91,19 @@
             box-shadow: 0 0 15px rgba(255,0,127,0.6);
             color: #ffffff;
         }
-        /* Scanline Overlay Effect - ensure pointer-events: none */
+        .btn-cyber-yellow {
+            background: linear-gradient(135deg, rgba(243,230,0,0.25), rgba(243,230,0,0.05));
+            border: 1px solid #f3e600;
+            color: #f3e600;
+            transition: all 0.2s ease;
+            pointer-events: auto !important;
+            cursor: pointer;
+        }
+        .btn-cyber-yellow:hover {
+            background: rgba(243,230,0,0.4);
+            box-shadow: 0 0 15px rgba(243,230,0,0.6);
+            color: #ffffff;
+        }
         .scanlines {
             background: linear-gradient(
                 rgba(18, 21, 32, 0) 50%, 
@@ -97,52 +112,70 @@
             background-size: 100% 4px;
             pointer-events: none;
         }
-        /* Ensure all interactive buttons and modal contents have working pointer events */
         button, a, input, select {
             pointer-events: auto !important;
         }
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.8; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.03); }
+        }
+        .target-neon {
+            box-shadow: 0 0 15px currentColor;
+            animation: pulseGlow 1.5s infinite ease-in-out;
+        }
     </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between relative scanlines">
+<body class="min-h-screen flex flex-col justify-between relative scanlines bg-cyber-bg text-gray-100">
 
-    <div id="custom-crosshair" class="crosshair-container">
-        <!-- Will be dynamically injected via JS -->
-    </div>
+    <div id="custom-crosshair" class="crosshair-container"></div>
 
-    <!-- Header Navigation -->
-    <header class="w-full border-b border-cyber-border bg-cyber-card/80 backdrop-blur-md px-6 py-4 flex items-center justify-between z-40 relative">
-        <div class="flex items-center space-x-3 pointer-events-auto">
+    <header class="w-full border-b border-cyber-border bg-cyber-card/80 backdrop-blur-md px-4 md:px-8 py-3.5 flex items-center justify-between z-40 relative">
+        <div class="flex items-center space-x-3 cursor-pointer" onclick="returnToMenu()">
             <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyber-cyan to-cyber-magenta flex items-center justify-center shadow-lg shadow-cyber-cyan/20">
-                <i class="fa-solid fa-crosshairs text-cyber-bg text-xl font-bold"></i>
+                <i class="fa-solid fa-bullseye text-cyber-bg text-xl font-bold"></i>
             </div>
             <div>
-                <h1 class="font-cyber text-2xl font-bold tracking-wider text-white">CYBER<span class="text-cyber-cyan">AIM</span> <span class="text-xs px-2 py-0.5 rounded bg-cyber-cyan/10 border border-cyber-cyan/30 text-cyber-cyan ml-1">V2.5</span></h1>
-                <p class="text-xs text-gray-400">Advanced Precision & Reflex Training Arena</p>
+                <h1 class="font-cyber text-2xl font-extrabold tracking-wider text-white">NICK'S <span class="text-cyber-cyan">AIM TRAINER</span> <span class="text-xs px-2 py-0.5 rounded bg-cyber-cyan/10 border border-cyber-cyan/30 text-cyber-cyan ml-1">PRO</span></h1>
+                <p class="text-[11px] text-gray-400 font-medium">Precision Reflex & Tactical Target Calibration</p>
             </div>
         </div>
         
-        <div class="flex items-center space-x-3 z-50 relative pointer-events-auto">
-            <button onclick="openSettingsModal()" class="px-4 py-2 rounded-xl text-sm font-semibold btn-cyber-cyan flex items-center space-x-2">
-                <i class="fa-solid fa-sliders"></i>
-                <span>Settings</span>
+        <div class="flex items-center space-x-2 md:space-x-3 z-50 relative">
+            <button onclick="openWorldRecordsModal()" class="px-3.5 py-2 rounded-xl text-xs md:text-sm font-semibold btn-cyber-yellow flex items-center space-x-2">
+                <i class="fa-solid fa-earth-americas"></i>
+                <span class="hidden sm:inline">World Records</span>
             </button>
-            <button onclick="openStatsModal()" class="px-4 py-2 rounded-xl text-sm font-semibold btn-cyber-magenta flex items-center space-x-2">
+            <button onclick="openSettingsModal()" class="px-3.5 py-2 rounded-xl text-xs md:text-sm font-semibold btn-cyber-cyan flex items-center space-x-2">
+                <i class="fa-solid fa-sliders"></i>
+                <span class="hidden sm:inline">Settings</span>
+            </button>
+            <button onclick="openStatsModal()" class="px-3.5 py-2 rounded-xl text-xs md:text-sm font-semibold btn-cyber-magenta flex items-center space-x-2">
                 <i class="fa-solid fa-chart-line"></i>
-                <span>Records</span>
+                <span class="hidden sm:inline">Records</span>
+            </button>
+            <div class="h-6 w-px bg-cyber-border mx-1"></div>
+            <!-- Auth / Profile Button -->
+            <button id="auth-btn" onclick="handleAuthClick()" class="px-4 py-2 rounded-xl text-xs md:text-sm font-semibold bg-cyber-cyan/10 border border-cyber-cyan/40 text-cyber-cyan hover:bg-cyber-cyan hover:text-cyber-bg transition-all flex items-center space-x-2">
+                <i class="fa-solid fa-user-astronaut"></i>
+                <span id="auth-btn-label">Sign In</span>
             </button>
         </div>
     </header>
 
-    <main class="flex-1 flex flex-col items-center justify-center p-4 relative z-30 pointer-events-none">
+    <main class="flex-1 flex flex-col items-center justify-center p-4 relative z-30 pointer-events-none min-h-[80vh]">
 
         <!-- VIEW 1: MODE SELECTION MENU -->
-        <div id="menu-view" class="w-full max-w-5xl flex flex-col items-center space-y-8 pointer-events-auto">
+        <div id="menu-view" class="w-full max-w-5xl flex flex-col items-center space-y-8 pointer-events-auto my-auto">
             <div class="text-center space-y-2">
-                <h2 class="font-cyber text-4xl md:text-5xl font-extrabold tracking-wider text-white uppercase">Select Training Protocol</h2>
-                <p class="text-gray-400 max-w-lg mx-auto text-sm">Enhance muscle memory, flick velocity, target tracking, and reaction precision with calibrated simulations.</p>
+                <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-cyber-cyan/10 border border-cyber-cyan/30 text-cyber-cyan text-xs font-cyber tracking-widest uppercase mb-1">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <span>Cybernetic Combat Training</span>
+                </div>
+                <h2 class="font-cyber text-4xl md:text-6xl font-extrabold tracking-wider text-white uppercase">Select Protocol</h2>
+                <p class="text-gray-400 max-w-lg mx-auto text-xs md:text-sm">Fine-tune motor responses, snap flicking, precision tracking, and shoot trigger responsiveness.</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-4xl px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-4xl px-2">
                 <!-- Mode 1: Gridshot -->
                 <div onclick="selectGameMode('gridshot')" class="cyber-card rounded-2xl p-6 flex flex-col justify-between cursor-pointer transition-all duration-300 hover:scale-105 hover:border-cyber-cyan group pointer-events-auto">
                     <div>
@@ -150,7 +183,7 @@
                             <i class="fa-solid fa-table-cells"></i>
                         </div>
                         <h3 class="font-cyber text-2xl font-bold text-white mb-2">Gridshot</h3>
-                        <p class="text-gray-400 text-xs leading-relaxed">3 targets spawn simultaneously in a structured grid. Click one to instantly spawn another. Ultimate test of speed and horizontal/vertical transitions.</p>
+                        <p class="text-gray-400 text-xs leading-relaxed">3 targets spawn simultaneously in a structured grid. Destroy one to trigger an immediate spawn. Speed & accuracy trial.</p>
                     </div>
                     <div class="mt-6 pt-4 border-t border-cyber-border flex items-center justify-between text-xs text-cyber-cyan font-semibold">
                         <span>30 Seconds Trial</span>
@@ -165,7 +198,7 @@
                             <i class="fa-solid fa-bolt"></i>
                         </div>
                         <h3 class="font-cyber text-2xl font-bold text-white mb-2">Flick Shot</h3>
-                        <p class="text-gray-400 text-xs leading-relaxed">Targets appear randomly one at a time. Designed specifically for measuring micro-adjustments, reaction latency, and precise snap flicking.</p>
+                        <p class="text-gray-400 text-xs leading-relaxed">Targets appear randomly one by one. Measures micro-adjustments, snap reactions, and individual target burst speed.</p>
                     </div>
                     <div class="mt-6 pt-4 border-t border-cyber-border flex items-center justify-between text-xs text-cyber-magenta font-semibold">
                         <span>25 Targets Trial</span>
@@ -174,13 +207,13 @@
                 </div>
 
                 <!-- Mode 3: Tracking -->
-                <div onclick="selectGameMode('tracking')" class="cyber-card rounded-2xl p-6 flex flex-col justify-between cursor-pointer transition-all duration-300 hover:scale-105 hover:border-cyber-yellow group pointer-events-auto" style="border-color: rgba(243, 230, 0, 0.2);">
+                <div onclick="selectGameMode('tracking')" class="cyber-card-yellow rounded-2xl p-6 flex flex-col justify-between cursor-pointer transition-all duration-300 hover:scale-105 hover:border-cyber-yellow group pointer-events-auto">
                     <div>
                         <div class="w-12 h-12 rounded-xl bg-cyber-yellow/10 border border-cyber-yellow/30 flex items-center justify-center text-cyber-yellow text-xl mb-4 group-hover:bg-cyber-yellow group-hover:text-cyber-bg transition-colors">
-                            <i class="fa-solid fa-bullseye"></i>
+                            <i class="fa-solid fa-crosshairs"></i>
                         </div>
                         <h3 class="font-cyber text-2xl font-bold text-white mb-2">Tracking Sphere</h3>
-                        <p class="text-gray-400 text-xs leading-relaxed">Keep your cursor constantly inside a smoothly bouncing kinetic target sphere. Tests smooth tracking and continuous cursor control.</p>
+                        <p class="text-gray-400 text-xs leading-relaxed">Maintain crosshairs inside a moving kinetic target sphere. Tests smooth cursor control and continuous target lock-on.</p>
                     </div>
                     <div class="mt-6 pt-4 border-t border-cyber-border flex items-center justify-between text-xs text-cyber-yellow font-semibold">
                         <span>30 Seconds Trial</span>
@@ -192,30 +225,30 @@
             <!-- Quick Stats preview banner -->
             <div class="w-full max-w-4xl cyber-card rounded-2xl p-4 flex items-center justify-around text-center pointer-events-auto">
                 <div>
-                    <div class="text-xs text-gray-400 uppercase font-cyber tracking-wider">Gridshot High Score</div>
-                    <div id="home-hs-gridshot" class="text-xl font-bold font-cyber text-cyber-cyan">0</div>
+                    <div class="text-[11px] text-gray-400 uppercase font-cyber tracking-wider">Gridshot Record</div>
+                    <div id="home-hs-gridshot" class="text-2xl font-bold font-cyber text-cyber-cyan">0</div>
                 </div>
                 <div class="h-8 w-px bg-cyber-border"></div>
                 <div>
-                    <div class="text-xs text-gray-400 uppercase font-cyber tracking-wider">Flick Shot Best Time</div>
-                    <div id="home-hs-flick" class="text-xl font-bold font-cyber text-cyber-magenta">0 ms</div>
+                    <div class="text-[11px] text-gray-400 uppercase font-cyber tracking-wider">Flick Shot Best Latency</div>
+                    <div id="home-hs-flick" class="text-2xl font-bold font-cyber text-cyber-magenta">0 ms</div>
                 </div>
                 <div class="h-8 w-px bg-cyber-border"></div>
                 <div>
-                    <div class="text-xs text-gray-400 uppercase font-cyber tracking-wider">Tracking High Score</div>
-                    <div id="home-hs-tracking" class="text-xl font-bold font-cyber text-cyber-yellow">0</div>
+                    <div class="text-[11px] text-gray-400 uppercase font-cyber tracking-wider">Tracking Record</div>
+                    <div id="home-hs-tracking" class="text-2xl font-bold font-cyber text-cyber-yellow">0</div>
                 </div>
             </div>
         </div>
 
         <!-- VIEW 2: GAMEPLAY ARENA -->
-        <div id="game-view" class="w-full max-w-6xl h-[82vh] hidden flex flex-col relative rounded-2xl cyber-card overflow-hidden pointer-events-auto">
+        <div id="game-view" class="w-full max-w-6xl h-[78vh] hidden flex flex-col relative rounded-2xl cyber-card overflow-hidden pointer-events-auto">
             <!-- HUD Top Bar -->
             <div class="w-full bg-cyber-card/95 border-b border-cyber-border px-6 py-3 flex items-center justify-between z-20 pointer-events-auto">
-                <div class="flex items-center space-x-6">
-                    <button onclick="quitGame()" class="text-gray-400 hover:text-white transition-colors flex items-center space-x-2 text-sm font-semibold pointer-events-auto">
+                <div class="flex items-center space-x-4">
+                    <button onclick="quitGame()" class="text-gray-400 hover:text-white transition-colors flex items-center space-x-2 text-xs font-semibold pointer-events-auto px-3 py-1.5 rounded-lg bg-cyber-card border border-cyber-border">
                         <i class="fa-solid fa-arrow-left"></i>
-                        <span>Abort</span>
+                        <span>Abort Protocol</span>
                     </button>
                     <div class="h-4 w-px bg-cyber-border"></div>
                     <div class="flex items-center space-x-2">
@@ -225,81 +258,89 @@
                 </div>
 
                 <!-- Live HUD Stats -->
-                <div class="flex items-center space-x-8">
+                <div class="flex items-center space-x-6 md:space-x-8">
                     <div class="text-center">
-                        <div class="text-[10px] text-gray-400 uppercase font-cyber tracking-wider">Score / Targets</div>
-                        <div id="hud-score" class="text-xl font-bold font-cyber text-white">0</div>
+                        <div class="text-[10px] text-gray-400 uppercase font-cyber tracking-wider">Score / Pops</div>
+                        <div id="hud-score" class="text-lg md:text-xl font-bold font-cyber text-white">0</div>
                     </div>
                     <div class="text-center">
                         <div class="text-[10px] text-gray-400 uppercase font-cyber tracking-wider">Accuracy</div>
-                        <div id="hud-accuracy" class="text-xl font-bold font-cyber text-cyber-green">100%</div>
+                        <div id="hud-accuracy" class="text-lg md:text-xl font-bold font-cyber text-cyber-green">100%</div>
                     </div>
                     <div class="text-center">
                         <div class="text-[10px] text-gray-400 uppercase font-cyber tracking-wider">Combo</div>
-                        <div id="hud-combo" class="text-xl font-bold font-cyber text-cyber-yellow">0x</div>
+                        <div id="hud-combo" class="text-lg md:text-xl font-bold font-cyber text-cyber-yellow">0x</div>
                     </div>
                     <div class="text-center">
                         <div class="text-[10px] text-gray-400 uppercase font-cyber tracking-wider">Time Remaining</div>
-                        <div id="hud-timer" class="text-xl font-bold font-cyber text-cyber-magenta">30.0s</div>
+                        <div id="hud-timer" class="text-lg md:text-xl font-bold font-cyber text-cyber-magenta">30.0s</div>
                     </div>
                 </div>
             </div>
 
-            <!-- Interactive Arena Canvas container -->
-            <div id="arena" class="flex-1 relative cursor-crosshair overflow-hidden pointer-events-auto" onclick="handleArenaClick(event)">
-                <!-- Targets will be dynamically injected here -->
+            <!-- Interactive Arena Container -->
+            <div id="arena" class="flex-1 relative cursor-crosshair overflow-hidden pointer-events-auto bg-[#08090d]" onclick="handleArenaClick(event)" onmousemove="handleArenaMouseMove(event)">
+                <!-- Keybind Trigger Visual Hint -->
+                <div class="absolute bottom-3 left-4 text-[11px] text-gray-500 font-cyber flex items-center space-x-2 pointer-events-none z-10 opacity-75">
+                    <i class="fa-solid fa-keyboard"></i>
+                    <span>Shoot Key: <strong id="hud-keybind-label" class="text-cyber-cyan">Left Click / Spacebar</strong></span>
+                </div>
             </div>
         </div>
 
         <!-- VIEW 3: RESULTS SCREEN -->
-        <div id="results-view" class="w-full max-w-2xl hidden flex flex-col items-center space-y-6 cyber-card rounded-3xl p-8 relative overflow-hidden pointer-events-auto">
+        <div id="results-view" class="w-full max-w-2xl hidden flex flex-col items-center space-y-6 cyber-card rounded-3xl p-6 md:p-8 relative overflow-hidden pointer-events-auto my-auto">
             <div class="absolute -top-24 -right-24 w-48 h-48 bg-cyber-cyan/10 rounded-full blur-3xl pointer-events-none"></div>
             <div class="absolute -bottom-24 -left-24 w-48 h-48 bg-cyber-magenta/10 rounded-full blur-3xl pointer-events-none"></div>
 
             <div class="text-center space-y-1">
-                <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-cyber-cyan/10 border border-cyber-cyan/30 text-cyber-cyan text-2xl mb-2 shadow-lg shadow-cyber-cyan/20">
+                <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-cyber-cyan/10 border border-cyber-cyan/30 text-cyber-cyan text-2xl mb-1 shadow-lg shadow-cyber-cyan/20">
                     <i class="fa-solid fa-trophy"></i>
                 </div>
-                <h2 class="font-cyber text-3xl font-extrabold tracking-wider text-white">TRAINING SESSION COMPLETE</h2>
+                <h2 class="font-cyber text-3xl font-extrabold tracking-wider text-white uppercase">Session Complete</h2>
                 <p id="results-mode-subtitle" class="text-xs text-cyber-cyan uppercase font-cyber tracking-widest">Gridshot Protocol</p>
             </div>
 
             <!-- Score Highlight Box -->
-            <div class="w-full bg-cyber-card/80 border border-cyber-border rounded-2xl p-6 text-center">
-                <div class="text-xs text-gray-400 uppercase font-cyber tracking-wider mb-1">Final Performance Score</div>
+            <div class="w-full bg-cyber-card/80 border border-cyber-border rounded-2xl p-5 text-center">
+                <div class="text-xs text-gray-400 uppercase font-cyber tracking-wider mb-1">Final Performance Rating</div>
                 <div id="res-score" class="text-5xl font-extrabold font-cyber text-white tracking-tight">0</div>
                 <div id="res-new-highscore" class="hidden mt-2 inline-block px-3 py-1 rounded-full bg-cyber-yellow/10 border border-cyber-yellow/40 text-cyber-yellow text-xs font-bold font-cyber animate-pulse">
-                    <i class="fa-solid fa-star mr-1"></i> NEW HIGH SCORE RECORD!
+                    <i class="fa-solid fa-star mr-1"></i> NEW PERSONAL HIGH SCORE!
                 </div>
             </div>
 
             <!-- Detailed Metrics Grid -->
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 w-full">
-                <div class="cyber-card rounded-xl p-4 text-center">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3.5 w-full">
+                <div class="cyber-card rounded-xl p-3.5 text-center">
                     <div class="text-[10px] text-gray-400 uppercase font-cyber">Accuracy</div>
-                    <div id="res-accuracy" class="text-xl font-bold font-cyber text-cyber-green mt-1">0%</div>
+                    <div id="res-accuracy" class="text-xl font-bold font-cyber text-cyber-green mt-0.5">0%</div>
                 </div>
-                <div class="cyber-card rounded-xl p-4 text-center">
+                <div class="cyber-card rounded-xl p-3.5 text-center">
                     <div class="text-[10px] text-gray-400 uppercase font-cyber">Avg Reaction</div>
-                    <div id="res-reaction" class="text-xl font-bold font-cyber text-cyber-cyan mt-1">0 ms</div>
+                    <div id="res-reaction" class="text-xl font-bold font-cyber text-cyber-cyan mt-0.5">0 ms</div>
                 </div>
-                <div class="cyber-card rounded-xl p-4 text-center">
+                <div class="cyber-card rounded-xl p-3.5 text-center">
                     <div class="text-[10px] text-gray-400 uppercase font-cyber">Hits / Misses</div>
-                    <div id="res-hits-misses" class="text-xl font-bold font-cyber text-white mt-1">0 / 0</div>
+                    <div id="res-hits-misses" class="text-xl font-bold font-cyber text-white mt-0.5">0 / 0</div>
                 </div>
-                <div class="cyber-card rounded-xl p-4 text-center">
+                <div class="cyber-card rounded-xl p-3.5 text-center">
                     <div class="text-[10px] text-gray-400 uppercase font-cyber">Max Combo</div>
-                    <div id="res-combo" class="text-xl font-bold font-cyber text-cyber-yellow mt-1">0x</div>
+                    <div id="res-combo" class="text-xl font-bold font-cyber text-cyber-yellow mt-0.5">0x</div>
                 </div>
             </div>
 
-            <!-- Action Buttons -->
-            <div class="flex items-center space-x-4 w-full pt-2 pointer-events-auto">
-                <button onclick="restartCurrentGame()" class="flex-1 py-3 rounded-xl font-semibold btn-cyber-cyan font-cyber tracking-wider text-base flex items-center justify-center space-x-2 pointer-events-auto">
-                    <i class="fa-solid fa-rotate-right"></i>
-                    <span>RETRY PROTOCOL</span>
+            <!-- Action Buttons including REPLAY -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full pt-2 pointer-events-auto">
+                <button onclick="startReplayPlayback()" class="py-3 rounded-xl font-semibold btn-cyber-yellow font-cyber tracking-wider text-sm flex items-center justify-center space-x-2 pointer-events-auto">
+                    <i class="fa-solid fa-circle-play"></i>
+                    <span>WATCH REPLAY</span>
                 </button>
-                <button onclick="returnToMenu()" class="flex-1 py-3 rounded-xl font-semibold bg-cyber-card border border-cyber-border text-gray-300 hover:text-white hover:border-gray-500 font-cyber tracking-wider text-base flex items-center justify-center space-x-2 transition-all pointer-events-auto">
+                <button onclick="restartCurrentGame()" class="py-3 rounded-xl font-semibold btn-cyber-cyan font-cyber tracking-wider text-sm flex items-center justify-center space-x-2 pointer-events-auto">
+                    <i class="fa-solid fa-rotate-right"></i>
+                    <span>RETRY SESSION</span>
+                </button>
+                <button onclick="returnToMenu()" class="py-3 rounded-xl font-semibold bg-cyber-card border border-cyber-border text-gray-300 hover:text-white hover:border-gray-500 font-cyber tracking-wider text-sm flex items-center justify-center space-x-2 transition-all pointer-events-auto">
                     <i class="fa-solid fa-house"></i>
                     <span>MAIN MENU</span>
                 </button>
@@ -310,7 +351,7 @@
 
     <!-- SETTINGS MODAL -->
     <div id="settings-modal" class="fixed inset-0 bg-black/85 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 pointer-events-auto">
-        <div class="cyber-card w-full max-w-lg rounded-3xl p-6 space-y-6 relative border border-cyber-cyan/30 pointer-events-auto">
+        <div class="cyber-card w-full max-w-lg rounded-3xl p-6 space-y-5 relative border border-cyber-cyan/30 pointer-events-auto max-h-[90vh] overflow-y-auto">
             <div class="flex items-center justify-between border-b border-cyber-border pb-4">
                 <div class="flex items-center space-x-3">
                     <div class="w-10 h-10 rounded-xl bg-cyber-cyan/10 border border-cyber-cyan/30 flex items-center justify-center text-cyber-cyan">
@@ -318,75 +359,92 @@
                     </div>
                     <h3 class="font-cyber text-2xl font-bold text-white">Trainer Settings</h3>
                 </div>
-                <button onclick="closeSettingsModal()" class="text-gray-400 hover:text-white text-lg p-2 pointer-events-auto">
+                <button onclick="closeSettingsModal()" class="text-gray-400 hover:text-white text-lg p-2">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
 
-            <div class="space-y-5">
+            <div class="space-y-4">
+                <!-- Keybinds for Shooting -->
+                <div class="space-y-2">
+                    <label class="text-xs uppercase font-cyber text-gray-300 flex justify-between items-center">
+                        <span>Shoot Trigger Keybind</span>
+                        <span id="val-keybind-display" class="text-cyber-yellow font-bold bg-cyber-yellow/10 border border-cyber-yellow/30 px-2 py-0.5 rounded text-[11px]">Spacebar</span>
+                    </label>
+                    <div class="flex items-center space-x-3">
+                        <button id="btn-bind-key" onclick="startKeybindCapture()" class="flex-1 py-2.5 rounded-xl text-xs font-semibold btn-cyber-yellow transition-all flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-keyboard"></i>
+                            <span id="btn-bind-key-text">Click to Assign Keybind</span>
+                        </button>
+                        <button onclick="resetKeybind()" class="px-3 py-2.5 rounded-xl text-xs font-semibold bg-cyber-card border border-cyber-border text-gray-400 hover:text-white">
+                            Reset (Mouse Only)
+                        </button>
+                    </div>
+                </div>
+
                 <!-- Target Size Setting -->
                 <div class="space-y-2">
                     <label class="text-xs uppercase font-cyber text-gray-300 flex justify-between">
-                        <span>Target Size</span>
+                        <span>Target Dimension</span>
                         <span id="val-target-size" class="text-cyber-cyan font-bold">Medium (60px)</span>
                     </label>
-                    <div class="grid grid-cols-3 gap-3">
-                        <button onclick="setTargetSize('small')" id="btn-size-small" class="py-2 rounded-xl text-xs font-semibold bg-cyber-card border border-cyber-border text-gray-300 hover:border-cyber-cyan transition-all pointer-events-auto">Small (40px)</button>
-                        <button onclick="setTargetSize('medium')" id="btn-size-medium" class="py-2 rounded-xl text-xs font-semibold btn-cyber-cyan transition-all pointer-events-auto">Medium (60px)</button>
-                        <button onclick="setTargetSize('large')" id="btn-size-large" class="py-2 rounded-xl text-xs font-semibold bg-cyber-card border border-cyber-border text-gray-300 hover:border-cyber-cyan transition-all pointer-events-auto">Large (80px)</button>
+                    <div class="grid grid-cols-3 gap-2.5">
+                        <button onclick="setTargetSize('small')" id="btn-size-small" class="py-2 rounded-xl text-xs font-semibold bg-cyber-card border border-cyber-border text-gray-300 hover:border-cyber-cyan">Small (40px)</button>
+                        <button onclick="setTargetSize('medium')" id="btn-size-medium" class="py-2 rounded-xl text-xs font-semibold btn-cyber-cyan">Medium (60px)</button>
+                        <button onclick="setTargetSize('large')" id="btn-size-large" class="py-2 rounded-xl text-xs font-semibold bg-cyber-card border border-cyber-border text-gray-300 hover:border-cyber-cyan">Large (80px)</button>
                     </div>
                 </div>
 
                 <!-- Target Style Setting -->
                 <div class="space-y-2">
                     <label class="text-xs uppercase font-cyber text-gray-300 flex justify-between">
-                        <span>Target Aesthetic Style</span>
+                        <span>Target Aesthetic</span>
                         <span id="val-target-style" class="text-cyber-cyan font-bold">Neon Glow</span>
                     </label>
-                    <div class="grid grid-cols-3 gap-3">
-                        <button onclick="setTargetStyle('neon')" id="btn-style-neon" class="py-2 rounded-xl text-xs font-semibold btn-cyber-cyan transition-all pointer-events-auto">Neon Glow</button>
-                        <button onclick="setTargetStyle('solid')" id="btn-style-solid" class="py-2 rounded-xl text-xs font-semibold bg-cyber-card border border-cyber-border text-gray-300 hover:border-cyber-cyan transition-all pointer-events-auto">Solid Circle</button>
-                        <button onclick="setTargetStyle('bullseye')" id="btn-style-bullseye" class="py-2 rounded-xl text-xs font-semibold bg-cyber-card border border-cyber-border text-gray-300 hover:border-cyber-cyan transition-all pointer-events-auto">Bullseye</button>
+                    <div class="grid grid-cols-3 gap-2.5">
+                        <button onclick="setTargetStyle('neon')" id="btn-style-neon" class="py-2 rounded-xl text-xs font-semibold btn-cyber-cyan">Neon Glow</button>
+                        <button onclick="setTargetStyle('solid')" id="btn-style-solid" class="py-2 rounded-xl text-xs font-semibold bg-cyber-card border border-cyber-border text-gray-300 hover:border-cyber-cyan">Solid Circle</button>
+                        <button onclick="setTargetStyle('bullseye')" id="btn-style-bullseye" class="py-2 rounded-xl text-xs font-semibold bg-cyber-card border border-cyber-border text-gray-300 hover:border-cyber-cyan">Bullseye</button>
                     </div>
                 </div>
 
-                <!-- Crosshair Type Setting -->
+                <!-- Crosshair Design -->
                 <div class="space-y-2">
                     <label class="text-xs uppercase font-cyber text-gray-300 flex justify-between">
-                        <span>Crosshair Design</span>
+                        <span>Crosshair Geometry</span>
                         <span id="val-crosshair" class="text-cyber-cyan font-bold">Plus (Cross)</span>
                     </label>
                     <div class="grid grid-cols-4 gap-2">
-                        <button onclick="setCrosshairType('dot')" id="btn-ch-dot" class="py-2 rounded-xl text-xs font-semibold bg-cyber-card border border-cyber-border text-gray-300 pointer-events-auto">Dot</button>
-                        <button onclick="setCrosshairType('plus')" id="btn-ch-plus" class="py-2 rounded-xl text-xs font-semibold btn-cyber-cyan pointer-events-auto">Plus</button>
-                        <button onclick="setCrosshairType('circle')" id="btn-ch-circle" class="py-2 rounded-xl text-xs font-semibold bg-cyber-card border border-cyber-border text-gray-300 pointer-events-auto">Circle</button>
-                        <button onclick="setCrosshairType('classic')" id="btn-ch-classic" class="py-2 rounded-xl text-xs font-semibold bg-cyber-card border border-cyber-border text-gray-300 pointer-events-auto">Classic</button>
+                        <button onclick="setCrosshairType('dot')" id="btn-ch-dot" class="py-2 rounded-xl text-xs font-semibold bg-cyber-card border border-cyber-border text-gray-300">Dot</button>
+                        <button onclick="setCrosshairType('plus')" id="btn-ch-plus" class="py-2 rounded-xl text-xs font-semibold btn-cyber-cyan">Plus</button>
+                        <button onclick="setCrosshairType('circle')" id="btn-ch-circle" class="py-2 rounded-xl text-xs font-semibold bg-cyber-card border border-cyber-border text-gray-300">Circle</button>
+                        <button onclick="setCrosshairType('classic')" id="btn-ch-classic" class="py-2 rounded-xl text-xs font-semibold bg-cyber-card border border-cyber-border text-gray-300">Classic</button>
                     </div>
                 </div>
 
-                <!-- Crosshair Color Setting -->
+                <!-- Crosshair Color -->
                 <div class="space-y-2">
                     <label class="text-xs uppercase font-cyber text-gray-300 flex justify-between">
-                        <span>Crosshair Color</span>
+                        <span>Crosshair Palette</span>
                         <span id="val-ch-color" class="text-cyber-cyan font-bold">Cyan</span>
                     </label>
-                    <div class="flex items-center space-x-3 pointer-events-auto">
-                        <button onclick="setCrosshairColor('#00f0ff')" class="w-8 h-8 rounded-full bg-[#00f0ff] border-2 border-white/45 shadow-sm cursor-pointer"></button>
-                        <button onclick="setCrosshairColor('#ff007f')" class="w-8 h-8 rounded-full bg-[#ff007f] border-2 border-white/20 shadow-sm cursor-pointer"></button>
-                        <button onclick="setCrosshairColor('#f3e600')" class="w-8 h-8 rounded-full bg-[#f3e600] border-2 border-white/20 shadow-sm cursor-pointer"></button>
-                        <button onclick="setCrosshairColor('#00ff66')" class="w-8 h-8 rounded-full bg-[#00ff66] border-2 border-white/20 shadow-sm cursor-pointer"></button>
-                        <button onclick="setCrosshairColor('#ffffff')" class="w-8 h-8 rounded-full bg-[#ffffff] border-2 border-white/20 shadow-sm cursor-pointer"></button>
+                    <div class="flex items-center space-x-3">
+                        <button onclick="setCrosshairColor('#00f0ff')" class="w-8 h-8 rounded-full bg-[#00f0ff] border-2 border-white/45 cursor-pointer"></button>
+                        <button onclick="setCrosshairColor('#ff007f')" class="w-8 h-8 rounded-full bg-[#ff007f] border-2 border-white/20 cursor-pointer"></button>
+                        <button onclick="setCrosshairColor('#f3e600')" class="w-8 h-8 rounded-full bg-[#f3e600] border-2 border-white/20 cursor-pointer"></button>
+                        <button onclick="setCrosshairColor('#00ff66')" class="w-8 h-8 rounded-full bg-[#00ff66] border-2 border-white/20 cursor-pointer"></button>
+                        <button onclick="setCrosshairColor('#ffffff')" class="w-8 h-8 rounded-full bg-[#ffffff] border-2 border-white/20 cursor-pointer"></button>
                     </div>
                 </div>
             </div>
 
-            <div class="pt-4 border-t border-cyber-border flex justify-end pointer-events-auto">
-                <button onclick="closeSettingsModal()" class="px-6 py-2.5 rounded-xl font-semibold btn-cyber-cyan font-cyber text-sm pointer-events-auto">SAVE & CLOSE</button>
+            <div class="pt-4 border-t border-cyber-border flex justify-end">
+                <button onclick="closeSettingsModal()" class="px-6 py-2.5 rounded-xl font-semibold btn-cyber-cyan font-cyber text-sm">SAVE & CLOSE</button>
             </div>
         </div>
     </div>
 
-    <!-- STATS / LEADERBOARD MODAL -->
+    <!-- STATS / LOCAL RECORDS MODAL -->
     <div id="stats-modal" class="fixed inset-0 bg-black/85 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 pointer-events-auto">
         <div class="cyber-card-magenta w-full max-w-lg rounded-3xl p-6 space-y-6 relative border border-cyber-magenta/30 pointer-events-auto">
             <div class="flex items-center justify-between border-b border-cyber-border pb-4">
@@ -394,26 +452,26 @@
                     <div class="w-10 h-10 rounded-xl bg-cyber-magenta/10 border border-cyber-magenta/30 flex items-center justify-center text-cyber-magenta">
                         <i class="fa-solid fa-chart-line"></i>
                     </div>
-                    <h3 class="font-cyber text-2xl font-bold text-white">Performance Records</h3>
+                    <h3 class="font-cyber text-2xl font-bold text-white">Personal Best Records</h3>
                 </div>
-                <button onclick="closeStatsModal()" class="text-gray-400 hover:text-white text-lg p-2 pointer-events-auto">
+                <button onclick="closeStatsModal()" class="text-gray-400 hover:text-white text-lg p-2">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
 
-            <div class="space-y-4">
+            <div class="space-y-3.5">
                 <div class="cyber-card rounded-2xl p-4 flex items-center justify-between">
                     <div>
                         <div class="text-xs text-gray-400 uppercase font-cyber">Gridshot High Score</div>
-                        <div class="text-xs text-gray-500">Max targets popped in 30s</div>
+                        <div class="text-[11px] text-gray-500">Max targets popped in 30s</div>
                     </div>
                     <div id="modal-hs-gridshot" class="text-2xl font-bold font-cyber text-cyber-cyan">0</div>
                 </div>
 
                 <div class="cyber-card rounded-2xl p-4 flex items-center justify-between">
                     <div>
-                        <div class="text-xs text-gray-400 uppercase font-cyber">Flick Shot Best Time</div>
-                        <div class="text-xs text-gray-500">Average reaction per target</div>
+                        <div class="text-xs text-gray-400 uppercase font-cyber">Flick Shot Best Latency</div>
+                        <div class="text-[11px] text-gray-500">Lowest average response time</div>
                     </div>
                     <div id="modal-hs-flick" class="text-2xl font-bold font-cyber text-cyber-magenta">0 ms</div>
                 </div>
@@ -421,21 +479,155 @@
                 <div class="cyber-card rounded-2xl p-4 flex items-center justify-between">
                     <div>
                         <div class="text-xs text-gray-400 uppercase font-cyber">Tracking High Score</div>
-                        <div class="text-xs text-gray-500">Best kinetic score</div>
+                        <div class="text-[11px] text-gray-500">Peak kinetic lock-on score</div>
                     </div>
                     <div id="modal-hs-tracking" class="text-2xl font-bold font-cyber text-cyber-yellow">0</div>
                 </div>
             </div>
 
-            <div class="pt-4 border-t border-cyber-border flex justify-between items-center pointer-events-auto">
-                <button onclick="clearLocalScores()" class="px-4 py-2 rounded-xl text-xs font-semibold bg-red-500/10 border border-red-500/30 text-red-400 hover:bg-red-500/20 transition-all pointer-events-auto">Clear All Data</button>
-                <button onclick="closeStatsModal()" class="px-6 py-2.5 rounded-xl font-semibold btn-cyber-magenta font-cyber text-sm pointer-events-auto">CLOSE</button>
+            <div class="pt-4 border-t border-cyber-border flex justify-between items-center">
+                <button onclick="clearLocalScores()" class="px-4 py-2 rounded-xl text-xs font-semibold bg-red-500/10 border border-red-500/30 text-red-400 hover:bg-red-500/20">Clear Local Stats</button>
+                <button onclick="closeStatsModal()" class="px-6 py-2.5 rounded-xl font-semibold btn-cyber-magenta font-cyber text-sm">CLOSE</button>
             </div>
         </div>
     </div>
 
-    <script>
-        // Web Audio API Sound Synthesizer
+    <!-- WORLD RECORDS / GLOBAL LEADERBOARD MODAL -->
+    <div id="world-records-modal" class="fixed inset-0 bg-black/85 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 pointer-events-auto">
+        <div class="cyber-card-yellow w-full max-w-2xl rounded-3xl p-6 space-y-5 relative border border-cyber-yellow/40 pointer-events-auto max-h-[85vh] flex flex-col">
+            <div class="flex items-center justify-between border-b border-cyber-border pb-4">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-cyber-yellow/10 border border-cyber-yellow/30 flex items-center justify-center text-cyber-yellow">
+                        <i class="fa-solid fa-earth-americas"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-cyber text-2xl font-bold text-white">Global World Records</h3>
+                        <p class="text-[11px] text-gray-400">Live Firebase Global Leaderboard</p>
+                    </div>
+                </div>
+                <button onclick="closeWorldRecordsModal()" class="text-gray-400 hover:text-white text-lg p-2">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Tab selection -->
+            <div class="flex space-x-2 border-b border-cyber-border pb-3">
+                <button id="tab-lb-gridshot" onclick="switchLeaderboardTab('gridshot')" class="px-4 py-1.5 rounded-lg text-xs font-cyber font-bold btn-cyber-cyan">Gridshot</button>
+                <button id="tab-lb-flick" onclick="switchLeaderboardTab('flick')" class="px-4 py-1.5 rounded-lg text-xs font-cyber font-bold bg-cyber-card border border-cyber-border text-gray-400">Flick Shot</button>
+                <button id="tab-lb-tracking" onclick="switchLeaderboardTab('tracking')" class="px-4 py-1.5 rounded-lg text-xs font-cyber font-bold bg-cyber-card border border-cyber-border text-gray-400">Tracking</button>
+            </div>
+
+            <!-- Leaderboard Table -->
+            <div class="flex-1 overflow-y-auto pr-1">
+                <table class="w-full text-left text-xs">
+                    <thead>
+                        <tr class="text-gray-400 border-b border-cyber-border font-cyber uppercase tracking-wider text-[11px]">
+                            <th class="py-2 px-3"># Rank</th>
+                            <th class="py-2 px-3">Cyber Pilot</th>
+                            <th class="py-2 px-3 text-right">Score / Performance</th>
+                            <th class="py-2 px-3 text-right">Accuracy</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboard-tbody" class="divide-y divide-cyber-border/40 font-cyber">
+                        <tr>
+                            <td colspan="4" class="py-8 text-center text-gray-500 italic">Connecting to Global Database...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="pt-3 border-t border-cyber-border flex justify-between items-center text-xs text-gray-400">
+                <span id="lb-user-status">Sign in to publish your scores globally!</span>
+                <button onclick="closeWorldRecordsModal()" class="px-5 py-2 rounded-xl font-semibold btn-cyber-yellow font-cyber text-sm">CLOSE</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- AUTH / USER PROFILE MODAL -->
+    <div id="auth-modal" class="fixed inset-0 bg-black/85 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 pointer-events-auto">
+        <div class="cyber-card w-full max-w-md rounded-3xl p-6 space-y-6 relative border border-cyber-cyan/30 pointer-events-auto">
+            <div class="flex items-center justify-between border-b border-cyber-border pb-4">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-cyber-cyan/10 border border-cyber-cyan/30 flex items-center justify-center text-cyber-cyan">
+                        <i class="fa-solid fa-user-astronaut"></i>
+                    </div>
+                    <h3 class="font-cyber text-2xl font-bold text-white" id="auth-modal-title">Pilot Identity</h3>
+                </div>
+                <button onclick="closeAuthModal()" class="text-gray-400 hover:text-white text-lg p-2">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Logged out View -->
+            <div id="auth-logged-out-view" class="space-y-4">
+                <p class="text-xs text-gray-400">Sign in to save your personal high scores to Nick's Aim Trainer global world records database.</p>
+                
+                <div class="space-y-3">
+                    <div>
+                        <label class="text-[11px] text-gray-400 font-cyber uppercase">Pilot Handle / Callsign</label>
+                        <input type="text" id="auth-username" placeholder="e.g. CyberFlicker" class="w-full mt-1 bg-cyber-bg border border-cyber-border rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-cyber-cyan">
+                    </div>
+                </div>
+
+                <div class="pt-2 flex flex-col space-y-2">
+                    <button onclick="handleAnonymousSignIn()" class="w-full py-3 rounded-xl font-semibold btn-cyber-cyan font-cyber tracking-wider text-sm flex items-center justify-center space-x-2">
+                        <i class="fa-solid fa-right-to-bracket"></i>
+                        <span>AUTHENTICATE PILOT SESSION</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Logged In View -->
+            <div id="auth-logged-in-view" class="space-y-4 hidden">
+                <div class="cyber-card rounded-2xl p-4 flex items-center space-x-4">
+                    <div class="w-12 h-12 rounded-full bg-cyber-cyan/20 border border-cyber-cyan/40 flex items-center justify-center text-cyber-cyan text-xl">
+                        <i class="fa-solid fa-robot"></i>
+                    </div>
+                    <div class="flex-1 overflow-hidden">
+                        <div id="profile-handle" class="font-cyber font-bold text-white text-lg truncate">Pilot</div>
+                        <div id="profile-uid" class="text-[10px] text-gray-500 font-mono truncate">UID: -</div>
+                    </div>
+                </div>
+
+                <div class="pt-2 border-t border-cyber-border">
+                    <button onclick="handleSignOut()" class="w-full py-2.5 rounded-xl font-semibold bg-red-500/10 border border-red-500/30 text-red-400 hover:bg-red-500/20 font-cyber text-sm">
+                        LOGOUT PILOT SESSION
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Defensive DOM updates to avoid null property assignment errors
+        function setText(id, text) {
+            const el = document.getElementById(id);
+            if (el) el.innerText = String(text);
+        }
+
+        // Firebase Configuration & Global Setup
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'nicks-aim-trainer-default';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
+            apiKey: "demo-api-key",
+            authDomain: "demo-project.firebaseapp.com",
+            projectId: "demo-project",
+            storageBucket: "demo-project.appspot.com",
+            messagingSenderId: "123456789",
+            appId: "1:123456789:web:123456789"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        window.db = db;
+        window.auth = auth;
+        window.appId = appId;
+
         class SoundEngine {
             constructor() {
                 this.ctx = null;
@@ -506,22 +698,22 @@
         }
         const soundEngine = new SoundEngine();
 
-        // Global Settings & State
         let settings = {
-            targetSize: 'medium', // small (40), medium (60), large (80)
-            targetStyle: 'neon', // neon, solid, bullseye
+            targetSize: 'medium', // small(40), medium(60), large(80)
+            targetStyle: 'neon',  // neon, solid, bullseye
             crosshairType: 'plus', // dot, plus, circle, classic
-            crosshairColor: '#00f0ff'
+            crosshairColor: '#00f0ff',
+            shootKey: 'Space' // 'Space', 'KeyE', 'KeyF', null
         };
 
-        let highScores = {
+        let localHighScores = {
             gridshot: 0,
             flick: 0,
             tracking: 0
         };
 
         let gameState = {
-            activeMode: null, // 'gridshot', 'flick', 'tracking'
+            activeMode: null,
             isRunning: false,
             score: 0,
             hits: 0,
@@ -531,210 +723,375 @@
             maxCombo: 0,
             timeLeft: 30.0,
             timerInterval: null,
-            animationFrameId: null,
-            targets: [],
-            flickTargetCount: 0,
-            flickTargetMax: 25,
-            flickStartTime: 0,
+            animFrame: null,
+            flickTargetsLeft: 25,
             reactionTimes: [],
-            trackingBall: null,
-            mousePos: { x: 0, y: 0 }
+            lastTargetSpawnTime: 0,
+            trackingInsideTime: 0,
+            trackingTotalTime: 0,
+            // Replay recording state
+            sessionReplayData: [],
+            sessionStartTime: 0
         };
 
-        // Load saved high scores & settings
-        function loadUserData() {
-            const savedHS = localStorage.getItem('cyberaim_highscores_v2');
-            if (savedHS) {
-                try { highScores = JSON.parse(savedHS); } catch(e) {}
+        let cursorPosition = { x: 0, y: 0 };
+        let activeTargets = [];
+        let isCapturingKeybind = false;
+        let currentUser = null;
+        let activeLeaderboardTab = 'gridshot';
+        let leaderboardData = [];
+        let isReplaying = false;
+
+        async function initAuth() {
+            try {
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                }
+            } catch(e) {
+                console.warn("Custom token auth error, falling back to state listener", e);
             }
-            const savedSettings = localStorage.getItem('cyberaim_settings_v2');
-            if (savedSettings) {
-                try { settings = JSON.parse(savedSettings); } catch(e) {}
-            }
-            updateHomeScreenStats();
-            applySettingsToUI();
+
+            onAuthStateChanged(auth, (user) => {
+                currentUser = user;
+                updateAuthUI();
+                if (user) {
+                    listenToLeaderboard();
+                }
+            });
         }
 
-        function saveUserData() {
-            localStorage.setItem('cyberaim_highscores_v2', JSON.stringify(highScores));
-            localStorage.setItem('cyberaim_settings_v2', JSON.stringify(settings));
-        }
+        function updateAuthUI() {
+            const loggedOutView = document.getElementById('auth-logged-out-view');
+            const loggedInView = document.getElementById('auth-logged-in-view');
 
-        // Custom Crosshair Management
-        const crosshairEl = document.getElementById('custom-crosshair');
-
-        window.addEventListener('mousemove', (e) => {
-            gameState.mousePos.x = e.clientX;
-            gameState.mousePos.y = e.clientY;
-            if (gameState.isRunning) {
-                crosshairEl.style.display = 'block';
-                crosshairEl.style.left = e.clientX + 'px';
-                crosshairEl.style.top = e.clientY + 'px';
+            if (currentUser) {
+                const name = currentUser.displayName || (currentUser.isAnonymous ? 'Guest Pilot' : 'Cyber Pilot');
+                setText('auth-btn-label', name);
+                if (loggedOutView) loggedOutView.classList.add('hidden');
+                if (loggedInView) loggedInView.classList.remove('hidden');
+                setText('profile-handle', name);
+                setText('profile-uid', 'UID: ' + currentUser.uid);
+                setText('lb-user-status', 'Logged in as: ' + name);
             } else {
-                crosshairEl.style.display = 'none';
+                setText('auth-btn-label', 'Sign In');
+                if (loggedOutView) loggedOutView.classList.remove('hidden');
+                if (loggedInView) loggedInView.classList.add('hidden');
+                setText('lb-user-status', 'Sign in to record your scores globally!');
+            }
+        }
+
+        window.handleAuthClick = function() {
+            const modal = document.getElementById('auth-modal');
+            if (modal) modal.classList.remove('hidden');
+        }
+
+        window.closeAuthModal = function() {
+            const modal = document.getElementById('auth-modal');
+            if (modal) modal.classList.add('hidden');
+        }
+
+        window.handleAnonymousSignIn = async function() {
+            const usernameInputEl = document.getElementById('auth-username');
+            const usernameInput = usernameInputEl ? usernameInputEl.value.trim() : '';
+            try {
+                let userCred = auth.currentUser;
+                if (!userCred) {
+                    userCred = (await signInAnonymously(auth)).user;
+                }
+                const pilotName = usernameInput || 'Pilot_' + userCred.uid.substring(0, 5);
+                const userDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'users', userCred.uid);
+                await setDoc(userDocRef, {
+                    displayName: pilotName,
+                    updatedAt: Date.now()
+                }, { merge: true });
+
+                currentUser.displayName = pilotName;
+                updateAuthUI();
+                closeAuthModal();
+                publishScoresToGlobal();
+            } catch(e) {
+                console.error("Auth error", e);
+            }
+        }
+
+        window.handleSignOut = async function() {
+            await signOut(auth);
+            currentUser = null;
+            updateAuthUI();
+            closeAuthModal();
+        }
+
+        function listenToLeaderboard() {
+            try {
+                const lbRef = collection(db, 'artifacts', appId, 'public', 'data', 'leaderboard');
+                onSnapshot(lbRef, (snapshot) => {
+                    leaderboardData = [];
+                    snapshot.forEach((doc) => {
+                        leaderboardData.push({ id: doc.id, ...doc.data() });
+                    });
+                    renderLeaderboard();
+                }, (error) => {
+                    console.warn("Leaderboard snapshot error", error);
+                });
+            } catch(e) {}
+        }
+
+        async function publishScoresToGlobal() {
+            if (!currentUser) return;
+            try {
+                const docId = currentUser.uid;
+                const scoreRef = doc(db, 'artifacts', appId, 'public', 'data', 'leaderboard', docId);
+                const pilotName = currentUser.displayName || 'Cyber Pilot';
+                
+                await setDoc(scoreRef, {
+                    pilotName: pilotName,
+                    uid: currentUser.uid,
+                    gridshot: localHighScores.gridshot,
+                    flick: localHighScores.flick,
+                    tracking: localHighScores.tracking,
+                    updatedAt: Date.now()
+                }, { merge: true });
+            } catch(e) {
+                console.error("Error publishing scores", e);
+            }
+        }
+
+        function renderLeaderboard() {
+            const tbody = document.getElementById('leaderboard-tbody');
+            if (!tbody) return;
+
+            let filtered = [...leaderboardData];
+            if (activeLeaderboardTab === 'gridshot') {
+                filtered.sort((a, b) => (b.gridshot || 0) - (a.gridshot || 0));
+            } else if (activeLeaderboardTab === 'flick') {
+                filtered = filtered.filter(item => item.flick && item.flick > 0);
+                filtered.sort((a, b) => (a.flick || 9999) - (b.flick || 9999));
+            } else if (activeLeaderboardTab === 'tracking') {
+                filtered.sort((a, b) => (b.tracking || 0) - (a.tracking || 0));
+            }
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" class="py-8 text-center text-gray-500 italic">No global records established for this mode yet.</td></tr>`;
+                return;
+            }
+
+            let html = '';
+            filtered.forEach((item, index) => {
+                let valDisplay = '0';
+                if (activeLeaderboardTab === 'gridshot') valDisplay = `${item.gridshot || 0} pts`;
+                if (activeLeaderboardTab === 'flick') valDisplay = `${item.flick || 0} ms avg`;
+                if (activeLeaderboardTab === 'tracking') valDisplay = `${item.tracking || 0} pts`;
+
+                const rankColor = index === 0 ? 'text-cyber-yellow font-bold' : index === 1 ? 'text-gray-300' : index === 2 ? 'text-amber-600' : 'text-gray-500';
+                
+                html += `
+                    <tr class="hover:bg-cyber-card/60 transition-colors">
+                        <td class="py-2.5 px-3 font-bold ${rankColor}">#${index + 1}</td>
+                        <td class="py-2.5 px-3 font-semibold text-white">${item.pilotName || 'Pilot'}</td>
+                        <td class="py-2.5 px-3 text-right font-bold text-cyber-cyan">${valDisplay}</td>
+                        <td class="py-2.5 px-3 text-right text-gray-400">Verified</td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+        }
+
+        window.switchLeaderboardTab = function(mode) {
+            activeLeaderboardTab = mode;
+            ['gridshot', 'flick', 'tracking'].forEach(m => {
+                const btn = document.getElementById(`tab-lb-${m}`);
+                if (btn) {
+                    if (m === mode) {
+                        btn.className = 'px-4 py-1.5 rounded-lg text-xs font-cyber font-bold btn-cyber-cyan';
+                    } else {
+                        btn.className = 'px-4 py-1.5 rounded-lg text-xs font-cyber font-bold bg-cyber-card border border-cyber-border text-gray-400';
+                    }
+                }
+            });
+            renderLeaderboard();
+        }
+
+        window.openWorldRecordsModal = function() {
+            const modal = document.getElementById('world-records-modal');
+            if (modal) modal.classList.remove('hidden');
+            renderLeaderboard();
+        }
+
+        window.closeWorldRecordsModal = function() {
+            const modal = document.getElementById('world-records-modal');
+            if (modal) modal.classList.add('hidden');
+        }
+
+        window.startKeybindCapture = function() {
+            isCapturingKeybind = true;
+            setText('btn-bind-key-text', "Press ANY key now...");
+            const btn = document.getElementById('btn-bind-key');
+            if (btn) btn.className = "flex-1 py-2.5 rounded-xl text-xs font-semibold btn-cyber-magenta animate-pulse";
+        }
+
+        window.resetKeybind = function() {
+            settings.shootKey = null;
+            setText('val-keybind-display', "Mouse Only");
+            setText('hud-keybind-label', "Left Click");
+            setText('btn-bind-key-text', "Click to Assign Keybind");
+            const btn = document.getElementById('btn-bind-key');
+            if (btn) btn.className = "flex-1 py-2.5 rounded-xl text-xs font-semibold btn-cyber-yellow";
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (isCapturingKeybind) {
+                e.preventDefault();
+                settings.shootKey = e.code;
+                const displayKey = e.code.replace('Key', 'Key ').replace('Space', 'Spacebar');
+                setText('val-keybind-display', displayKey);
+                setText('hud-keybind-label', `Left Click / ${displayKey}`);
+                setText('btn-bind-key-text', `Assigned: ${displayKey}`);
+                const btn = document.getElementById('btn-bind-key');
+                if (btn) btn.className = "flex-1 py-2.5 rounded-xl text-xs font-semibold btn-cyber-yellow";
+                isCapturingKeybind = false;
+                return;
+            }
+
+            if (gameState.isRunning && settings.shootKey && e.code === settings.shootKey && !isReplaying) {
+                e.preventDefault();
+                triggerShootAtCurrentCursor();
             }
         });
 
-        function renderCrosshairHTML() {
-            const color = settings.crosshairColor;
-            let html = '';
-            switch(settings.crosshairType) {
-                case 'dot':
-                    html = `<div style="width: 6px; height: 6px; background-color: ${color}; border-radius: 50%; box-shadow: 0 0 8px ${color};"></div>`;
-                    break;
-                case 'plus':
-                    html = `
-                        <div style="position: relative; width: 20px; height: 20px;">
-                            <div style="position: absolute; top: 9px; left: 0; width: 20px; height: 2px; background-color: ${color}; box-shadow: 0 0 6px ${color};"></div>
-                            <div style="position: absolute; top: 0; left: 9px; width: 2px; height: 20px; background-color: ${color}; box-shadow: 0 0 6px ${color};"></div>
-                        </div>`;
-                    break;
-                case 'circle':
-                    html = `<div style="width: 22px; height: 22px; border: 2px solid ${color}; border-radius: 50%; box-shadow: 0 0 8px ${color};"></div>`;
-                    break;
-                case 'classic':
-                    html = `
-                        <div style="position: relative; width: 24px; height: 24px;">
-                            <div style="position: absolute; top: 11px; left: 0; width: 8px; height: 2px; background-color: ${color};"></div>
-                            <div style="position: absolute; top: 11px; right: 0; width: 8px; height: 2px; background-color: ${color};"></div>
-                            <div style="position: absolute; top: 0; left: 11px; width: 2px; height: 8px; background-color: ${color};"></div>
-                            <div style="position: absolute; bottom: 0; left: 11px; width: 2px; height: 8px; background-color: ${color};"></div>
-                        </div>`;
-                    break;
+        function triggerShootAtCurrentCursor() {
+            const arena = document.getElementById('arena');
+            if (!arena) return;
+            const rect = arena.getBoundingClientRect();
+            if (cursorPosition.x >= rect.left && cursorPosition.x <= rect.right &&
+                cursorPosition.y >= rect.top && cursorPosition.y <= rect.bottom) {
+                
+                const relativeX = cursorPosition.x - rect.left;
+                const relativeY = cursorPosition.y - rect.top;
+                processArenaShoot(relativeX, relativeY);
             }
-            crosshairEl.innerHTML = html;
         }
 
-        // Settings Handlers
-        function openSettingsModal() {
-            document.getElementById('settings-modal').classList.remove('hidden');
+        window.handleArenaMouseMove = function(e) {
+            cursorPosition.x = e.clientX;
+            cursorPosition.y = e.clientY;
+            updateCustomCrosshairPosition(e.clientX, e.clientY);
+
+            if (gameState.isRunning) {
+                const arena = document.getElementById('arena');
+                if (arena) {
+                    const rect = arena.getBoundingClientRect();
+                    const rx = e.clientX - rect.left;
+                    const ry = e.clientY - rect.top;
+                    recordReplayEvent('move', { x: rx, y: ry });
+                }
+            }
         }
-        function closeSettingsModal() {
-            document.getElementById('settings-modal').classList.add('hidden');
-            saveUserData();
-            applySettingsToUI();
+
+        function updateCustomCrosshairPosition(x, y) {
+            const ch = document.getElementById('custom-crosshair');
+            if (ch) {
+                ch.style.left = x + 'px';
+                ch.style.top = y + 'px';
+            }
         }
-        function setTargetSize(size) {
+
+        window.setTargetSize = function(size) {
             settings.targetSize = size;
+            const sizes = { small: 'Small (40px)', medium: 'Medium (60px)', large: 'Large (80px)' };
+            setText('val-target-size', sizes[size]);
             ['small', 'medium', 'large'].forEach(s => {
                 const btn = document.getElementById(`btn-size-${s}`);
                 if (btn) {
-                    if (s === size) {
-                        btn.className = 'py-2 rounded-xl text-xs font-semibold btn-cyber-cyan transition-all pointer-events-auto';
-                    } else {
-                        btn.className = 'py-2 rounded-xl text-xs font-semibold bg-cyber-card border border-cyber-border text-gray-300 hover:border-cyber-cyan transition-all pointer-events-auto';
-                    }
+                    btn.className = (s === size) ? 'py-2 rounded-xl text-xs font-semibold btn-cyber-cyan' : 'py-2 rounded-xl text-xs font-semibold bg-cyber-card border border-cyber-border text-gray-300 hover:border-cyber-cyan';
                 }
             });
-            const sizeMap = { small: 'Small (40px)', medium: 'Medium (60px)', large: 'Large (80px)' };
-            const valEl = document.getElementById('val-target-size');
-            if (valEl) valEl.textContent = sizeMap[size];
         }
-        function setTargetStyle(style) {
+
+        window.setTargetStyle = function(style) {
             settings.targetStyle = style;
-            ['neon', 'solid', 'bullseye'].forEach(s => {
-                const btn = document.getElementById(`btn-style-${s}`);
+            const styles = { neon: 'Neon Glow', solid: 'Solid Circle', bullseye: 'Bullseye' };
+            setText('val-target-style', styles[style]);
+            ['neon', 'solid', 'bullseye'].forEach(st => {
+                const btn = document.getElementById(`btn-style-${st}`);
                 if (btn) {
-                    if (s === style) {
-                        btn.className = 'py-2 rounded-xl text-xs font-semibold btn-cyber-cyan transition-all pointer-events-auto';
-                    } else {
-                        btn.className = 'py-2 rounded-xl text-xs font-semibold bg-cyber-card border border-cyber-border text-gray-300 hover:border-cyber-cyan transition-all pointer-events-auto';
-                    }
+                    btn.className = (st === style) ? 'py-2 rounded-xl text-xs font-semibold btn-cyber-cyan' : 'py-2 rounded-xl text-xs font-semibold bg-cyber-card border border-cyber-border text-gray-300 hover:border-cyber-cyan';
                 }
             });
-            const styleMap = { neon: 'Neon Glow', solid: 'Solid Circle', bullseye: 'Bullseye' };
-            const valEl = document.getElementById('val-target-style');
-            if (valEl) valEl.textContent = styleMap[style];
         }
-        function setCrosshairType(type) {
+
+        window.setCrosshairType = function(type) {
             settings.crosshairType = type;
-            ['dot', 'plus', 'circle', 'classic'].forEach(t => {
-                const btn = document.getElementById(`btn-ch-${t}`);
+            const names = { dot: 'Dot', plus: 'Plus', circle: 'Circle', classic: 'Classic' };
+            setText('val-crosshair', names[type]);
+            ['dot', 'plus', 'circle', 'classic'].forEach(c => {
+                const btn = document.getElementById(`btn-ch-${c}`);
                 if (btn) {
-                    if (t === type) {
-                        btn.className = 'py-2 rounded-xl text-xs font-semibold btn-cyber-cyan transition-all pointer-events-auto';
-                    } else {
-                        btn.className = 'py-2 rounded-xl text-xs font-semibold bg-cyber-card border border-cyber-border text-gray-300 pointer-events-auto';
-                    }
+                    btn.className = (c === type) ? 'py-2 rounded-xl text-xs font-semibold btn-cyber-cyan' : 'py-2 rounded-xl text-xs font-semibold bg-cyber-card border border-cyber-border text-gray-300';
                 }
             });
-            const typeMap = { dot: 'Dot', plus: 'Plus (Cross)', circle: 'Circle', classic: 'Classic' };
-            const valEl = document.getElementById('val-crosshair');
-            if (valEl) valEl.textContent = typeMap[type];
-            renderCrosshairHTML();
+            renderCrosshairSVG();
         }
-        function setCrosshairColor(color) {
+
+        window.setCrosshairColor = function(color) {
             settings.crosshairColor = color;
-            const valEl = document.getElementById('val-ch-color');
-            if (valEl) valEl.textContent = color === '#00f0ff' ? 'Cyan' : color === '#ff007f' ? 'Magenta' : color === '#f3e600' ? 'Yellow' : color === '#00ff66' ? 'Green' : 'White';
-            renderCrosshairHTML();
+            setText('val-ch-color', color);
+            renderCrosshairSVG();
         }
 
-        function applySettingsToUI() {
-            setTargetSize(settings.targetSize);
-            setTargetStyle(settings.targetStyle);
-            setCrosshairType(settings.crosshairType);
-            setCrosshairColor(settings.crosshairColor);
+        function renderCrosshairSVG() {
+            const ch = document.getElementById('custom-crosshair');
+            if (!ch) return;
+            const color = settings.crosshairColor;
+            let svgHtml = '';
+
+            if (settings.crosshairType === 'dot') {
+                svgHtml = `<svg width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" fill="${color}"/></svg>`;
+            } else if (settings.crosshairType === 'plus') {
+                svgHtml = `<svg width="32" height="32" viewBox="0 0 32 32"><line x1="16" y1="4" x2="16" y2="28" stroke="${color}" stroke-width="2"/><line x1="4" y1="16" x2="28" y2="16" stroke="${color}" stroke-width="2"/><circle cx="16" cy="16" r="2" fill="${color}"/></svg>`;
+            } else if (settings.crosshairType === 'circle') {
+                svgHtml = `<svg width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="8" stroke="${color}" stroke-width="2" fill="none"/><circle cx="16" cy="16" r="2" fill="${color}"/></svg>`;
+            } else {
+                svgHtml = `<svg width="36" height="36" viewBox="0 0 36 36"><circle cx="18" cy="18" r="10" stroke="${color}" stroke-width="1.5" stroke-dasharray="4 2" fill="none"/><line x1="18" y1="2" x2="18" y2="10" stroke="${color}" stroke-width="2"/><line x1="18" y1="26" x2="18" y2="34" stroke="${color}" stroke-width="2"/><line x1="2" y1="18" x2="10" y2="18" stroke="${color}" stroke-width="2"/><line x1="26" y1="18" x2="34" y2="18" stroke="${color}" stroke-width="2"/></svg>`;
+            }
+            ch.innerHTML = svgHtml;
+            ch.style.display = 'block';
         }
 
-        // Stats modal
-        function openStatsModal() {
-            document.getElementById('modal-hs-gridshot').textContent = highScores.gridshot;
-            document.getElementById('modal-hs-flick').textContent = highScores.flick > 0 ? highScores.flick + ' ms' : '0 ms';
-            document.getElementById('modal-hs-tracking').textContent = highScores.tracking;
-            document.getElementById('stats-modal').classList.remove('hidden');
-        }
-        function closeStatsModal() {
-            document.getElementById('stats-modal').classList.add('hidden');
-        }
-        function clearLocalScores() {
-            highScores = { gridshot: 0, flick: 0, tracking: 0 };
-            saveUserData();
-            openStatsModal();
-            updateHomeScreenStats();
-        }
-        function updateHomeScreenStats() {
-            document.getElementById('home-hs-gridshot').textContent = highScores.gridshot;
-            document.getElementById('home-hs-flick').textContent = highScores.flick > 0 ? highScores.flick + ' ms' : '0 ms';
-            document.getElementById('home-hs-tracking').textContent = highScores.tracking;
+        function getTargetSizePx() {
+            if (settings.targetSize === 'small') return 40;
+            if (settings.targetSize === 'large') return 80;
+            return 60;
         }
 
-        // Game Flow Controllers
-        function selectGameMode(mode) {
-            soundEngine.playStart();
+        function recordReplayEvent(type, data) {
+            if (!gameState.isRunning || isReplaying) return;
+            const timeOffset = Date.now() - gameState.sessionStartTime;
+            gameState.sessionReplayData.push({
+                time: timeOffset,
+                type: type,
+                data: data
+            });
+        }
+
+        window.selectGameMode = function(mode) {
             gameState.activeMode = mode;
-            
-            document.getElementById('menu-view').classList.add('hidden');
-            document.getElementById('results-view').classList.add('hidden');
-            document.getElementById('game-view').classList.remove('hidden');
+            const menuView = document.getElementById('menu-view');
+            const resultsView = document.getElementById('results-view');
+            const gameView = document.getElementById('game-view');
 
-            document.getElementById('hud-mode-name').textContent = mode;
-            startGame();
+            if (menuView) menuView.classList.add('hidden');
+            if (resultsView) resultsView.classList.add('hidden');
+            if (gameView) gameView.classList.remove('hidden');
+
+            setText('hud-mode-name', mode);
+            initAndStartGame();
         }
 
-        function quitGame() {
-            stopGameLoop();
-            document.getElementById('game-view').classList.add('hidden');
-            document.getElementById('menu-view').classList.remove('hidden');
-            crosshairEl.style.display = 'none';
-            updateHomeScreenStats();
-        }
-
-        function returnToMenu() {
-            document.getElementById('results-view').classList.add('hidden');
-            document.getElementById('menu-view').classList.remove('hidden');
-            crosshairEl.style.display = 'none';
-            updateHomeScreenStats();
-        }
-
-        function restartCurrentGame() {
-            document.getElementById('results-view').classList.add('hidden');
-            startGame();
-        }
-
-        // Game Engine Core
-        function startGame() {
-            stopGameLoop();
+        function initAndStartGame() {
+            const arena = document.getElementById('arena');
+            if (arena) arena.innerHTML = '';
+            activeTargets = [];
+            isReplaying = false;
 
             gameState.isRunning = true;
             gameState.score = 0;
@@ -743,318 +1100,438 @@
             gameState.totalClicks = 0;
             gameState.combo = 0;
             gameState.maxCombo = 0;
-            gameState.targets = [];
+            gameState.timeLeft = 30.0;
+            gameState.flickTargetsLeft = 25;
             gameState.reactionTimes = [];
-            
-            crosshairEl.style.display = 'block';
+            gameState.trackingInsideTime = 0;
+            gameState.trackingTotalTime = 0;
+            gameState.sessionReplayData = [];
+            gameState.sessionStartTime = Date.now();
 
-            const arena = document.getElementById('arena');
-            arena.innerHTML = '';
-
-            if (gameState.activeMode === 'gridshot') {
-                gameState.timeLeft = 30.0;
-                spawnGridshotTargets(3);
-            } else if (gameState.activeMode === 'flick') {
-                gameState.timeLeft = 0;
-                gameState.flickTargetCount = 0;
-                spawnFlickTarget();
-            } else if (gameState.activeMode === 'tracking') {
-                gameState.timeLeft = 30.0;
-                spawnTrackingBall();
-            }
-
+            soundEngine.playStart();
             updateHUD();
 
-            if (gameState.activeMode !== 'flick') {
-                gameState.timerInterval = setInterval(() => {
-                    gameState.timeLeft -= 0.1;
-                    if (gameState.timeLeft <= 0) {
-                        gameState.timeLeft = 0;
-                        updateHUD();
-                        endGame();
-                        return;
-                    }
-                    updateHUD();
-                }, 100);
-            }
+            if (gameState.timerInterval) clearInterval(gameState.timerInterval);
+            if (gameState.animFrame) cancelAnimationFrame(gameState.animFrame);
 
-            gameState.animationFrameId = requestAnimationFrame(gameLoop);
+            if (gameState.activeMode === 'gridshot') {
+                for (let i = 0; i < 3; i++) {
+                    spawnTarget();
+                }
+                startCountdownTimer();
+            } else if (gameState.activeMode === 'flick') {
+                setText('hud-timer', '25 Targets');
+                spawnTarget();
+            } else if (gameState.activeMode === 'tracking') {
+                spawnTrackingSphere();
+                startCountdownTimer();
+                startTrackingLoop();
+            }
         }
 
-        function stopGameLoop() {
-            gameState.isRunning = false;
-            if (gameState.timerInterval) clearInterval(gameState.timerInterval);
-            if (gameState.animationFrameId) cancelAnimationFrame(gameState.animationFrameId);
+        function startCountdownTimer() {
+            gameState.timerInterval = setInterval(() => {
+                gameState.timeLeft -= 0.1;
+                if (gameState.timeLeft <= 0) {
+                    gameState.timeLeft = 0;
+                    endGameSession();
+                }
+                updateHUD();
+            }, 100);
         }
 
         function updateHUD() {
-            document.getElementById('hud-score').textContent = gameState.score;
+            setText('hud-score', gameState.score);
+            setText('hud-combo', gameState.combo + 'x');
             
-            let accuracy = 100;
-            if (gameState.totalClicks > 0) {
-                accuracy = Math.round((gameState.hits / gameState.totalClicks) * 100);
-            }
-            document.getElementById('hud-accuracy').textContent = accuracy + '%';
-            document.getElementById('hud-combo').textContent = gameState.combo + 'x';
+            const total = gameState.hits + gameState.misses;
+            const acc = total > 0 ? Math.round((gameState.hits / total) * 100) : 100;
+            setText('hud-accuracy', acc + '%');
 
-            if (gameState.activeMode === 'flick') {
-                document.getElementById('hud-timer').textContent = `${gameState.flickTargetCount}/${gameState.flickTargetMax}`;
+            if (gameState.activeMode !== 'flick') {
+                setText('hud-timer', gameState.timeLeft.toFixed(1) + 's');
             } else {
-                document.getElementById('hud-timer').textContent = gameState.timeLeft.toFixed(1) + 's';
+                setText('hud-timer', gameState.flickTargetsLeft + ' Rem.');
             }
         }
 
-        function getTargetPixelSize() {
-            if (settings.targetSize === 'small') return 40;
-            if (settings.targetSize === 'large') return 80;
-            return 60;
-        }
-
-        // Spawning Logic
-        function spawnGridshotTargets(count) {
+        function spawnTarget() {
             const arena = document.getElementById('arena');
-            const rect = arena.getBoundingClientRect();
-            const size = getTargetPixelSize();
+            if (!arena) return;
+            const size = getTargetSizePx();
+            const arenaW = arena.clientWidth;
+            const arenaH = arena.clientHeight;
 
-            for (let i = 0; i < count; i++) {
-                const colWidth = (rect.width - 100) / 3;
-                const minX = 50 + (i * colWidth) + 10;
-                const maxX = 50 + ((i + 1) * colWidth) - size - 10;
-                const x = Math.random() * (maxX - minX) + minX;
-                const y = Math.random() * (rect.height - size - 100) + 50;
+            const padding = size + 20;
+            const x = Math.random() * (arenaW - padding * 2) + padding;
+            const y = Math.random() * (arenaH - padding * 2) + padding;
 
-                createTargetElement(x, y, size, () => {
-                    soundEngine.playPop();
-                    gameState.hits++;
-                    gameState.totalClicks++;
-                    gameState.combo++;
-                    if (gameState.combo > gameState.maxCombo) gameState.maxCombo = gameState.combo;
-                    gameState.score += 100 * (1 + Math.floor(gameState.combo / 10));
-                    
-                    spawnGridshotTargets(1);
-                    updateHUD();
-                });
-            }
-        }
+            const targetEl = document.createElement('div');
+            targetEl.className = 'absolute rounded-full cursor-pointer flex items-center justify-center transition-transform hover:scale-105';
+            targetEl.style.width = size + 'px';
+            targetEl.style.height = size + 'px';
+            targetEl.style.left = (x - size / 2) + 'px';
+            targetEl.style.top = (y - size / 2) + 'px';
 
-        function spawnFlickTarget() {
-            if (gameState.flickTargetCount >= gameState.flickTargetMax) {
-                endGame();
-                return;
-            }
-            const arena = document.getElementById('arena');
-            const rect = arena.getBoundingClientRect();
-            const size = getTargetPixelSize();
-
-            const x = Math.random() * (rect.width - size - 100) + 50;
-            const y = Math.random() * (rect.height - size - 100) + 50;
-
-            gameState.flickStartTime = performance.now();
-
-            createTargetElement(x, y, size, () => {
-                const reactionTime = performance.now() - gameState.flickStartTime;
-                gameState.reactionTimes.push(reactionTime);
-
-                soundEngine.playPop();
-                gameState.hits++;
-                gameState.totalClicks++;
-                gameState.combo++;
-                if (gameState.combo > gameState.maxCombo) gameState.maxCombo = gameState.combo;
-                gameState.score = Math.round(gameState.reactionTimes.reduce((a,b)=>a+b,0) / gameState.reactionTimes.length);
-
-                gameState.flickTargetCount++;
-                updateHUD();
-                spawnFlickTarget();
-            });
-        }
-
-        function spawnTrackingBall() {
-            const arena = document.getElementById('arena');
-            const rect = arena.getBoundingClientRect();
-            const size = getTargetPixelSize();
-
-            const targetObj = {
-                x: rect.width / 2,
-                y: rect.height / 2,
-                vx: (Math.random() - 0.5) * 6,
-                vy: (Math.random() - 0.5) * 6,
-                size: size,
-                el: null
-            };
-
-            const el = document.createElement('div');
-            el.className = getTargetCSSClass();
-            applyTargetStyles(el, size);
-            el.style.position = 'absolute';
-            el.style.left = targetObj.x + 'px';
-            el.style.top = targetObj.y + 'px';
-            arena.appendChild(el);
-            targetObj.el = el;
-
-            gameState.trackingBall = targetObj;
-        }
-
-        function getTargetCSSClass() {
-            return 'rounded-full cursor-crosshair transition-transform duration-75 flex items-center justify-center pointer-events-auto';
-        }
-
-        function applyTargetStyles(el, size) {
-            el.style.width = size + 'px';
-            el.style.height = size + 'px';
+            const color = gameState.activeMode === 'flick' ? '#ff007f' : '#00f0ff';
             
             if (settings.targetStyle === 'neon') {
-                el.style.background = 'radial-gradient(circle, rgba(0,240,255,0.85) 0%, rgba(255,0,127,0.45) 100%)';
-                el.style.border = '2px solid #00f0ff';
-                el.style.boxShadow = '0 0 15px #00f0ff, inset 0 0 10px #ff007f';
+                targetEl.style.background = `radial-gradient(circle, ${color} 20%, rgba(10,11,16,0.8) 100%)`;
+                targetEl.style.border = `2px solid ${color}`;
+                targetEl.style.boxShadow = `0 0 15px ${color}`;
             } else if (settings.targetStyle === 'solid') {
-                el.style.background = '#ff007f';
-                el.style.border = '2px solid #ffffff';
-                el.style.boxShadow = '0 0 10px rgba(255,0,127,0.5)';
-            } else if (settings.targetStyle === 'bullseye') {
-                el.style.background = 'radial-gradient(circle, #ff007f 30%, #0a0b10 31%, #0a0b10 50%, #00f0ff 51%, #00f0ff 70%, #121520 71%)';
-                el.style.border = '2px solid #ffffff';
-                el.style.boxShadow = '0 0 12px rgba(0,240,255,0.4)';
+                targetEl.style.background = color;
+            } else {
+                targetEl.innerHTML = `<div class="w-full h-full rounded-full border-4 border-white flex items-center justify-center"><div class="w-1/2 h-1/2 rounded-full" style="background:${color}"></div></div>`;
             }
+
+            const targetObj = { id: Date.now() + Math.random(), el: targetEl, x: x, y: y, size: size };
+            activeTargets.push(targetObj);
+            arena.appendChild(targetEl);
+
+            gameState.lastTargetSpawnTime = Date.now();
+            recordReplayEvent('spawn', { x: x, y: y, size: size, id: targetObj.id });
         }
 
-        function createTargetElement(x, y, size, onClickCallback) {
+        function spawnTrackingSphere() {
             const arena = document.getElementById('arena');
-            const el = document.createElement('div');
-            el.className = getTargetCSSClass();
-            applyTargetStyles(el, size);
-            el.style.position = 'absolute';
-            el.style.left = x + 'px';
-            el.style.top = y + 'px';
+            if (!arena) return;
+            arena.innerHTML = '';
+            const size = 70;
+            const arenaW = arena.clientWidth;
+            const arenaH = arena.clientHeight;
 
-            el.addEventListener('pointerdown', (e) => {
-                e.stopPropagation();
-                el.remove();
-                onClickCallback();
-            });
+            const targetEl = document.createElement('div');
+            targetEl.className = 'absolute rounded-full pointer-events-none flex items-center justify-center';
+            targetEl.style.width = size + 'px';
+            targetEl.style.height = size + 'px';
+            targetEl.style.background = 'radial-gradient(circle, #f3e600 30%, rgba(243,230,0,0.2) 100%)';
+            targetEl.style.border = '2px solid #f3e600';
+            targetEl.style.boxShadow = '0 0 20px #f3e600';
 
-            arena.appendChild(el);
-            gameState.targets.push({ el, x, y, size });
+            const x = arenaW / 2;
+            const y = arenaH / 2;
+
+            const targetObj = {
+                el: targetEl,
+                x: x,
+                y: y,
+                vx: (Math.random() - 0.5) * 8,
+                vy: (Math.random() - 0.5) * 8,
+                size: size
+            };
+            activeTargets = [targetObj];
+            arena.appendChild(targetEl);
         }
 
-        function handleArenaClick(e) {
-            if (!gameState.isRunning) return;
+        function startTrackingLoop() {
+            function loop() {
+                if (!gameState.isRunning || gameState.activeMode !== 'tracking') return;
+
+                const arena = document.getElementById('arena');
+                const target = activeTargets[0];
+                if (target && arena) {
+                    const arenaW = arena.clientWidth;
+                    const arenaH = arena.clientHeight;
+
+                    target.x += target.vx;
+                    target.y += target.vy;
+
+                    if (target.x - target.size / 2 <= 10 || target.x + target.size / 2 >= arenaW - 10) target.vx *= -1;
+                    if (target.y - target.size / 2 <= 10 || target.y + target.size / 2 >= arenaH - 10) target.vy *= -1;
+
+                    if (Math.random() < 0.03) {
+                        target.vx += (Math.random() - 0.5) * 3;
+                        target.vy += (Math.random() - 0.5) * 3;
+                    }
+
+                    target.el.style.left = (target.x - target.size / 2) + 'px';
+                    target.el.style.top = (target.y - target.size / 2) + 'px';
+
+                    const rect = arena.getBoundingClientRect();
+                    const rx = cursorPosition.x - rect.left;
+                    const ry = cursorPosition.y - rect.top;
+
+                    const dist = Math.hypot(rx - target.x, ry - target.y);
+                    gameState.trackingTotalTime += 16;
+                    if (dist <= target.size / 2) {
+                        gameState.trackingInsideTime += 16;
+                        gameState.score += 10;
+                        target.el.style.boxShadow = '0 0 30px #00ff66';
+                    } else {
+                        target.el.style.boxShadow = '0 0 15px #f3e600';
+                    }
+                    updateHUD();
+                }
+                gameState.animFrame = requestAnimationFrame(loop);
+            }
+            loop();
+        }
+
+        window.handleArenaClick = function(e) {
+            if (!gameState.isRunning || isReplaying) return;
+            const arena = document.getElementById('arena');
+            if (!arena) return;
+            const rect = arena.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            const clickY = e.clientY - rect.top;
+
+            processArenaShoot(clickX, clickY);
+        }
+
+        function processArenaShoot(x, y) {
             if (gameState.activeMode === 'tracking') return;
 
-            soundEngine.playMiss();
-            gameState.misses++;
             gameState.totalClicks++;
-            gameState.combo = 0;
+            let hitIndex = -1;
+
+            for (let i = 0; i < activeTargets.length; i++) {
+                const t = activeTargets[i];
+                const dist = Math.hypot(x - t.x, y - t.y);
+                if (dist <= t.size / 2) {
+                    hitIndex = i;
+                    break;
+                }
+            }
+
+            if (hitIndex !== -1) {
+                const hitTarget = activeTargets[hitIndex];
+                soundEngine.playPop();
+                gameState.hits++;
+                gameState.score += 100 + (gameState.combo * 10);
+                gameState.combo++;
+                if (gameState.combo > gameState.maxCombo) gameState.maxCombo = gameState.combo;
+
+                const reactionTime = Date.now() - gameState.lastTargetSpawnTime;
+                gameState.reactionTimes.push(reactionTime);
+
+                recordReplayEvent('hit', { x: x, y: y, targetId: hitTarget.id });
+
+                hitTarget.el.remove();
+                activeTargets.splice(hitIndex, 1);
+
+                if (gameState.activeMode === 'gridshot') {
+                    spawnTarget();
+                } else if (gameState.activeMode === 'flick') {
+                    gameState.flickTargetsLeft--;
+                    if (gameState.flickTargetsLeft > 0) {
+                        spawnTarget();
+                    } else {
+                        endGameSession();
+                    }
+                }
+            } else {
+                soundEngine.playMiss();
+                gameState.misses++;
+                gameState.combo = 0;
+                recordReplayEvent('miss', { x: x, y: y });
+            }
             updateHUD();
         }
 
-        // Main Animation & Physics Loop
-        function gameLoop() {
-            if (!gameState.isRunning) return;
-
-            if (gameState.activeMode === 'tracking' && gameState.trackingBall) {
-                const ball = gameState.trackingBall;
-                const arena = document.getElementById('arena');
-                const rect = arena.getBoundingClientRect();
-
-                ball.x += ball.vx;
-                ball.y += ball.vy;
-
-                if (ball.x <= 0 || ball.x >= rect.width - ball.size) {
-                    ball.vx *= -1;
-                    ball.vx += (Math.random() - 0.5) * 2;
-                }
-                if (ball.y <= 0 || ball.y >= rect.height - ball.size) {
-                    ball.vy *= -1;
-                    ball.vy += (Math.random() - 0.5) * 2;
-                }
-
-                ball.el.style.left = ball.x + 'px';
-                ball.el.style.top = ball.y + 'px';
-
-                const ballCenterX = ball.x + ball.size / 2;
-                const ballCenterY = ball.y + ball.size / 2;
-                
-                const arenaRect = arena.getBoundingClientRect();
-                const mouseArenaX = gameState.mousePos.x - arenaRect.left;
-                const mouseArenaY = gameState.mousePos.y - arenaRect.top;
-
-                const distX = mouseArenaX - ballCenterX;
-                const distY = mouseArenaY - ballCenterY;
-                const distance = Math.sqrt(distX * distX + distY * distY);
-
-                if (distance <= ball.size / 2) {
-                    gameState.score += 10;
-                    gameState.hits++;
-                    ball.el.style.transform = 'scale(1.1)';
-                } else {
-                    gameState.misses++;
-                    ball.el.style.transform = 'scale(1.0)';
-                }
-                gameState.totalClicks = gameState.hits + gameState.misses;
-                updateHUD();
-            }
-
-            gameState.animationFrameId = requestAnimationFrame(gameLoop);
-        }
-
-        function endGame() {
-            stopGameLoop();
-            crosshairEl.style.display = 'none';
-
-            document.getElementById('game-view').classList.add('hidden');
-            document.getElementById('results-view').classList.remove('hidden');
-
-            const modeTitles = { gridshot: 'Gridshot Protocol', flick: 'Flick Shot Protocol', tracking: 'Tracking Sphere Protocol' };
-            document.getElementById('results-mode-subtitle').textContent = modeTitles[gameState.activeMode];
+        function endGameSession() {
+            gameState.isRunning = false;
+            if (gameState.timerInterval) clearInterval(gameState.timerInterval);
+            if (gameState.animFrame) cancelAnimationFrame(gameState.animFrame);
 
             let finalScore = gameState.score;
-            let isNewRecord = false;
+            let avgReaction = 0;
 
-            if (gameState.activeMode === 'gridshot') {
-                document.getElementById('res-score').textContent = finalScore;
-                if (finalScore > highScores.gridshot) {
-                    highScores.gridshot = finalScore;
-                    isNewRecord = true;
-                }
-            } else if (gameState.activeMode === 'flick') {
-                const avgReaction = gameState.reactionTimes.length > 0 ? Math.round(gameState.reactionTimes.reduce((a,b)=>a+b,0)/gameState.reactionTimes.length) : 0;
-                document.getElementById('res-score').textContent = avgReaction + ' ms';
+            if (gameState.reactionTimes.length > 0) {
+                avgReaction = Math.round(gameState.reactionTimes.reduce((a, b) => a + b, 0) / gameState.reactionTimes.length);
+            }
+
+            if (gameState.activeMode === 'flick') {
                 finalScore = avgReaction;
-                if (highScores.flick === 0 || (avgReaction > 0 && avgReaction < highScores.flick)) {
-                    highScores.flick = avgReaction;
-                    isNewRecord = true;
-                }
-            } else if (gameState.activeMode === 'tracking') {
-                document.getElementById('res-score').textContent = finalScore;
-                if (finalScore > highScores.tracking) {
-                    highScores.tracking = finalScore;
-                    isNewRecord = true;
-                }
             }
 
-            if (isNewRecord) {
-                document.getElementById('res-new-highscore').classList.remove('hidden');
-            } else {
-                document.getElementById('res-new-highscore').classList.add('hidden');
+            let isNewHs = false;
+            if (gameState.activeMode === 'gridshot' && finalScore > localHighScores.gridshot) {
+                localHighScores.gridshot = finalScore;
+                isNewHs = true;
+            } else if (gameState.activeMode === 'flick' && (localHighScores.flick === 0 || finalScore < localHighScores.flick)) {
+                localHighScores.flick = finalScore;
+                isNewHs = true;
+            } else if (gameState.activeMode === 'tracking' && finalScore > localHighScores.tracking) {
+                localHighScores.tracking = finalScore;
+                isNewHs = true;
             }
 
-            let accuracy = 100;
-            if (gameState.totalClicks > 0) {
-                accuracy = Math.round((gameState.hits / gameState.totalClicks) * 100);
-            }
-            document.getElementById('res-accuracy').textContent = accuracy + '%';
-            
-            const avgReactMs = gameState.reactionTimes.length > 0 ? Math.round(gameState.reactionTimes.reduce((a,b)=>a+b,0)/gameState.reactionTimes.length) : 0;
-            document.getElementById('res-reaction').textContent = avgReactMs + ' ms';
-            document.getElementById('res-hits-misses').textContent = `${gameState.hits} / ${gameState.misses}`;
-            document.getElementById('res-combo').textContent = gameState.maxCombo + 'x';
+            saveLocalScores();
+            publishScoresToGlobal();
 
-            saveUserData();
+            setText('res-score', gameState.activeMode === 'flick' ? `${finalScore} ms` : finalScore);
+            const hudAccEl = document.getElementById('hud-accuracy');
+            setText('res-accuracy', hudAccEl ? hudAccEl.innerText : '100%');
+            setText('res-reaction', avgReaction > 0 ? `${avgReaction} ms` : 'N/A');
+            setText('res-hits-misses', `${gameState.hits} / ${gameState.misses}`);
+            setText('res-combo', `${gameState.maxCombo}x`);
+            setText('results-mode-subtitle', `${gameState.activeMode ? gameState.activeMode.toUpperCase() : ''} SESSION RESULT`);
+
+            const newHsBadge = document.getElementById('res-new-highscore');
+            if (newHsBadge) {
+                if (isNewHs) newHsBadge.classList.remove('hidden');
+                else newHsBadge.classList.add('hidden');
+            }
+
+            const gameView = document.getElementById('game-view');
+            const resultsView = document.getElementById('results-view');
+            if (gameView) gameView.classList.add('hidden');
+            if (resultsView) resultsView.classList.remove('hidden');
         }
 
-        window.onload = function() {
-            loadUserData();
-        };
+        window.startReplayPlayback = function() {
+            isReplaying = true;
+            const resultsView = document.getElementById('results-view');
+            const gameView = document.getElementById('game-view');
+            if (resultsView) resultsView.classList.add('hidden');
+            if (gameView) gameView.classList.remove('hidden');
+
+            const arena = document.getElementById('arena');
+            if (!arena) return;
+            arena.innerHTML = '';
+
+            const replayLabel = document.createElement('div');
+            replayLabel.className = 'absolute top-3 left-4 px-3 py-1 rounded bg-cyber-yellow/20 border border-cyber-yellow text-cyber-yellow text-xs font-cyber font-bold animate-pulse z-30 pointer-events-none';
+            replayLabel.innerText = 'REPLAY PLAYBACK IN PROGRESS...';
+            arena.appendChild(replayLabel);
+
+            let replayTargets = {};
+            const events = [...gameState.sessionReplayData];
+            if (events.length === 0) return;
+
+            let startTime = Date.now();
+
+            function replayStep() {
+                const elapsed = Date.now() - startTime;
+
+                while (events.length > 0 && events[0].time <= elapsed) {
+                    const ev = events.shift();
+                    
+                    if (ev.type === 'spawn') {
+                        const targetEl = document.createElement('div');
+                        targetEl.className = 'absolute rounded-full flex items-center justify-center';
+                        targetEl.style.width = ev.data.size + 'px';
+                        targetEl.style.height = ev.data.size + 'px';
+                        targetEl.style.left = (ev.data.x - ev.data.size / 2) + 'px';
+                        targetEl.style.top = (ev.data.y - ev.data.size / 2) + 'px';
+                        targetEl.style.background = 'radial-gradient(circle, #00f0ff 20%, rgba(10,11,16,0.8) 100%)';
+                        targetEl.style.border = '2px solid #00f0ff';
+
+                        replayTargets[ev.data.id] = targetEl;
+                        arena.appendChild(targetEl);
+                    } else if (ev.type === 'move') {
+                        updateCustomCrosshairPosition(ev.data.x + arena.getBoundingClientRect().left, ev.data.y + arena.getBoundingClientRect().top);
+                    } else if (ev.type === 'hit') {
+                        if (replayTargets[ev.data.targetId]) {
+                            replayTargets[ev.data.targetId].remove();
+                            delete replayTargets[ev.data.targetId];
+                        }
+                        showShotMarker(ev.data.x, ev.data.y, '#00ff66');
+                    } else if (ev.type === 'miss') {
+                        showShotMarker(ev.data.x, ev.data.y, '#ff007f');
+                    }
+                }
+
+                if (events.length > 0) {
+                    requestAnimationFrame(replayStep);
+                } else {
+                    setTimeout(() => {
+                        isReplaying = false;
+                        if (gameView) gameView.classList.add('hidden');
+                        if (resultsView) resultsView.classList.remove('hidden');
+                    }, 1000);
+                }
+            }
+            requestAnimationFrame(replayStep);
+        }
+
+        function showShotMarker(x, y, color) {
+            const arena = document.getElementById('arena');
+            if (!arena) return;
+            const marker = document.createElement('div');
+            marker.className = 'absolute w-4 h-4 rounded-full -translate-x-1/2 -translate-y-1/2 pointer-events-none animate-ping';
+            marker.style.left = x + 'px';
+            marker.style.top = y + 'px';
+            marker.style.backgroundColor = color;
+            arena.appendChild(marker);
+            setTimeout(() => marker.remove(), 400);
+        }
+
+        // Local Storage Helpers
+        function saveLocalScores() {
+            localStorage.setItem('nicks_aim_hs', JSON.stringify(localHighScores));
+            updateScoreDisplays();
+        }
+
+        function loadLocalScores() {
+            const data = localStorage.getItem('nicks_aim_hs');
+            if (data) {
+                try {
+                    localHighScores = JSON.parse(data);
+                } catch(e) {}
+            }
+            updateScoreDisplays();
+        }
+
+        function updateScoreDisplays() {
+            setText('home-hs-gridshot', localHighScores.gridshot);
+            setText('modal-hs-gridshot', localHighScores.gridshot);
+
+            setText('home-hs-flick', localHighScores.flick > 0 ? `${localHighScores.flick} ms` : '0 ms');
+            setText('modal-hs-flick', localHighScores.flick > 0 ? `${localHighScores.flick} ms` : '0 ms');
+
+            setText('home-hs-tracking', localHighScores.tracking);
+            setText('modal-hs-tracking', localHighScores.tracking);
+        }
+
+        window.clearLocalScores = function() {
+            localHighScores = { gridshot: 0, flick: 0, tracking: 0 };
+            saveLocalScores();
+            closeStatsModal();
+        }
+
+        // Navigation Modals & General UI Controls
+        window.openSettingsModal = function() {
+            const modal = document.getElementById('settings-modal');
+            if (modal) modal.classList.remove('hidden');
+        }
+        window.closeSettingsModal = function() {
+            const modal = document.getElementById('settings-modal');
+            if (modal) modal.classList.add('hidden');
+        }
+        window.openStatsModal = function() {
+            const modal = document.getElementById('stats-modal');
+            if (modal) modal.classList.remove('hidden');
+        }
+        window.closeStatsModal = function() {
+            const modal = document.getElementById('stats-modal');
+            if (modal) modal.classList.add('hidden');
+        }
+        window.quitGame = function() {
+            gameState.isRunning = false;
+            if (gameState.timerInterval) clearInterval(gameState.timerInterval);
+            if (gameState.animFrame) cancelAnimationFrame(gameState.animFrame);
+            returnToMenu();
+        }
+        window.restartCurrentGame = function() {
+            selectGameMode(gameState.activeMode);
+        }
+        window.returnToMenu = function() {
+            const gameView = document.getElementById('game-view');
+            const resultsView = document.getElementById('results-view');
+            const menuView = document.getElementById('menu-view');
+
+            if (gameView) gameView.classList.add('hidden');
+            if (resultsView) resultsView.classList.add('hidden');
+            if (menuView) menuView.classList.remove('hidden');
+        }
+
+        window.addEventListener('load', () => {
+            initAuth();
+            loadLocalScores();
+            renderCrosshairSVG();
+        });
     </script>
 </body>
 </html>
