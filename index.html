@@ -253,18 +253,19 @@
         let currentItem = null;
 
         // Fetch dataset asynchronously from vocabulary.json
-        async function loadDataset() {
-            try {
-                const response = await fetch('vocabulary.json');
-                if (!response.ok) throw new Error('Network response was not ok');
-                
-                rawDataset = await response.json();
-                filterDataset();
-            } catch (error) {
-                console.error('Error loading vocabulary dataset:', error);
-                document.getElementById('term-display').textContent = 'Failed to load vocabulary.json';
-            }
-        }
+      async function loadDataset() {
+    try {
+        // Use an explicit relative path or resolve against window.location
+        const response = await fetch(new URL('vocabulary.json', window.location.href));
+        if (!response.ok) throw new Error('Network response was not ok');
+        
+        rawDataset = await response.json();
+        filterDataset();
+    } catch (error) {
+        console.error('Error loading vocabulary dataset:', error);
+        document.getElementById('term-display').textContent = 'Failed to load vocabulary.json';
+    }
+}
 
         function filterDataset() {
             const selectedLevel = document.getElementById('level-filter').value;
