@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CyberAim Pro - Advanced Aim Trainer</title>
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -37,7 +36,6 @@
             color: #f3f4f6;
             overflow-x: hidden;
             user-select: none;
-            cursor: default;
         }
         .font-cyber {
             font-family: 'Rajdhani', sans-serif;
@@ -47,92 +45,98 @@
             position: fixed;
             pointer-events: none;
             transform: translate(-50%, -50%);
-            z-index: 9999;
+            z-index: 99999;
             display: none;
         }
         /* Glassmorphism Cyber Card */
         .cyber-card {
-            background: rgba(18, 21, 32, 0.85);
+            background: rgba(18, 21, 32, 0.9);
             backdrop-filter: blur(12px);
             border: 1px solid rgba(0, 240, 255, 0.2);
             box-shadow: 0 0 20px rgba(0, 240, 255, 0.05);
         }
         .cyber-card-magenta {
-            background: rgba(18, 21, 32, 0.85);
+            background: rgba(18, 21, 32, 0.9);
             backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 0, 127, 0.2);
             box-shadow: 0 0 20px rgba(255, 0, 127, 0.05);
         }
         /* Neon Button Glow */
         .btn-cyber-cyan {
-            background: linear-gradient(135deg, rgba(0,240,255,0.2), rgba(0,240,255,0.05));
+            background: linear-gradient(135deg, rgba(0,240,255,0.25), rgba(0,240,255,0.05));
             border: 1px solid #00f0ff;
             color: #00f0ff;
             transition: all 0.2s ease;
+            pointer-events: auto !important;
+            cursor: pointer;
         }
         .btn-cyber-cyan:hover {
-            background: rgba(0,240,255,0.3);
-            box-shadow: 0 0 15px rgba(0,240,255,0.5);
+            background: rgba(0,240,255,0.4);
+            box-shadow: 0 0 15px rgba(0,240,255,0.6);
             color: #ffffff;
         }
         .btn-cyber-magenta {
-            background: linear-gradient(135deg, rgba(255,0,127,0.2), rgba(255,0,127,0.05));
+            background: linear-gradient(135deg, rgba(255,0,127,0.25), rgba(255,0,127,0.05));
             border: 1px solid #ff007f;
             color: #ff007f;
             transition: all 0.2s ease;
+            pointer-events: auto !important;
+            cursor: pointer;
         }
         .btn-cyber-magenta:hover {
-            background: rgba(255,0,127,0.3);
-            box-shadow: 0 0 15px rgba(255,0,127,0.5);
+            background: rgba(255,0,127,0.4);
+            box-shadow: 0 0 15px rgba(255,0,127,0.6);
             color: #ffffff;
         }
-        /* Scanline Overlay Effect */
+        /* Scanline Overlay Effect - ensure pointer-events: none */
         .scanlines {
             background: linear-gradient(
                 rgba(18, 21, 32, 0) 50%, 
-                rgba(0, 0, 0, 0.1) 50%
+                rgba(0, 0, 0, 0.15) 50%
             );
             background-size: 100% 4px;
             pointer-events: none;
+        }
+        /* Ensure all interactive buttons and modal contents have working pointer events */
+        button, a, input, select {
+            pointer-events: auto !important;
         }
     </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between relative scanlines">
 
-    <!-- Custom Crosshair Element -->
     <div id="custom-crosshair" class="crosshair-container">
-        <!-- Will be dynamically injected via JS based on settings -->
+        <!-- Will be dynamically injected via JS -->
     </div>
 
     <!-- Header Navigation -->
-    <header class="w-full border-b border-cyber-border bg-cyber-card/60 backdrop-blur-md px-6 py-4 flex items-center justify-between z-30">
-        <div class="flex items-center space-x-3">
+    <header class="w-full border-b border-cyber-border bg-cyber-card/80 backdrop-blur-md px-6 py-4 flex items-center justify-between z-40 relative">
+        <div class="flex items-center space-x-3 pointer-events-auto">
             <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyber-cyan to-cyber-magenta flex items-center justify-center shadow-lg shadow-cyber-cyan/20">
                 <i class="fa-solid fa-crosshairs text-cyber-bg text-xl font-bold"></i>
             </div>
             <div>
-                <h1 class="font-cyber text-2xl font-bold tracking-wider text-white">CYBER<span class="text-cyber-cyan">AIM</span> <span class="text-xs px-2 py-0.5 rounded bg-cyber-cyan/10 border border-cyber-cyan/30 text-cyber-cyan ml-1">V2.4</span></h1>
+                <h1 class="font-cyber text-2xl font-bold tracking-wider text-white">CYBER<span class="text-cyber-cyan">AIM</span> <span class="text-xs px-2 py-0.5 rounded bg-cyber-cyan/10 border border-cyber-cyan/30 text-cyber-cyan ml-1">V2.5</span></h1>
                 <p class="text-xs text-gray-400">Advanced Precision & Reflex Training Arena</p>
             </div>
         </div>
         
-        <div class="flex items-center space-x-3">
+        <div class="flex items-center space-x-3 z-50 relative pointer-events-auto">
             <button onclick="openSettingsModal()" class="px-4 py-2 rounded-xl text-sm font-semibold btn-cyber-cyan flex items-center space-x-2">
                 <i class="fa-solid fa-sliders"></i>
                 <span>Settings</span>
             </button>
             <button onclick="openStatsModal()" class="px-4 py-2 rounded-xl text-sm font-semibold btn-cyber-magenta flex items-center space-x-2">
                 <i class="fa-solid fa-chart-line"></i>
-                <span>Leaderboard / Stats</span>
+                <span>Records</span>
             </button>
         </div>
     </header>
 
-    <!-- Main App Container -->
-    <main class="flex-1 flex flex-col items-center justify-center p-4 relative z-20">
+    <main class="flex-1 flex flex-col items-center justify-center p-4 relative z-30 pointer-events-none">
 
         <!-- VIEW 1: MODE SELECTION MENU -->
-        <div id="menu-view" class="w-full max-w-5xl flex flex-col items-center space-y-8">
+        <div id="menu-view" class="w-full max-w-5xl flex flex-col items-center space-y-8 pointer-events-auto">
             <div class="text-center space-y-2">
                 <h2 class="font-cyber text-4xl md:text-5xl font-extrabold tracking-wider text-white uppercase">Select Training Protocol</h2>
                 <p class="text-gray-400 max-w-lg mx-auto text-sm">Enhance muscle memory, flick velocity, target tracking, and reaction precision with calibrated simulations.</p>
@@ -140,7 +144,7 @@
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-4xl px-4">
                 <!-- Mode 1: Gridshot -->
-                <div onclick="selectGameMode('gridshot')" class="cyber-card rounded-2xl p-6 flex flex-col justify-between cursor-pointer transition-all duration-300 hover:scale-105 hover:border-cyber-cyan group">
+                <div onclick="selectGameMode('gridshot')" class="cyber-card rounded-2xl p-6 flex flex-col justify-between cursor-pointer transition-all duration-300 hover:scale-105 hover:border-cyber-cyan group pointer-events-auto">
                     <div>
                         <div class="w-12 h-12 rounded-xl bg-cyber-cyan/10 border border-cyber-cyan/30 flex items-center justify-center text-cyber-cyan text-xl mb-4 group-hover:bg-cyber-cyan group-hover:text-cyber-bg transition-colors">
                             <i class="fa-solid fa-table-cells"></i>
@@ -155,7 +159,7 @@
                 </div>
 
                 <!-- Mode 2: Flick Shot -->
-                <div onclick="selectGameMode('flick')" class="cyber-card-magenta rounded-2xl p-6 flex flex-col justify-between cursor-pointer transition-all duration-300 hover:scale-105 hover:border-cyber-magenta group">
+                <div onclick="selectGameMode('flick')" class="cyber-card-magenta rounded-2xl p-6 flex flex-col justify-between cursor-pointer transition-all duration-300 hover:scale-105 hover:border-cyber-magenta group pointer-events-auto">
                     <div>
                         <div class="w-12 h-12 rounded-xl bg-cyber-magenta/10 border border-cyber-magenta/30 flex items-center justify-center text-cyber-magenta text-xl mb-4 group-hover:bg-cyber-magenta group-hover:text-cyber-bg transition-colors">
                             <i class="fa-solid fa-bolt"></i>
@@ -170,7 +174,7 @@
                 </div>
 
                 <!-- Mode 3: Tracking -->
-                <div onclick="selectGameMode('tracking')" class="cyber-card rounded-2xl p-6 flex flex-col justify-between cursor-pointer transition-all duration-300 hover:scale-105 hover:border-cyber-yellow group" style="border-color: rgba(243, 230, 0, 0.2);">
+                <div onclick="selectGameMode('tracking')" class="cyber-card rounded-2xl p-6 flex flex-col justify-between cursor-pointer transition-all duration-300 hover:scale-105 hover:border-cyber-yellow group pointer-events-auto" style="border-color: rgba(243, 230, 0, 0.2);">
                     <div>
                         <div class="w-12 h-12 rounded-xl bg-cyber-yellow/10 border border-cyber-yellow/30 flex items-center justify-center text-cyber-yellow text-xl mb-4 group-hover:bg-cyber-yellow group-hover:text-cyber-bg transition-colors">
                             <i class="fa-solid fa-bullseye"></i>
@@ -186,7 +190,7 @@
             </div>
 
             <!-- Quick Stats preview banner -->
-            <div class="w-full max-w-4xl cyber-card rounded-2xl p-4 flex items-center justify-around text-center">
+            <div class="w-full max-w-4xl cyber-card rounded-2xl p-4 flex items-center justify-around text-center pointer-events-auto">
                 <div>
                     <div class="text-xs text-gray-400 uppercase font-cyber tracking-wider">Gridshot High Score</div>
                     <div id="home-hs-gridshot" class="text-xl font-bold font-cyber text-cyber-cyan">0</div>
@@ -205,11 +209,11 @@
         </div>
 
         <!-- VIEW 2: GAMEPLAY ARENA -->
-        <div id="game-view" class="w-full max-w-6xl h-[82vh] hidden flex flex-col relative rounded-2xl cyber-card overflow-hidden">
+        <div id="game-view" class="w-full max-w-6xl h-[82vh] hidden flex flex-col relative rounded-2xl cyber-card overflow-hidden pointer-events-auto">
             <!-- HUD Top Bar -->
-            <div class="w-full bg-cyber-card/90 border-b border-cyber-border px-6 py-3 flex items-center justify-between z-10">
+            <div class="w-full bg-cyber-card/95 border-b border-cyber-border px-6 py-3 flex items-center justify-between z-20 pointer-events-auto">
                 <div class="flex items-center space-x-6">
-                    <button onclick="quitGame()" class="text-gray-400 hover:text-white transition-colors flex items-center space-x-2 text-sm font-semibold">
+                    <button onclick="quitGame()" class="text-gray-400 hover:text-white transition-colors flex items-center space-x-2 text-sm font-semibold pointer-events-auto">
                         <i class="fa-solid fa-arrow-left"></i>
                         <span>Abort</span>
                     </button>
@@ -241,14 +245,14 @@
                 </div>
             </div>
 
-            <!-- Interactive Target Canvas / Click Arena -->
-            <div id="arena" class="flex-1 relative cursor-crosshair overflow-hidden" onclick="handleArenaClick(event)">
-                <!-- Targets will be spawned inside here via JS -->
+            <!-- Interactive Arena Canvas container -->
+            <div id="arena" class="flex-1 relative cursor-crosshair overflow-hidden pointer-events-auto" onclick="handleArenaClick(event)">
+                <!-- Targets will be dynamically injected here -->
             </div>
         </div>
 
         <!-- VIEW 3: RESULTS SCREEN -->
-        <div id="results-view" class="w-full max-w-2xl hidden flex flex-col items-center space-y-6 cyber-card rounded-3xl p-8 animate-fade-in relative overflow-hidden">
+        <div id="results-view" class="w-full max-w-2xl hidden flex flex-col items-center space-y-6 cyber-card rounded-3xl p-8 relative overflow-hidden pointer-events-auto">
             <div class="absolute -top-24 -right-24 w-48 h-48 bg-cyber-cyan/10 rounded-full blur-3xl pointer-events-none"></div>
             <div class="absolute -bottom-24 -left-24 w-48 h-48 bg-cyber-magenta/10 rounded-full blur-3xl pointer-events-none"></div>
 
@@ -290,12 +294,12 @@
             </div>
 
             <!-- Action Buttons -->
-            <div class="flex items-center space-x-4 w-full pt-2">
-                <button onclick="restartCurrentGame()" class="flex-1 py-3 rounded-xl font-semibold btn-cyber-cyan font-cyber tracking-wider text-base flex items-center justify-center space-x-2">
+            <div class="flex items-center space-x-4 w-full pt-2 pointer-events-auto">
+                <button onclick="restartCurrentGame()" class="flex-1 py-3 rounded-xl font-semibold btn-cyber-cyan font-cyber tracking-wider text-base flex items-center justify-center space-x-2 pointer-events-auto">
                     <i class="fa-solid fa-rotate-right"></i>
                     <span>RETRY PROTOCOL</span>
                 </button>
-                <button onclick="returnToMenu()" class="flex-1 py-3 rounded-xl font-semibold bg-cyber-card border border-cyber-border text-gray-300 hover:text-white hover:border-gray-500 font-cyber tracking-wider text-base flex items-center justify-center space-x-2 transition-all">
+                <button onclick="returnToMenu()" class="flex-1 py-3 rounded-xl font-semibold bg-cyber-card border border-cyber-border text-gray-300 hover:text-white hover:border-gray-500 font-cyber tracking-wider text-base flex items-center justify-center space-x-2 transition-all pointer-events-auto">
                     <i class="fa-solid fa-house"></i>
                     <span>MAIN MENU</span>
                 </button>
@@ -305,8 +309,8 @@
     </main>
 
     <!-- SETTINGS MODAL -->
-    <div id="settings-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="cyber-card w-full max-w-lg rounded-3xl p-6 space-y-6 relative border border-cyber-cyan/30">
+    <div id="settings-modal" class="fixed inset-0 bg-black/85 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 pointer-events-auto">
+        <div class="cyber-card w-full max-w-lg rounded-3xl p-6 space-y-6 relative border border-cyber-cyan/30 pointer-events-auto">
             <div class="flex items-center justify-between border-b border-cyber-border pb-4">
                 <div class="flex items-center space-x-3">
                     <div class="w-10 h-10 rounded-xl bg-cyber-cyan/10 border border-cyber-cyan/30 flex items-center justify-center text-cyber-cyan">
@@ -314,7 +318,7 @@
                     </div>
                     <h3 class="font-cyber text-2xl font-bold text-white">Trainer Settings</h3>
                 </div>
-                <button onclick="closeSettingsModal()" class="text-gray-400 hover:text-white text-lg p-2">
+                <button onclick="closeSettingsModal()" class="text-gray-400 hover:text-white text-lg p-2 pointer-events-auto">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
@@ -327,9 +331,9 @@
                         <span id="val-target-size" class="text-cyber-cyan font-bold">Medium (60px)</span>
                     </label>
                     <div class="grid grid-cols-3 gap-3">
-                        <button onclick="setTargetSize('small')" id="btn-size-small" class="py-2 rounded-xl text-xs font-semibold bg-cyber-card border border-cyber-border text-gray-300 hover:border-cyber-cyan transition-all">Small (40px)</button>
-                        <button onclick="setTargetSize('medium')" id="btn-size-medium" class="py-2 rounded-xl text-xs font-semibold btn-cyber-cyan transition-all">Medium (60px)</button>
-                        <button onclick="setTargetSize('large')" id="btn-size-large" class="py-2 rounded-xl text-xs font-semibold bg-cyber-card border border-cyber-border text-gray-300 hover:border-cyber-cyan transition-all">Large (80px)</button>
+                        <button onclick="setTargetSize('small')" id="btn-size-small" class="py-2 rounded-xl text-xs font-semibold bg-cyber-card border border-cyber-border text-gray-300 hover:border-cyber-cyan transition-all pointer-events-auto">Small (40px)</button>
+                        <button onclick="setTargetSize('medium')" id="btn-size-medium" class="py-2 rounded-xl text-xs font-semibold btn-cyber-cyan transition-all pointer-events-auto">Medium (60px)</button>
+                        <button onclick="setTargetSize('large')" id="btn-size-large" class="py-2 rounded-xl text-xs font-semibold bg-cyber-card border border-cyber-border text-gray-300 hover:border-cyber-cyan transition-all pointer-events-auto">Large (80px)</button>
                     </div>
                 </div>
 
@@ -340,9 +344,9 @@
                         <span id="val-target-style" class="text-cyber-cyan font-bold">Neon Glow</span>
                     </label>
                     <div class="grid grid-cols-3 gap-3">
-                        <button onclick="setTargetStyle('neon')" id="btn-style-neon" class="py-2 rounded-xl text-xs font-semibold btn-cyber-cyan transition-all">Neon Glow</button>
-                        <button onclick="setTargetStyle('solid')" id="btn-style-solid" class="py-2 rounded-xl text-xs font-semibold bg-cyber-card border border-cyber-border text-gray-300 hover:border-cyber-cyan transition-all">Solid Circle</button>
-                        <button onclick="setTargetStyle('bullseye')" id="btn-style-bullseye" class="py-2 rounded-xl text-xs font-semibold bg-cyber-card border border-cyber-border text-gray-300 hover:border-cyber-cyan transition-all">Bullseye</button>
+                        <button onclick="setTargetStyle('neon')" id="btn-style-neon" class="py-2 rounded-xl text-xs font-semibold btn-cyber-cyan transition-all pointer-events-auto">Neon Glow</button>
+                        <button onclick="setTargetStyle('solid')" id="btn-style-solid" class="py-2 rounded-xl text-xs font-semibold bg-cyber-card border border-cyber-border text-gray-300 hover:border-cyber-cyan transition-all pointer-events-auto">Solid Circle</button>
+                        <button onclick="setTargetStyle('bullseye')" id="btn-style-bullseye" class="py-2 rounded-xl text-xs font-semibold bg-cyber-card border border-cyber-border text-gray-300 hover:border-cyber-cyan transition-all pointer-events-auto">Bullseye</button>
                     </div>
                 </div>
 
@@ -353,10 +357,10 @@
                         <span id="val-crosshair" class="text-cyber-cyan font-bold">Plus (Cross)</span>
                     </label>
                     <div class="grid grid-cols-4 gap-2">
-                        <button onclick="setCrosshairType('dot')" id="btn-ch-dot" class="py-2 rounded-xl text-xs font-semibold bg-cyber-card border border-cyber-border text-gray-300">Dot</button>
-                        <button onclick="setCrosshairType('plus')" id="btn-ch-plus" class="py-2 rounded-xl text-xs font-semibold btn-cyber-cyan">Plus</button>
-                        <button onclick="setCrosshairType('circle')" id="btn-ch-circle" class="py-2 rounded-xl text-xs font-semibold bg-cyber-card border border-cyber-border text-gray-300">Circle</button>
-                        <button onclick="setCrosshairType('classic')" id="btn-ch-classic" class="py-2 rounded-xl text-xs font-semibold bg-cyber-card border border-cyber-border text-gray-300">Classic</button>
+                        <button onclick="setCrosshairType('dot')" id="btn-ch-dot" class="py-2 rounded-xl text-xs font-semibold bg-cyber-card border border-cyber-border text-gray-300 pointer-events-auto">Dot</button>
+                        <button onclick="setCrosshairType('plus')" id="btn-ch-plus" class="py-2 rounded-xl text-xs font-semibold btn-cyber-cyan pointer-events-auto">Plus</button>
+                        <button onclick="setCrosshairType('circle')" id="btn-ch-circle" class="py-2 rounded-xl text-xs font-semibold bg-cyber-card border border-cyber-border text-gray-300 pointer-events-auto">Circle</button>
+                        <button onclick="setCrosshairType('classic')" id="btn-ch-classic" class="py-2 rounded-xl text-xs font-semibold bg-cyber-card border border-cyber-border text-gray-300 pointer-events-auto">Classic</button>
                     </div>
                 </div>
 
@@ -366,25 +370,25 @@
                         <span>Crosshair Color</span>
                         <span id="val-ch-color" class="text-cyber-cyan font-bold">Cyan</span>
                     </label>
-                    <div class="flex items-center space-x-3">
-                        <button onclick="setCrosshairColor('#00f0ff')" class="w-8 h-8 rounded-full bg-[#00f0ff] border-2 border-white/45 shadow-sm"></button>
-                        <button onclick="setCrosshairColor('#ff007f')" class="w-8 h-8 rounded-full bg-[#ff007f] border-2 border-white/20 shadow-sm"></button>
-                        <button onclick="setCrosshairColor('#f3e600')" class="w-8 h-8 rounded-full bg-[#f3e600] border-2 border-white/20 shadow-sm"></button>
-                        <button onclick="setCrosshairColor('#00ff66')" class="w-8 h-8 rounded-full bg-[#00ff66] border-2 border-white/20 shadow-sm"></button>
-                        <button onclick="setCrosshairColor('#ffffff')" class="w-8 h-8 rounded-full bg-[#ffffff] border-2 border-white/20 shadow-sm"></button>
+                    <div class="flex items-center space-x-3 pointer-events-auto">
+                        <button onclick="setCrosshairColor('#00f0ff')" class="w-8 h-8 rounded-full bg-[#00f0ff] border-2 border-white/45 shadow-sm cursor-pointer"></button>
+                        <button onclick="setCrosshairColor('#ff007f')" class="w-8 h-8 rounded-full bg-[#ff007f] border-2 border-white/20 shadow-sm cursor-pointer"></button>
+                        <button onclick="setCrosshairColor('#f3e600')" class="w-8 h-8 rounded-full bg-[#f3e600] border-2 border-white/20 shadow-sm cursor-pointer"></button>
+                        <button onclick="setCrosshairColor('#00ff66')" class="w-8 h-8 rounded-full bg-[#00ff66] border-2 border-white/20 shadow-sm cursor-pointer"></button>
+                        <button onclick="setCrosshairColor('#ffffff')" class="w-8 h-8 rounded-full bg-[#ffffff] border-2 border-white/20 shadow-sm cursor-pointer"></button>
                     </div>
                 </div>
             </div>
 
-            <div class="pt-4 border-t border-cyber-border flex justify-end">
-                <button onclick="closeSettingsModal()" class="px-6 py-2.5 rounded-xl font-semibold btn-cyber-cyan font-cyber text-sm">SAVE & CLOSE</button>
+            <div class="pt-4 border-t border-cyber-border flex justify-end pointer-events-auto">
+                <button onclick="closeSettingsModal()" class="px-6 py-2.5 rounded-xl font-semibold btn-cyber-cyan font-cyber text-sm pointer-events-auto">SAVE & CLOSE</button>
             </div>
         </div>
     </div>
 
     <!-- STATS / LEADERBOARD MODAL -->
-    <div id="stats-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="cyber-card-magenta w-full max-w-lg rounded-3xl p-6 space-y-6 relative border border-cyber-magenta/30">
+    <div id="stats-modal" class="fixed inset-0 bg-black/85 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 pointer-events-auto">
+        <div class="cyber-card-magenta w-full max-w-lg rounded-3xl p-6 space-y-6 relative border border-cyber-magenta/30 pointer-events-auto">
             <div class="flex items-center justify-between border-b border-cyber-border pb-4">
                 <div class="flex items-center space-x-3">
                     <div class="w-10 h-10 rounded-xl bg-cyber-magenta/10 border border-cyber-magenta/30 flex items-center justify-center text-cyber-magenta">
@@ -392,7 +396,7 @@
                     </div>
                     <h3 class="font-cyber text-2xl font-bold text-white">Performance Records</h3>
                 </div>
-                <button onclick="closeStatsModal()" class="text-gray-400 hover:text-white text-lg p-2">
+                <button onclick="closeStatsModal()" class="text-gray-400 hover:text-white text-lg p-2 pointer-events-auto">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
@@ -423,16 +427,15 @@
                 </div>
             </div>
 
-            <div class="pt-4 border-t border-cyber-border flex justify-between items-center">
-                <button onclick="clearLocalScores()" class="px-4 py-2 rounded-xl text-xs font-semibold bg-red-500/10 border border-red-500/30 text-red-400 hover:bg-red-500/20 transition-all">Clear All Data</button>
-                <button onclick="closeStatsModal()" class="px-6 py-2.5 rounded-xl font-semibold btn-cyber-magenta font-cyber text-sm">CLOSE</button>
+            <div class="pt-4 border-t border-cyber-border flex justify-between items-center pointer-events-auto">
+                <button onclick="clearLocalScores()" class="px-4 py-2 rounded-xl text-xs font-semibold bg-red-500/10 border border-red-500/30 text-red-400 hover:bg-red-500/20 transition-all pointer-events-auto">Clear All Data</button>
+                <button onclick="closeStatsModal()" class="px-6 py-2.5 rounded-xl font-semibold btn-cyber-magenta font-cyber text-sm pointer-events-auto">CLOSE</button>
             </div>
         </div>
     </div>
 
-    <!-- JavaScript Game Engine & Audio Synthesizer -->
     <script>
-        // Web Audio API Sound Synthesizer (No external asset files needed)
+        // Web Audio API Sound Synthesizer
         class SoundEngine {
             constructor() {
                 this.ctx = null;
@@ -513,7 +516,7 @@
 
         let highScores = {
             gridshot: 0,
-            flick: 0, // Lower ms is better for flick, or 0 if none
+            flick: 0,
             tracking: 0
         };
 
@@ -529,26 +532,22 @@
             timeLeft: 30.0,
             timerInterval: null,
             animationFrameId: null,
-            targets: [], // Active targets in arena
-            spawnTimer: 0,
-            // Flick specific
+            targets: [],
             flickTargetCount: 0,
             flickTargetMax: 25,
             flickStartTime: 0,
             reactionTimes: [],
-            // Tracking specific
             trackingBall: null,
-            trackingScoreAccumulator: 0,
             mousePos: { x: 0, y: 0 }
         };
 
-        // Load saved high scores & settings from localStorage
+        // Load saved high scores & settings
         function loadUserData() {
-            const savedHS = localStorage.getItem('cyberaim_highscores');
+            const savedHS = localStorage.getItem('cyberaim_highscores_v2');
             if (savedHS) {
                 try { highScores = JSON.parse(savedHS); } catch(e) {}
             }
-            const savedSettings = localStorage.getItem('cyberaim_settings');
+            const savedSettings = localStorage.getItem('cyberaim_settings_v2');
             if (savedSettings) {
                 try { settings = JSON.parse(savedSettings); } catch(e) {}
             }
@@ -557,8 +556,8 @@
         }
 
         function saveUserData() {
-            localStorage.setItem('cyberaim_highscores', JSON.stringify(highScores));
-            localStorage.setItem('cyberaim_settings', JSON.stringify(settings));
+            localStorage.setItem('cyberaim_highscores_v2', JSON.stringify(highScores));
+            localStorage.setItem('cyberaim_settings_v2', JSON.stringify(settings));
         }
 
         // Custom Crosshair Management
@@ -619,45 +618,55 @@
             settings.targetSize = size;
             ['small', 'medium', 'large'].forEach(s => {
                 const btn = document.getElementById(`btn-size-${s}`);
-                if (s === size) {
-                    btn.className = 'py-2 rounded-xl text-xs font-semibold btn-cyber-cyan transition-all';
-                } else {
-                    btn.className = 'py-2 rounded-xl text-xs font-semibold bg-cyber-card border border-cyber-border text-gray-300 hover:border-cyber-cyan transition-all';
+                if (btn) {
+                    if (s === size) {
+                        btn.className = 'py-2 rounded-xl text-xs font-semibold btn-cyber-cyan transition-all pointer-events-auto';
+                    } else {
+                        btn.className = 'py-2 rounded-xl text-xs font-semibold bg-cyber-card border border-cyber-border text-gray-300 hover:border-cyber-cyan transition-all pointer-events-auto';
+                    }
                 }
             });
             const sizeMap = { small: 'Small (40px)', medium: 'Medium (60px)', large: 'Large (80px)' };
-            document.getElementById('val-target-size').textContent = sizeMap[size];
+            const valEl = document.getElementById('val-target-size');
+            if (valEl) valEl.textContent = sizeMap[size];
         }
         function setTargetStyle(style) {
             settings.targetStyle = style;
             ['neon', 'solid', 'bullseye'].forEach(s => {
                 const btn = document.getElementById(`btn-style-${s}`);
-                if (s === style) {
-                    btn.className = 'py-2 rounded-xl text-xs font-semibold btn-cyber-cyan transition-all';
-                } else {
-                    btn.className = 'py-2 rounded-xl text-xs font-semibold bg-cyber-card border border-cyber-border text-gray-300 hover:border-cyber-cyan transition-all';
+                if (btn) {
+                    if (s === style) {
+                        btn.className = 'py-2 rounded-xl text-xs font-semibold btn-cyber-cyan transition-all pointer-events-auto';
+                    } else {
+                        btn.className = 'py-2 rounded-xl text-xs font-semibold bg-cyber-card border border-cyber-border text-gray-300 hover:border-cyber-cyan transition-all pointer-events-auto';
+                    }
                 }
             });
             const styleMap = { neon: 'Neon Glow', solid: 'Solid Circle', bullseye: 'Bullseye' };
-            document.getElementById('val-target-style').textContent = styleMap[style];
+            const valEl = document.getElementById('val-target-style');
+            if (valEl) valEl.textContent = styleMap[style];
         }
         function setCrosshairType(type) {
             settings.crosshairType = type;
             ['dot', 'plus', 'circle', 'classic'].forEach(t => {
                 const btn = document.getElementById(`btn-ch-${t}`);
-                if (t === type) {
-                    btn.className = 'py-2 rounded-xl text-xs font-semibold btn-cyber-cyan transition-all';
-                } else {
-                    btn.className = 'py-2 rounded-xl text-xs font-semibold bg-cyber-card border border-cyber-border text-gray-300';
+                if (btn) {
+                    if (t === type) {
+                        btn.className = 'py-2 rounded-xl text-xs font-semibold btn-cyber-cyan transition-all pointer-events-auto';
+                    } else {
+                        btn.className = 'py-2 rounded-xl text-xs font-semibold bg-cyber-card border border-cyber-border text-gray-300 pointer-events-auto';
+                    }
                 }
             });
             const typeMap = { dot: 'Dot', plus: 'Plus (Cross)', circle: 'Circle', classic: 'Classic' };
-            document.getElementById('val-crosshair').textContent = typeMap[type];
+            const valEl = document.getElementById('val-crosshair');
+            if (valEl) valEl.textContent = typeMap[type];
             renderCrosshairHTML();
         }
         function setCrosshairColor(color) {
             settings.crosshairColor = color;
-            document.getElementById('val-ch-color').textContent = color === '#00f0ff' ? 'Cyan' : color === '#ff007f' ? 'Magenta' : color === '#f3e600' ? 'Yellow' : color === '#00ff66' ? 'Green' : 'White';
+            const valEl = document.getElementById('val-ch-color');
+            if (valEl) valEl.textContent = color === '#00f0ff' ? 'Cyan' : color === '#ff007f' ? 'Magenta' : color === '#f3e600' ? 'Yellow' : color === '#00ff66' ? 'Green' : 'White';
             renderCrosshairHTML();
         }
 
@@ -699,9 +708,7 @@
             document.getElementById('results-view').classList.add('hidden');
             document.getElementById('game-view').classList.remove('hidden');
 
-            const modeNames = { gridshot: 'Gridshot Protocol', flick: 'Flick Shot Protocol', tracking: 'Tracking Sphere Protocol' };
             document.getElementById('hud-mode-name').textContent = mode;
-            
             startGame();
         }
 
@@ -729,7 +736,6 @@
         function startGame() {
             stopGameLoop();
 
-            // Reset state
             gameState.isRunning = true;
             gameState.score = 0;
             gameState.hits = 0;
@@ -749,7 +755,7 @@
                 gameState.timeLeft = 30.0;
                 spawnGridshotTargets(3);
             } else if (gameState.activeMode === 'flick') {
-                gameState.timeLeft = 0; // Count up or until max targets
+                gameState.timeLeft = 0;
                 gameState.flickTargetCount = 0;
                 spawnFlickTarget();
             } else if (gameState.activeMode === 'tracking') {
@@ -759,7 +765,6 @@
 
             updateHUD();
 
-            // Start Timer
             if (gameState.activeMode !== 'flick') {
                 gameState.timerInterval = setInterval(() => {
                     gameState.timeLeft -= 0.1;
@@ -773,7 +778,6 @@
                 }, 100);
             }
 
-            // Start Animation Loop
             gameState.animationFrameId = requestAnimationFrame(gameLoop);
         }
 
@@ -803,7 +807,7 @@
         function getTargetPixelSize() {
             if (settings.targetSize === 'small') return 40;
             if (settings.targetSize === 'large') return 80;
-            return 60; // medium
+            return 60;
         }
 
         // Spawning Logic
@@ -813,7 +817,6 @@
             const size = getTargetPixelSize();
 
             for (let i = 0; i < count; i++) {
-                // Divide arena into 3 columns for structured gridshot
                 const colWidth = (rect.width - 100) / 3;
                 const minX = 50 + (i * colWidth) + 10;
                 const maxX = 50 + ((i + 1) * colWidth) - size - 10;
@@ -828,7 +831,6 @@
                     if (gameState.combo > gameState.maxCombo) gameState.maxCombo = gameState.combo;
                     gameState.score += 100 * (1 + Math.floor(gameState.combo / 10));
                     
-                    // Spawn replacement
                     spawnGridshotTargets(1);
                     updateHUD();
                 });
@@ -858,7 +860,7 @@
                 gameState.totalClicks++;
                 gameState.combo++;
                 if (gameState.combo > gameState.maxCombo) gameState.maxCombo = gameState.combo;
-                gameState.score = Math.round(gameState.reactionTimes.reduce((a,b)=>a+b,0) / gameState.reactionTimes.length); // lower avg reaction ms
+                gameState.score = Math.round(gameState.reactionTimes.reduce((a,b)=>a+b,0) / gameState.reactionTimes.length);
 
                 gameState.flickTargetCount++;
                 updateHUD();
@@ -893,7 +895,7 @@
         }
 
         function getTargetCSSClass() {
-            return 'rounded-full cursor-crosshair transition-transform duration-75 flex items-center justify-center';
+            return 'rounded-full cursor-crosshair transition-transform duration-75 flex items-center justify-center pointer-events-auto';
         }
 
         function applyTargetStyles(el, size) {
@@ -901,7 +903,7 @@
             el.style.height = size + 'px';
             
             if (settings.targetStyle === 'neon') {
-                el.style.background = 'radial-gradient(circle, rgba(0,240,255,0.8) 0%, rgba(255,0,127,0.4) 100%)';
+                el.style.background = 'radial-gradient(circle, rgba(0,240,255,0.85) 0%, rgba(255,0,127,0.45) 100%)';
                 el.style.border = '2px solid #00f0ff';
                 el.style.boxShadow = '0 0 15px #00f0ff, inset 0 0 10px #ff007f';
             } else if (settings.targetStyle === 'solid') {
@@ -924,7 +926,7 @@
             el.style.left = x + 'px';
             el.style.top = y + 'px';
 
-            el.addEventListener('mousedown', (e) => {
+            el.addEventListener('pointerdown', (e) => {
                 e.stopPropagation();
                 el.remove();
                 onClickCallback();
@@ -934,10 +936,9 @@
             gameState.targets.push({ el, x, y, size });
         }
 
-        // Arena Click (Miss detection)
         function handleArenaClick(e) {
             if (!gameState.isRunning) return;
-            if (gameState.activeMode === 'tracking') return; // Tracking uses continuous mouseover
+            if (gameState.activeMode === 'tracking') return;
 
             soundEngine.playMiss();
             gameState.misses++;
@@ -946,7 +947,7 @@
             updateHUD();
         }
 
-        // Main Animation & Physics Loop (60 FPS)
+        // Main Animation & Physics Loop
         function gameLoop() {
             if (!gameState.isRunning) return;
 
@@ -958,10 +959,9 @@
                 ball.x += ball.vx;
                 ball.y += ball.vy;
 
-                // Bounce off walls
                 if (ball.x <= 0 || ball.x >= rect.width - ball.size) {
                     ball.vx *= -1;
-                    ball.vx += (Math.random() - 0.5) * 2; // randomize slightly
+                    ball.vx += (Math.random() - 0.5) * 2;
                 }
                 if (ball.y <= 0 || ball.y >= rect.height - ball.size) {
                     ball.vy *= -1;
@@ -971,11 +971,9 @@
                 ball.el.style.left = ball.x + 'px';
                 ball.el.style.top = ball.y + 'px';
 
-                // Check if mouse cursor is inside the moving ball
                 const ballCenterX = ball.x + ball.size / 2;
                 const ballCenterY = ball.y + ball.size / 2;
                 
-                // Get arena relative mouse position
                 const arenaRect = arena.getBoundingClientRect();
                 const mouseArenaX = gameState.mousePos.x - arenaRect.left;
                 const mouseArenaY = gameState.mousePos.y - arenaRect.top;
@@ -999,7 +997,6 @@
             gameState.animationFrameId = requestAnimationFrame(gameLoop);
         }
 
-        // End Game & Results Processing
         function endGame() {
             stopGameLoop();
             crosshairEl.style.display = 'none';
@@ -1055,7 +1052,6 @@
             saveUserData();
         }
 
-        // Initialize on load
         window.onload = function() {
             loadUserData();
         };
