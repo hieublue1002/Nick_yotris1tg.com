@@ -3,157 +3,287 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nick.yotris1tg | Fast Vocab &amp; Idiom Practice</title>
+    <title>Vocabulary & Idiom Flashcards</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', system-ui, sans-serif; }
-        body { background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%); color: #f8fafc; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
-        .card { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 2.5rem 2rem; max-width: 580px; width: 100%; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6); }
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 1rem; }
-        .brand { font-weight: 800; font-size: 0.95rem; background: linear-gradient(90deg, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .badge-group { display: flex; gap: 8px; }
-        .badge { padding: 4px 10px; font-size: 0.75rem; font-weight: 700; border-radius: 20px; text-transform: uppercase; background: rgba(56, 189, 248, 0.1); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.2); }
-        .badge-type { background: rgba(129, 140, 248, 0.1); color: #a5b4fc; border: 1px solid rgba(129, 140, 248, 0.2); }
-        .term-container { text-align: center; margin-bottom: 1.5rem; }
-        h1 { font-size: 2.4rem; font-weight: 800; color: #ffffff; margin-bottom: 0.2rem; }
-        .phonetic { color: #94a3b8; font-size: 1rem; font-style: italic; }
-        .input-group { margin-bottom: 1rem; }
-        label { display: block; font-size: 0.85rem; color: #94a3b8; margin-bottom: 0.5rem; font-weight: 500; }
-        textarea { width: 100%; height: 80px; background: rgba(15, 23, 42, 0.6); border: 1px solid #334155; border-radius: 12px; padding: 12px; color: #f8fafc; font-size: 0.95rem; resize: none; outline: none; }
-        textarea:focus { border-color: #38bdf8; box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15); }
-        .btn-group { display: flex; gap: 10px; margin-bottom: 1.5rem; }
-        button { flex: 1; padding: 12px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; transition: transform 0.1s ease; font-size: 0.9rem; }
-        button:active { transform: scale(0.98); }
-        .btn-check { background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; }
-        .btn-primary { background: linear-gradient(135deg, #0284c7 0%, #2563eb 100%); color: white; }
-        .btn-secondary { background: rgba(51, 65, 85, 0.6); color: #f8fafc; border: 1px solid rgba(255, 255, 255, 0.05); }
-        .feedback-banner { padding: 12px 14px; border-radius: 10px; font-size: 0.9rem; font-weight: 600; margin-bottom: 1rem; display: none; }
-        .feedback-correct { background: rgba(16, 185, 129, 0.2); border: 1px solid rgba(16, 185, 129, 0.5); color: #34d399; }
-        .feedback-incorrect { background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.5); color: #f87171; }
-        .answer-box { background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 12px; padding: 1.2rem; display: none; }
-        .answer-box.visible { display: block; }
-        .section-title { color: #38bdf8; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; margin-bottom: 0.3rem; }
-        .definition-en, .definition-vi { font-size: 0.95rem; margin-bottom: 0.8rem; line-height: 1.4; }
-        .definition-vi { color: #34d399; font-weight: 500; }
-        .example { font-size: 0.85rem; color: #94a3b8; font-style: italic; border-left: 2px solid #38bdf8; padding-left: 10px; }
-        .footer { margin-top: 1.5rem; text-align: center; font-size: 0.75rem; color: #64748b; }
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent: #3b82f6;
+            --accent-hover: #2563eb;
+            --success: #22c55e;
+            --error: #ef4444;
+            --border: #334155;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            margin: 0;
+        }
+
+        .controls {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        select {
+            background-color: var(--card-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+            padding: 0.5rem;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+        }
+
+        #pool-count {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 0.75rem;
+            padding: 2rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+
+        .badges {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .badge {
+            background-color: var(--border);
+            color: var(--text-primary);
+            padding: 0.25rem 0.6rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .term-container {
+            margin-bottom: 1.5rem;
+        }
+
+        #term-display {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0 0 0.25rem 0;
+        }
+
+        #phonetic-display {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            margin: 0;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            background-color: var(--bg-color);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            padding: 0.75rem;
+            border-radius: 0.375rem;
+            font-size: 1rem;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        button.primary-btn {
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.25rem;
+            border-radius: 0.375rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        button.primary-btn:hover {
+            background-color: var(--accent-hover);
+        }
+
+        .feedback-banner {
+            padding: 0.75rem;
+            border-radius: 0.375rem;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            display: none;
+        }
+
+        .feedback-correct {
+            background-color: rgba(34, 197, 94, 0.15);
+            color: var(--success);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+
+        .feedback-incorrect {
+            background-color: rgba(239, 68, 68, 0.15);
+            color: var(--error);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .answer-box {
+            background-color: var(--bg-color);
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .answer-box.visible {
+            display: block;
+        }
+
+        .answer-box p {
+            margin: 0.5rem 0;
+            font-size: 0.95rem;
+        }
+
+        .definition-en {
+            color: var(--text-primary);
+        }
+
+        .definition-vi {
+            color: var(--text-secondary);
+        }
+
+        .example {
+            font-style: italic;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .next-container {
+            margin-top: 1.5rem;
+            text-align: right;
+        }
     </style>
 </head>
 <body>
 
-    <div class="card">
-        <div class="header">
-            <div class="brand">Nick.yotris1tg</div>
-            <div class="badge-group">
-                <span class="badge" id="level-badge">--</span>
-                <span class="badge badge-type" id="type-badge">--</span>
+    <div class="container">
+        <header>
+            <h1>Vocabulary Trainer</h1>
+            <div class="controls">
+                <span id="pool-count">Pool: 0 terms</span>
+                <select id="level-filter" onchange="filterDataset()">
+                    <option value="ALL">All Levels</option>
+                    <option value="B2">B2</option>
+                    <option value="C1">C1</option>
+                    <option value="C2">C2</option>
+                </select>
+            </div>
+        </header>
+
+        <div class="card">
+            <div class="badges">
+                <span id="level-badge" class="badge">--</span>
+                <span id="type-badge" class="badge">--</span>
+            </div>
+
+            <div class="term-container">
+                <h2 id="term-display">Loading...</h2>
+                <p id="phonetic-display">--</p>
+            </div>
+
+            <div class="input-group">
+                <input type="text" id="user-guess" placeholder="Type meaning, translation, or keywords...">
+                <button class="primary-btn" onclick="checkAnswer()">Submit</button>
+            </div>
+
+            <div id="feedback-banner" class="feedback-banner"></div>
+
+            <div id="answer-box" class="answer-box">
+                <p class="definition-en"><strong>EN:</strong> <span id="definition-en-display"></span></p>
+                <p class="definition-vi"><strong>VI:</strong> <span id="definition-vi-display"></span></p>
+                <p class="example"><span id="example-display"></span></p>
+            </div>
+
+            <div class="next-container">
+                <button class="primary-btn" onclick="generateNewTerm()">Next Term ➔</button>
             </div>
         </div>
-
-        <div class="term-container">
-            <h1 id="term-display">--</h1>
-            <div class="phonetic" id="phonetic-display"></div>
-        </div>
-
-        <div class="input-group">
-            <label for="user-guess">Your definition guess (Press Enter to check):</label>
-            <textarea id="user-guess" placeholder="Write your guess here..."></textarea>
-        </div>
-
-        <div id="feedback-banner" class="feedback-banner"></div>
-
-        <div class="btn-group">
-            <button class="btn-check" onclick="checkAnswer()">Check Answer</button>
-            <button class="btn-secondary" onclick="revealMeaning()">Reveal Only</button>
-            <button class="btn-primary" onclick="generateNewTerm()">Next Word</button>
-        </div>
-
-        <div class="answer-box" id="answer-box">
-            <div class="section-title">English Meaning</div>
-            <div class="definition-en" id="definition-en-display"></div>
-
-            <div class="section-title">Nghĩa Tiếng Việt</div>
-            <div class="definition-vi" id="definition-vi-display"></div>
-
-            <div class="section-title">Example</div>
-            <div class="example" id="example-display"></div>
-        </div>
-
-        <div class="footer">Local Storage Execution • Instant Load</div>
     </div>
 
     <script>
-        const dataset = [
-            { term: "Substantial", level: "B2", type: "Adjective", phonetic: "/səbˈstæn.ʃəl/", defEN: "Large in amount, value, or importance.", defVI: "Đáng kể, quan trọng, lớn lao.", keywords: ["large", "amount", "important", "đáng kể", "lớn"], example: "A substantial increase in performance." },
-            { term: "Ambiguous", level: "B2", type: "Adjective", phonetic: "/æmˈbɪɡ.ju.əs/", defEN: "Open to more than one interpretation; not clear.", defVI: "Mơ hồ, không rõ ràng.", keywords: ["unclear", "mơ hồ", "không rõ"], example: "The technical documentation contained ambiguous instructions." },
-            { term: "Meticulous", level: "C1", type: "Adjective", phonetic: "/məˈtɪk.jə.ləs/", defEN: "Showing great attention to detail; precise.", defVI: "Tỉ mỉ, cẩn thận.", keywords: ["detail", "careful", "precise", "tỉ mỉ"], example: "System configuration requires meticulous alignment." },
-            { term: "Pragmatic", level: "C1", type: "Adjective", phonetic: "/præɡˈmæt.ɪk/", defEN: "Dealing with things sensibly based on practical conditions.", defVI: "Thực tế, chú trọng tính ứng dụng.", keywords: ["practical", "realistic", "thực tế"], example: "A pragmatic approach balances price with durability." },
-            { term: "Ubiquitous", level: "C2", type: "Adjective", phonetic: "/juːˈbɪk.wə.təs/", defEN: "Present, appearing, or found everywhere.", defVI: "Có mặt ở khắp mọi nơi.", keywords: ["everywhere", "present", "khắp nơi"], example: "USB-C interfaces have become ubiquitous." },
-            { term: "Ephemeral", level: "C2", type: "Adjective", phonetic: "/əˈfem.ər.əl/", defEN: "Lasting for a very short time; fleeting.", defVI: "Phù du, ngắn ngủi.", keywords: ["short", "fleeting", "ngắn", "phù du"], example: "Viral trends are remarkably ephemeral." },
-            { term: "Metaphysics", level: "C2", type: "Noun", phonetic: "--", defEN: "Branch of philosophy that explores fundamental questions about existence and reality.", defVI: "Triết học siêu hình", keywords: ["triết học", "siêu hình", "existence", "reality"], example: "Metaphysics explores fundamental questions about existence and reality." },
-            { term: "Epistemology", level: "C2", type: "Noun", phonetic: "--", defEN: "Theory of knowledge; examines how knowledge is acquired.", defVI: "Lý thuyết tri thức", keywords: ["tri thức", "lý thuyết", "knowledge"], example: "Epistemology examines how we acquire knowledge and distinguish belief from truth." },
-            { term: "Ethics", level: "B2", type: "Noun", phonetic: "--", defEN: "Moral principles that govern a person's behavior or conduct.", defVI: "Luân lý học", keywords: ["luân lý", "đạo đức", "moral"], example: "Medical ethics require doctors to always put the patient's well-being first." },
-            { term: "Existentialism", level: "C2", type: "Noun", phonetic: "--", defEN: "Philosophical approach that emphasizes the existence of the individual person as a free agent.", defVI: "Chủ nghĩa hiện sinh", keywords: ["hiện sinh", "chủ nghĩa", "existentialism"], example: "Sartre was one of the most prominent figures in 20th-century existentialism." },
-            { term: "Dialectic", level: "C1", type: "Noun", phonetic: "--", defEN: "Art of investigating or discussing the truth of opinions.", defVI: "Biện chứng học", keywords: ["biện chứng", "truth", "discussion"], example: "They engaged in a dialectic discussion to discover the underlying truth." },
-            { term: "Rationalism", level: "C1", type: "Noun", phonetic: "--", defEN: "Belief that opinions and actions should be based on reason and knowledge.", defVI: "Chủ nghĩa lý trí", keywords: ["lý trí", "reason", "rationalism"], example: "Rationalism holds that reason, rather than experience, is the foundation of knowledge." },
-            { term: "Axiom", level: "C1", type: "Noun", phonetic: "--", defEN: "A statement or proposition which is regarded as being established or accepted.", defVI: "Tiên đề, nguyên lý cơ bản", keywords: ["tiên đề", "nguyên lý", "axiom"], example: "It is a widely accepted axiom that practice improves performance." },
-            { term: "Empiricism", level: "C1", type: "Noun", phonetic: "--", defEN: "Theory that all knowledge is derived from sense-experience.", defVI: "Chủ nghĩa kinh nghiệm", keywords: ["kinh nghiệm", "empiricism", "experience"], example: "Modern science relies heavily on empiricism and experimental evidence." },
-            { term: "Ontology", level: "C2", type: "Noun", phonetic: "--", defEN: "Branch of metaphysics dealing with the nature of being.", defVI: "Bản thể học", keywords: ["bản thể", "being", "ontology"], example: "Ontology is the branch of philosophy concerned with the nature of being." },
-            { term: "Relativism", level: "C1", type: "Noun", phonetic: "--", defEN: "Doctrine that knowledge, truth, and morality exist in relation to culture or context.", defVI: "Chủ nghĩa tương đối", keywords: ["tương đối", "relativism"], example: "Cultural relativism suggests that moral values vary across different societies." },
-            { term: "Utilitarianism", level: "C1", type: "Noun", phonetic: "--", defEN: "Doctrine that actions are right if they are useful or for the benefit of a majority.", defVI: "Chủ nghĩa hữu ích", keywords: ["hữu ích", "utilitarianism", "happiness"], example: "Utilitarianism aims to maximize happiness for the greatest number of people." },
-            { term: "Absolutism", level: "C1", type: "Noun", phonetic: "--", defEN: "Acceptance of or belief in absolute principles in political or philosophical matters.", defVI: "Chủ nghĩa tuyệt đối", keywords: ["tuyệt đối", "absolutism"], example: "Moral absolutism states that certain actions are inherently right or wrong." },
-            { term: "Aesthetics", level: "B2", type: "Noun", phonetic: "--", defEN: "Set of principles concerned with the nature and appreciation of beauty.", defVI: "Thẩm mỹ học", keywords: ["thẩm mỹ", "beauty", "aesthetics"], example: "The new building was designed with both functionality and aesthetics in mind." },
-            { term: "Anthropology", level: "C1", type: "Noun", phonetic: "--", defEN: "Study of human societies, cultures, and their development.", defVI: "Nhân học", keywords: ["nhân học", "culture", "societies"], example: "Her research in anthropology focuses on ancient tribal communities." },
-            { term: "Fresco", level: "C2", type: "Noun", phonetic: "--", defEN: "Painting done rapidly in watercolor on wet plaster on a wall or ceiling.", defVI: "Bức tranh tường vẽ trên vôi tươi", keywords: ["tranh tường", "fresco", "vôi tươi"], example: "The ancient church features a stunning fresco painted on its ceiling." },
-            { term: "Ethnomusicology", level: "C2", type: "Noun", phonetic: "--", defEN: "Study of music in its cultural and social contexts.", defVI: "Học âm nhạc dân tộc", keywords: ["âm nhạc dân tộc", "ethnomusicology"], example: "Ethnomusicology combines the study of music with social anthropology." },
-            { term: "Renaissance", level: "B2", type: "Noun", phonetic: "--", defEN: "Revival of or renewed interest in something, especially art and literature.", defVI: "Phục hưng", keywords: ["phục hưng", "renaissance"], example: "Florence played a major role in the European Renaissance." },
-            { term: "Cinematography", level: "B2", type: "Noun", phonetic: "--", defEN: "Art of making motion pictures.", defVI: "Điện ảnh", keywords: ["điện ảnh", "cinematography", "movie"], example: "The movie won an award for its breathtaking cinematography." },
-            { term: "Calligraphy", level: "B2", type: "Noun", phonetic: "--", defEN: "Decorative handwriting or handwritten lettering.", defVI: "Thuật viết chữ đẹp", keywords: ["chữ đẹp", "viết chữ", "calligraphy"], example: "Traditional Chinese calligraphy requires patience and precise brush control." },
-            { term: "Impressionism", level: "B2", type: "Noun", phonetic: "--", defEN: "Style or movement in painting originating in France in the 1860s.", defVI: "Chủ nghĩa ấn tượng", keywords: ["ấn tượng", "impressionism"], example: "Monet was a leading figure in the French Impressionism movement." },
-            { term: "Choreography", level: "B2", type: "Noun", phonetic: "--", defEN: "Sequence of steps and movements in dance.", defVI: "Biên đạo múa", keywords: ["biên đạo", "múa", "dance"], example: "The dance group impressed everyone with their complex choreography." },
-            { term: "Mosaic", level: "B2", type: "Noun", phonetic: "--", defEN: "Picture or pattern produced by arranging together small colored pieces of tile, glass, or stone.", defVI: "Tranh khảm", keywords: ["tranh khảm", "khảm", "mosaic"], example: "The museum floor is decorated with a beautiful Roman mosaic." },
-            { term: "Folklore", level: "B2", type: "Noun", phonetic: "--", defEN: "Traditional beliefs, customs, and stories of a community passed through generations.", defVI: "Dân gian học", keywords: ["dân gian", "folklore"], example: "Many traditional tales have been passed down through local folklore." },
-            { term: "Surrealism", level: "C1", type: "Noun", phonetic: "--", defEN: "Movement in art and literature aiming to release the creative potential of the unconscious mind.", defVI: "Chủ nghĩa siêu thực", keywords: ["siêu thực", "surrealism"], example: "Salvador Dalí's paintings are famous examples of surrealism." },
-            { term: "Biodiversity", level: "B2", type: "Noun", phonetic: "--", defEN: "Variety of plant and animal life in a particular habitat or in the world.", defVI: "Đa dạng sinh học", keywords: ["đa dạng", "sinh học", "biodiversity"], example: "Deforestation poses a massive threat to global biodiversity." },
-            { term: "Photosynthesis", level: "B2", type: "Noun", phonetic: "--", defEN: "Process by which green plants use sunlight to synthesize nutrients from carbon dioxide and water.", defVI: "Quá trình quang hợp", keywords: ["quang hợp", "photosynthesis"], example: "Plants convert sunlight into energy through photosynthesis." },
-            { term: "Mitochondria", level: "C1", type: "Noun", phonetic: "--", defEN: "Organelle found in large numbers in most cells, where cellular respiration occurs.", defVI: "Tiêu bào / Ty thể", keywords: ["ty thể", "tiêu bào", "cell"], example: "Mitochondria are often referred to as the powerhouses of the cell." },
-            { term: "Tectonic", level: "C1", type: "Adjective", phonetic: "--", defEN: "Relating to the structure of the earth's crust and the large-scale processes which take place within it.", defVI: "Thuộc về kiến tạo / Lục địa động lực", keywords: ["kiến tạo", "tectonic"], example: "Earthquakes are caused by the sudden movement of tectonic plates." },
-            { term: "Evolution", level: "B2", type: "Noun", phonetic: "--", defEN: "Process by which different kinds of living organisms are thought to have developed from earlier forms.", defVI: "Quá trình tiến hóa", keywords: ["tiến hóa", "evolution"], example: "Charles Darwin proposed the theory of evolution by natural selection." },
-            { term: "Geothermal", level: "C1", type: "Adjective", phonetic: "--", defEN: "Relating to or produced by the internal heat of the earth.", defVI: "Thuộc về địa nhiệt", keywords: ["địa nhiệt", "geothermal"], example: "Iceland generates a large portion of its electricity from geothermal energy." },
-            { term: "Quantum Mechanics", level: "C2", type: "Noun", phonetic: "--", defEN: "Branch of mechanics that deals with the mathematical description of the motion and interaction of subatomic particles.", defVI: "Cơ học lượng tử", keywords: ["lượng tử", "cơ học", "quantum"], example: "Quantum mechanics explains the behavior of subatomic particles." },
-            { term: "Paleontology", level: "C1", type: "Noun", phonetic: "--", defEN: "Branch of science concerned with fossil animals and plants.", defVI: "Cổ sinh vật học", keywords: ["cổ sinh", "paleontology", "fossil"], example: "Fossil discoveries have helped advance the field of paleontology." },
-            { term: "Ecosystem", level: "B2", type: "Noun", phonetic: "--", defEN: "Biological community of interacting organisms and their physical environment.", defVI: "Hệ sinh thái", keywords: ["hệ sinh thái", "ecosystem"], example: "Coral reefs form a delicate and diverse marine ecosystem." },
-            { term: "Nanotechnology", level: "C1", type: "Noun", phonetic: "--", defEN: "Branch of technology that deals with dimensions and tolerances of less than 100 nanometers.", defVI: "Công nghệ nano / vi mô", keywords: ["nano", "vi mô", "công nghệ"], example: "Nanotechnology is used to develop advanced materials and medical devices." },
-            { term: "Meteorology", level: "C1", type: "Noun", phonetic: "--", defEN: "Branch of science concerned with the processes and phenomena of the atmosphere.", defVI: "Khí tượng học", keywords: ["khí tượng", "meteorology", "weather"], example: "Advances in meteorology have significantly improved weather forecasting." },
-            { term: "Chromosome", level: "C1", type: "Noun", phonetic: "--", defEN: "Threadlike structure of nucleic acids and protein found in the nucleus of most living cells.", defVI: "Nhiễm sắc thể", keywords: ["nhiễm sắc thể", "chromosome"], example: "Humans typically have 23 pairs of chromosomes in each cell." },
-            { term: "Sociology", level: "B2", type: "Noun", phonetic: "--", defEN: "Study of the development, structure, and functioning of human society.", defVI: "Xã hội học", keywords: ["xã hội", "sociology"], example: "Sociology helps us understand social structures and human behavior." },
-            { term: "Geopolitics", level: "C1", type: "Noun", phonetic: "--", defEN: "Politics, especially international relations, as influenced by geographical factors.", defVI: "Địa chính trị", keywords: ["địa chính trị", "geopolitics"], example: "Energy supply plays a critical role in global geopolitics." },
-            { term: "Demography", level: "C1", type: "Noun", phonetic: "--", defEN: "Study of statistics such as births, deaths, income, or incidence of disease.", defVI: "Dân số học", keywords: ["dân số", "demography"], example: "Changes in demography can affect a country's economic growth." },
-            { term: "Ethnography", level: "C2", type: "Noun", phonetic: "--", defEN: "Scientific description of the customs of individual peoples and cultures.", defVI: "Dân tộc học", keywords: ["dân tộc", "ethnography"], example: "The researcher spent two years living with the tribe to complete her ethnography." },
-            { term: "Urbanization", level: "B2", type: "Noun", phonetic: "--", defEN: "Process of making an area more urban.", defVI: "Quá trình đô thị hóa", keywords: ["đô thị hóa", "urbanization"], example: "Rapid urbanization has led to increased demand for housing in cities." },
-            { term: "Political economy", level: "C1", type: "Noun", phonetic: "--", defEN: "Study of production and trade and their relations with law, custom, and government.", defVI: "Kinh tế chính trị", keywords: ["kinh tế chính trị", "political economy"], example: "Political economy analyzes how government policy impacts economic markets." },
-            { term: "Cultural relativism", level: "C1", type: "Noun", phonetic: "--", defEN: "Idea that a person's beliefs and activities should be understood based on that person's own culture.", defVI: "Tương đối văn hóa", keywords: ["tương đối văn hóa", "cultural relativism"], example: "Cultural relativism encourages people to evaluate traditions without bias." },
-            { term: "Social stratification", level: "C1", type: "Noun", phonetic: "--", defEN: "Categorization of people into groups based on socioeconomic factors.", defVI: "Phân tầng xã hội", keywords: ["phân tầng xã hội", "stratification"], example: "Income inequality contributes significantly to social stratification." },
-            { term: "Neo-colonialism", level: "C2", type: "Noun", phonetic: "--", defEN: "Use of economic, political, or cultural pressures to control or influence other countries.", defVI: "Chủ nghĩa thực dân mới", keywords: ["thực dân mới", "colonialism"], example: "Some economists view unfair trade agreements as a form of neo-colonialism." },
-            { term: "Human rights", level: "B2", type: "Noun", phonetic: "--", defEN: "Rights inherent to all human beings, regardless of race, sex, nationality, or status.", defVI: "Quyền con người", keywords: ["quyền con người", "human rights"], example: "Freedom of speech is recognized as a fundamental human right." },
-            { term: "Gender studies", level: "B2", type: "Noun", phonetic: "--", defEN: "Interdisciplinary field devoted to analyzing gender identity and representation.", defVI: "Nghiên cứu giới tính", keywords: ["nghiên cứu giới tính", "gender"], example: "Gender studies analyze how social expectations shape identities." },
-            { term: "Algorithm", level: "B2", type: "Noun", phonetic: "--", defEN: "Process or set of rules to be followed in calculations or other problem-solving operations.", defVI: "Thuật toán", keywords: ["thuật toán", "algorithm"], example: "The search engine uses a complex algorithm to rank web pages." },
-            { term: "Calculus", level: "B2", type: "Noun", phonetic: "--", defEN: "Branch of mathematics that deals with finding and using derivatives and integrals.", defVI: "Giải tích", keywords: ["giải tích", "calculus"], example: "Students taking advanced engineering courses must master calculus." },
-            { term: "Matrix", level: "C1", type: "Noun", phonetic: "--", defEN: "Rectangular array of quantities or expressions in rows and columns.", defVI: "Ma trận", keywords: ["ma trận", "matrix"], example: "The data was organized into a two-dimensional matrix for analysis." },
-            { term: "Differential", level: "C1", type: "Adjective", phonetic: "--", defEN: "Constituting, relating to, or involving a difference or differentiation.", defVI: "Vi phân", keywords: ["vi phân", "differential"], example: "Differential equations are widely used in physics and engineering." },
-            { term: "Integral", level: "C1", type: "Noun / Adj", phonetic: "--", defEN: "Function of which a given function is the derivative.", defVI: "Nguyên / Tích phân", keywords: ["tích phân", "nguyên", "integral"], example: "Calculating the integral helps find the total area under a curve." },
-            { term: "Statistical inference", level: "C1", type: "Noun", phonetic: "--", defEN: "Process of using data analysis to deduce properties of an underlying probability distribution.", defVI: "Suy luận thống kê", keywords: ["suy luận thống kê", "inference"], example: "Statistical inference allows researchers to draw conclusions from a sample group." },
-            { term: "Probability", level: "B2", type: "Noun", phonetic: "--", defEN: "Extent to which something is probable; the likelihood of something happening.", defVI: "Xác suất", keywords: ["xác suất", "probability"], example: "There is a high probability of rain later this afternoon." },
-            { term: "Variance", level: "C1", type: "Noun", phonetic: "--", defEN: "Fact or quality of being different, divergent, or inconsistent.", defVI: "Phương sai", keywords: ["phương sai", "variance"], example: "High variance in test scores indicates a wide spread in student performance." },
-            { term: "Binomial", level: "C1", type: "Noun", phonetic: "--", defEN: "Mathematical expression consisting of two terms linked by a plus or minus sign.", defVI: "Nhị thức", keywords: ["nhị thức", "binomial"], example: "The formula represents a expanded binomial expression." },
-            { term: "Regression analysis", level: "C1", type: "Noun", phonetic: "--", defEN: "Statistical process for estimating the relationships among variables.", defVI: "Phân tích hồi quy", keywords: ["phân tích hồi quy", "regression"], example: "Market analysts used regression analysis to predict future sales trends." },
-            { term: "Polynomial", level: "C1", type: "Noun", phonetic: "--", defEN: "Expression of more than two algebraic terms.", defVI: "Đa thức", keywords: ["đa thức", "polynomial"], example: "A quadratic equation is a specific type of polynomial." },
-            { term: "Hypothesis testing", level: "C1", type: "Noun", phonetic: "--", defEN: "Act in statistics whereby an analyst tests an assumption regarding a population parameter.", defVI: "Kiểm định giả thuyết", keywords: ["kiểm định giả thuyết", "hypothesis"], example: "Scientists perform hypothesis testing to determine if their results are significant." }
-        ];
-
+        let rawDataset = [];
+        let filteredDataset = [];
         let currentItem = null;
 
+        // Fetch dataset asynchronously from vocabulary.json
+        async function loadDataset() {
+            try {
+                const response = await fetch('vocabulary.json');
+                if (!response.ok) throw new Error('Network response was not ok');
+                
+                rawDataset = await response.json();
+                filterDataset();
+            } catch (error) {
+                console.error('Error loading vocabulary dataset:', error);
+                document.getElementById('term-display').textContent = 'Failed to load vocabulary.json';
+            }
+        }
+
+        function filterDataset() {
+            const selectedLevel = document.getElementById('level-filter').value;
+            if (selectedLevel === "ALL") {
+                filteredDataset = [...rawDataset];
+            } else {
+                filteredDataset = rawDataset.filter(item => item.level === selectedLevel);
+            }
+            document.getElementById('pool-count').textContent = `Pool: ${filteredDataset.length} terms`;
+            generateNewTerm();
+        }
+
         function generateNewTerm() {
-            currentItem = dataset[Math.floor(Math.random() * dataset.length)];
+            if (filteredDataset.length === 0) {
+                document.getElementById('term-display').textContent = 'No terms available';
+                return;
+            }
+
+            currentItem = filteredDataset[Math.floor(Math.random() * filteredDataset.length)];
 
             document.getElementById('level-badge').textContent = currentItem.level;
             document.getElementById('type-badge').textContent = currentItem.type;
@@ -172,6 +302,8 @@
         }
 
         function checkAnswer() {
+            if (!currentItem) return;
+            
             const userGuess = document.getElementById('user-guess').value.trim().toLowerCase();
             const feedback = document.getElementById('feedback-banner');
 
@@ -201,8 +333,10 @@
             document.getElementById('answer-box').classList.add('visible');
         }
 
-        generateNewTerm();
+        // Initialize script upon page load
+        window.addEventListener('DOMContentLoaded', loadDataset);
 
+        // Allow pressing Enter key inside text input to submit answer
         document.getElementById('user-guess').addEventListener('keydown', function(e) {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
