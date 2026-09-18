@@ -300,21 +300,62 @@
     </div>
 
     <script>
-        // Expanded seed bank of English words across levels
-        const wordList = [
-            "Substantial", "Ambiguous", "Incentive", "Meticulous", "Pragmatic", 
-            "Consolidate", "Ubiquitous", "Ephemeral", "Acquiesce", "Resilient",
-            "Eloquent", "Scrutinize", "Profound", "Inevitable", "Plausible",
-            "Adversity", "Benevolent", "Candid", "Diligent", "Empathy",
-            "Fostering", "Granular", "Harmonious", "Impartial", "Juxtapose"
+        const fallbackDatabase = [
+            {
+                term: "Substantial",
+                level: "B2 Vocab",
+                type: "Adjective",
+                phonetic: "/səbˈstæn.ʃəl/",
+                defEN: "Large in amount, value, or importance.",
+                defVI: "Đáng kể, quan trọng, lớn lao.",
+                keywords: ["large", "amount", "important", "đáng kể", "lớn", "quan trọng"],
+                example: "The new processor resulted in a substantial increase in system performance."
+            },
+            {
+                term: "Meticulous",
+                level: "C1 Vocab",
+                type: "Adjective",
+                phonetic: "/məˈtɪk.jə.ləs/",
+                defEN: "Showing great attention to detail; very careful and precise.",
+                defVI: "Tỉ mỉ, cẩn thận, chú ý từng chi tiết.",
+                keywords: ["detail", "careful", "precise", "tỉ mỉ", "cẩn thận", "chi tiết"],
+                example: "System configuration requires meticulous component alignment."
+            },
+            {
+                term: "Ubiquitous",
+                level: "C2 Vocab",
+                type: "Adjective",
+                phonetic: "/juːˈbɪk.wə.təs/",
+                defEN: "Present, appearing, or found everywhere simultaneously.",
+                defVI: "Có mặt ở khắp mọi nơi, cực kỳ phổ biến.",
+                keywords: ["everywhere", "present", "khắp nơi", "phổ biến", "toàn bộ"],
+                example: "USB Type-C interfaces have become ubiquitous across modern consumer electronics."
+            },
+            {
+                term: "Pragmatic",
+                level: "C1 Vocab",
+                type: "Adjective",
+                phonetic: "/præɡˈmæt.ɪk/",
+                defEN: "Dealing with things sensibly and realistically based on practical conditions.",
+                defVI: "Thực tế, thực dụng, chú trọng tính ứng dụng.",
+                keywords: ["practical", "realistic", "thực tế", "thực dụng"],
+                example: "A pragmatic approach balances component price with hardware durability."
+            }
         ];
 
         let currentItem = null;
 
         async function fetchWordFromAPI(word) {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 3000); // 3-second timeout boundary
+
             try {
-                const response = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
-                if (!response.ok) throw new Error("Network response error");
+                const response = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`, {
+                    signal: controller.signal
+                });
+                clearTimeout(timeoutId);
+
+                if (!response.ok) return null;
                 const data = await response.json();
                 
                 const entry = data[0];
@@ -325,38 +366,27 @@
                     term: entry.word,
                     level: "API Online",
                     type: meaning.partOfSpeech || "Vocabulary",
-                    phonetic: entry.phonetic || (entry.phonetics[0] ? entry.phonetics[0].text : ""),
+                    phonetic: entry.phonetic || (entry.phonetics.find(p => p.text) || {}).text || "",
                     defEN: defObj.definition,
                     defVI: "Tra cứu từ điển để xem dịch nghĩa chi tiết.",
-                    keywords: defObj.definition.toLowerCase().split(" ").slice(0, 5),
-                    example: defObj.example || "No example provided by the dictionary entry."
+                    keywords: defObj.definition.toLowerCase().split(" ").filter(w => w.length > 3),
+                    example: defObj.example || "No example sentence provided by the API."
                 };
             } catch (err) {
-                return null;
+                return null; // Triggers fallback execution gracefully
             }
         }
 
         async function generateNewTerm() {
             document.getElementById('term-display').innerText = "Loading...";
             document.getElementById('phonetic-display').innerText = "";
-            
-            const randomWord = wordList[Math.floor(Math.random() * wordList.length)];
-            const fetchedData = await fetchWordFromAPI(randomWord);
 
-            if (fetchedData) {
-                currentItem = fetchedData;
-            } else {
-                currentItem = {
-                    term: randomWord,
-                    level: "Vocabulary",
-                    type: "Word",
-                    phonetic: "",
-                    defEN: "Definition could not be retrieved dynamically.",
-                    defVI: "Không thể lấy dữ liệu.",
-                    keywords: [],
-                    example: "-"
-                };
-            }
+            // Select local target word
+            const fallbackItem = fallbackDatabase[Math.floor(Math.random() * fallbackDatabase.length)];
+            
+            // Attempt API fetch; auto-fallback if request fails or times out
+            const apiResult = await fetchWordFromAPI(fallbackItem.term);
+            currentItem = apiResult || fallbackItem;
 
             document.getElementById('level-badge').innerText = currentItem.level;
             document.getElementById('type-badge').innerText = currentItem.type;
