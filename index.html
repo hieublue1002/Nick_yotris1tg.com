@@ -57,7 +57,7 @@
         </div>
 
         <div class="term-container">
-            <h1 id="term-display">--</h1>
+            <h1 id="term-display">Loading...</h1>
             <div class="phonetic" id="phonetic-display"></div>
         </div>
 
@@ -86,38 +86,34 @@
         </div>
 
         <div class="footer">
-            <span>Filter Enabled Execution</span>
+            <span>Dynamic JSON Execution</span>
             <span id="pool-count">Pool: 0 terms</span>
         </div>
     </div>
 
     <script>
-        const rawDataset = [
-            // B2 Level
-            { term: "Substantial", level: "B2", type: "Adjective", phonetic: "/səbˈstæn.ʃəl/", defEN: "Large in amount, value, or importance.", defVI: "Đáng kể, quan trọng, lớn lao.", keywords: ["large", "amount", "important", "đáng kể"], example: "A substantial increase in performance." },
-            { term: "Ambiguous", level: "B2", type: "Adjective", phonetic: "/æmˈbɪɡ.ju.əs/", defEN: "Open to more than one interpretation; not clear.", defVI: "Mơ hồ, không rõ ràng.", keywords: ["unclear", "mơ hồ", "không rõ"], example: "The technical documentation contained ambiguous instructions." },
-            { term: "Coherent", level: "B2", type: "Adjective", phonetic: "/koʊˈhɪr.ənt/", defEN: "Logical, consistent, and clear in thought or expression.", defVI: "Mạch lạc, chặt chẽ.", keywords: ["logical", "clear", "mạch lạc"], example: "The argument presented was logical and coherent." },
-            { term: "Bite the bullet", level: "B2", type: "Idiom", phonetic: "/baɪt ðə ˈbʊl.ɪt/", defEN: "To face a difficult situation with courage and get it over with.", defVI: "Cắn răng chịu đựng, dũng cảm đối mặt.", keywords: ["face", "courage", "cắn răng", "đối mặt"], example: "He decided to bite the bullet and apologize." },
-            { term: "Break the ice", level: "B2", type: "Idiom", phonetic: "/breɪk ðə aɪs/", defEN: "To do or say something to relieve tension or start conversation.", defVI: "Phá tan bầu không khí ngột ngạt, làm quen.", keywords: ["start", "tension", "làm quen", "phá tan"], example: "An introductory joke helped break the ice." },
-            { term: "Hit the nail on the head", level: "B2", type: "Idiom", phonetic: "/hɪt ðə neɪl ɑːn ðə hed/", defEN: "To describe exactly what is causing a situation or problem.", defVI: "Nói chính xác, đánh đúng trọng tâm.", keywords: ["exact", "correct", "chính xác", "trọng tâm"], example: "Her summary hit the nail on the head." },
+        // Set this to 'vocab.json' if served on GitHub Pages,
+        // or replace with your raw GitHub URL: 'https://raw.githubusercontent.com/<user>/<repo>/main/vocab.json'
+        const DATASET_URL = 'vocab.json';
 
-            // C1 Level
-            { term: "Meticulous", level: "C1", type: "Adjective", phonetic: "/məˈtɪk.jə.ləs/", defEN: "Showing great attention to detail; precise.", defVI: "Tỉ mỉ, cẩn thận.", keywords: ["detail", "careful", "precise", "tỉ mỉ"], example: "System configuration requires meticulous alignment." },
-            { term: "Pragmatic", level: "C1", type: "Adjective", phonetic: "/præɡˈmæt.ɪk/", defEN: "Dealing with things sensibly based on practical conditions.", defVI: "Thực tế, chú trọng tính ứng dụng.", keywords: ["practical", "realistic", "thực tế"], example: "A pragmatic approach balances price with durability." },
-            { term: "Inherent", level: "C1", type: "Adjective", phonetic: "/ɪnˈhɪr.ənt/", defEN: "Existing in something as a permanent or essential attribute.", defVI: "Vốn có, cố hữu.", keywords: ["essential", "permanent", "vốn có"], example: "Every system design carries an inherent set of trade-offs." },
-            { term: "Burning the midnight oil", level: "C1", type: "Idiom", phonetic: "/ˈbɝː.nɪŋ ðə ˈmɪd.naɪt ɔɪl/", defEN: "Working or studying late into the night.", defVI: "Thức khuya làm việc, học tập.", keywords: ["late", "study", "work", "thức khuya"], example: "Students were burning the midnight oil before finals." },
-            { term: "Blessing in disguise", level: "C1", type: "Idiom", phonetic: "/ˈbles.ɪŋ ɪn dɪsˈɡaɪz/", defEN: "An apparent misfortune that eventually has good results.", defVI: "Trong cái rủi có cái may.", keywords: ["misfortune", "good result", "cái may", "cái rủi"], example: "Losing that job was a blessing in disguise." },
-
-            // C2 Level
-            { term: "Ubiquitous", level: "C2", type: "Adjective", phonetic: "/juːˈbɪk.wə.təs/", defEN: "Present, appearing, or found everywhere.", defVI: "Có mặt ở khắp mọi nơi.", keywords: ["everywhere", "present", "khắp nơi"], example: "USB-C interfaces have become ubiquitous." },
-            { term: "Ephemeral", level: "C2", type: "Adjective", phonetic: "/əˈfem.ər.əl/", defEN: "Lasting for a very short time; fleeting.", defVI: "Phù du, ngắn ngủi.", keywords: ["short", "fleeting", "ngắn", "phù du"], example: "Viral trends are remarkably ephemeral." },
-            { term: "Paradigm", level: "C2", type: "Noun", phonetic: "/ˈpær.ə.daɪm/", defEN: "A typical pattern or model of something; a world view.", defVI: "Mô hình, phạm trù.", keywords: ["model", "pattern", "mô hình"], example: "The discovery generated a complete paradigm shift." },
-            { term: "Steal someone's thunder", level: "C2", type: "Idiom", phonetic: "/stiːl ˈsʌm.wʌnz ˈθʌn.dɚ/", defEN: "To take credit or attention away from someone else.", defVI: "Cướp công, cướp sự chú ý của ai.", keywords: ["credit", "attention", "cướp công", "chú ý"], example: "Announcing her news early stole his thunder." },
-            { term: "Through thick and thin", level: "C2", type: "Idiom", phonetic: "/θruː θɪk ænd θɪn/", defEN: "Under all circumstances, no matter how difficult.", defVI: "Vượt qua mọi khó khăn, hoạn nạn.", keywords: ["circumstances", "difficult", "khó khăn", "hoạn nạn"], example: "They remained loyal friends through thick and thin." }
-        ];
-
-        let filteredDataset = [...rawDataset];
+        let rawDataset = [];
+        let filteredDataset = [];
         let currentItem = null;
+
+        async function loadDataset() {
+            try {
+                const response = await fetch(DATASET_URL);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                rawDataset = await response.json();
+                filterDataset();
+            } catch (error) {
+                console.error("Could not fetch dataset:", error);
+                document.getElementById('term-display').textContent = "Error loading vocabulary";
+                document.getElementById('pool-count').textContent = "Failed to load JSON file";
+            }
+        }
 
         function filterDataset() {
             const selectedLevel = document.getElementById('level-filter').value;
@@ -181,8 +177,8 @@
             document.getElementById('answer-box').classList.add('visible');
         }
 
-        // Initialize App
-        filterDataset();
+        // Initialize App by loading external JSON
+        loadDataset();
 
         document.getElementById('user-guess').addEventListener('keydown', function(e) {
             if (e.key === 'Enter' && !e.shiftKey) {
