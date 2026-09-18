@@ -1,191 +1,397 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nick.yotris1tg | Advanced Vocab & Idiom Trainer</title>
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', system-ui, sans-serif; }
-        body { background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%); color: #f8fafc; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
-        .card { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 2.5rem 2rem; max-width: 620px; width: 100%; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6); }
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 1rem; }
-        .brand { font-weight: 800; font-size: 0.95rem; background: linear-gradient(90deg, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .controls { display: flex; gap: 8px; align-items: center; }
-        select { background: rgba(15, 23, 42, 0.8); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 8px; padding: 4px 8px; font-size: 0.8rem; font-weight: 700; outline: none; cursor: pointer; }
-        .badge { padding: 4px 10px; font-size: 0.75rem; font-weight: 700; border-radius: 20px; text-transform: uppercase; background: rgba(56, 189, 248, 0.1); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.2); }
-        .badge-type { background: rgba(129, 140, 248, 0.1); color: #a5b4fc; border: 1px solid rgba(129, 140, 248, 0.2); }
-        .term-container { text-align: center; margin-bottom: 1.5rem; }
-        h1 { font-size: 2.2rem; font-weight: 800; color: #ffffff; margin-bottom: 0.2rem; }
-        .phonetic { color: #94a3b8; font-size: 1rem; font-style: italic; }
-        .input-group { margin-bottom: 1rem; }
-        label { display: block; font-size: 0.85rem; color: #94a3b8; margin-bottom: 0.5rem; font-weight: 500; }
-        textarea { width: 100%; height: 80px; background: rgba(15, 23, 42, 0.6); border: 1px solid #334155; border-radius: 12px; padding: 12px; color: #f8fafc; font-size: 0.95rem; resize: none; outline: none; }
-        textarea:focus { border-color: #38bdf8; box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15); }
-        .btn-group { display: flex; gap: 10px; margin-bottom: 1.5rem; }
-        button { flex: 1; padding: 12px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; transition: transform 0.1s ease; font-size: 0.9rem; }
-        button:active { transform: scale(0.98); }
-        .btn-check { background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; }
-        .btn-primary { background: linear-gradient(135deg, #0284c7 0%, #2563eb 100%); color: white; }
-        .btn-secondary { background: rgba(51, 65, 85, 0.6); color: #f8fafc; border: 1px solid rgba(255, 255, 255, 0.05); }
-        .feedback-banner { padding: 12px 14px; border-radius: 10px; font-size: 0.9rem; font-weight: 600; margin-bottom: 1rem; display: none; }
-        .feedback-correct { background: rgba(16, 185, 129, 0.2); border: 1px solid rgba(16, 185, 129, 0.5); color: #34d399; }
-        .feedback-incorrect { background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.5); color: #f87171; }
-        .answer-box { background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 12px; padding: 1.2rem; display: none; }
-        .answer-box.visible { display: block; }
-        .section-title { color: #38bdf8; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; margin-bottom: 0.3rem; }
-        .definition-en, .definition-vi { font-size: 0.95rem; margin-bottom: 0.8rem; line-height: 1.4; }
-        .definition-vi { color: #34d399; font-weight: 500; }
-        .example { font-size: 0.85rem; color: #94a3b8; font-style: italic; border-left: 2px solid #38bdf8; padding-left: 10px; }
-        .footer { margin-top: 1.5rem; text-align: center; font-size: 0.75rem; color: #64748b; display: flex; justify-content: space-between; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Geometry Dash Mini</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      background-color: #000c20;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      overflow: hidden;
+      color: #fff;
+    }
+    #game-container {
+      position: relative;
+      box-shadow: 0 0 30px rgba(0, 255, 204, 0.3);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    canvas {
+      display: block;
+      background: #0d0f1a;
+    }
+    .instructions {
+      margin-top: 15px;
+      font-size: 14px;
+      color: #8a99ad;
+      text-align: center;
+    }
+    kbd {
+      background: #1a2236;
+      padding: 2px 6px;
+      border-radius: 4px;
+      border: 1px solid #00ffcc;
+      color: #00ffcc;
+    }
+  </style>
 </head>
 <body>
 
-    <div class="card">
-        <div class="header">
-            <div class="brand">Nick.yotris1tg</div>
-            <div class="controls">
-                <select id="level-filter" onchange="filterDataset()">
-                    <option value="ALL">All Levels</option>
-                    <option value="B2">Level B2</option>
-                    <option value="C1">Level C1</option>
-                    <option value="C2">Level C2</option>
-                </select>
-                <span class="badge" id="level-badge">--</span>
-                <span class="badge badge-type" id="type-badge">--</span>
-            </div>
-        </div>
+  <div id="game-container">
+    <canvas id="gameCanvas" width="800" height="400"></canvas>
+  </div>
+  <div class="instructions">
+    Nhấn <kbd>Space</kbd>, <kbd>Click Chuột</kbd> hoặc <kbd>Chạm màn hình</kbd> để nhảy.
+  </div>
 
-        <div class="term-container">
-            <h1 id="term-display">Loading...</h1>
-            <div class="phonetic" id="phonetic-display"></div>
-        </div>
+  <script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
 
-        <div class="input-group">
-            <label for="user-guess">Your definition guess (Press Enter to check):</label>
-            <textarea id="user-guess" placeholder="Write your guess here..."></textarea>
-        </div>
+    // Cấu hình Game
+    const GRAVITY = 0.65;
+    const JUMP_FORCE = -10.5;
+    const SPEED = 6;
+    const GROUND_Y = 320;
 
-        <div id="feedback-banner" class="feedback-banner"></div>
+    let gameState = 'START'; // START, PLAYING, GAMEOVER
+    let attempts = 1;
+    let score = 0;
+    let animationFrameId;
 
-        <div class="btn-group">
-            <button class="btn-check" onclick="checkAnswer()">Check Answer</button>
-            <button class="btn-secondary" onclick="revealMeaning()">Reveal Only</button>
-            <button class="btn-primary" onclick="generateNewTerm()">Next Term</button>
-        </div>
-
-        <div class="answer-box" id="answer-box">
-            <div class="section-title">English Meaning</div>
-            <div class="definition-en" id="definition-en-display"></div>
-
-            <div class="section-title">Nghĩa Tiếng Việt</div>
-            <div class="definition-vi" id="definition-vi-display"></div>
-
-            <div class="section-title">Example</div>
-            <div class="example" id="example-display"></div>
-        </div>
-
-        <div class="footer">
-            <span>Dynamic JSON Execution</span>
-            <span id="pool-count">Pool: 0 terms</span>
-        </div>
-    </div>
-
-    <script>
-        // Set this to 'vocab.json' if served on GitHub Pages,
-        // or replace with your raw GitHub URL: 'https://raw.githubusercontent.com/<user>/<repo>/main/vocab.json'
-        const DATASET_URL = 'vocab.json';
-
-        let rawDataset = [];
-        let filteredDataset = [];
-        let currentItem = null;
-
-        async function loadDataset() {
-            try {
-                const response = await fetch(DATASET_URL);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                rawDataset = await response.json();
-                filterDataset();
-            } catch (error) {
-                console.error("Could not fetch dataset:", error);
-                document.getElementById('term-display').textContent = "Error loading vocabulary";
-                document.getElementById('pool-count').textContent = "Failed to load JSON file";
-            }
+    // Đối tượng Player (Khối vuông)
+    const player = {
+      x: 100,
+      y: GROUND_Y - 30,
+      size: 30,
+      vy: 0,
+      rotation: 0,
+      isGrounded: true,
+      reset() {
+        this.y = GROUND_Y - this.size;
+        this.vy = 0;
+        this.rotation = 0;
+        this.isGrounded = true;
+      },
+      jump() {
+        if (this.isGrounded) {
+          this.vy = JUMP_FORCE;
+          this.isGrounded = false;
         }
+      },
+      update() {
+        this.vy += GRAVITY;
+        this.y += this.vy;
 
-        function filterDataset() {
-            const selectedLevel = document.getElementById('level-filter').value;
-            if (selectedLevel === "ALL") {
-                filteredDataset = [...rawDataset];
-            } else {
-                filteredDataset = rawDataset.filter(item => item.level === selectedLevel);
-            }
-            document.getElementById('pool-count').textContent = `Pool: ${filteredDataset.length} terms`;
-            generateNewTerm();
+        // Chạm đất
+        if (this.y >= GROUND_Y - this.size) {
+          this.y = GROUND_Y - this.size;
+          this.vy = 0;
+          this.isGrounded = true;
+          // Làm tròn góc xoay về bội số của 90 độ khi chạm đất
+          this.rotation = Math.round(this.rotation / (Math.PI / 2)) * (Math.PI / 2);
+        } else {
+          // Xoay khi đang ở trên không
+          this.rotation += 0.15;
         }
+      },
+      draw() {
+        ctx.save();
+        ctx.translate(this.x + this.size / 2, this.y + this.size / 2);
+        ctx.rotate(this.rotation);
 
-        function generateNewTerm() {
-            if (filteredDataset.length === 0) return;
+        // Thân khối vuông (Màu vàng Neon)
+        ctx.fillStyle = '#ffe600';
+        ctx.fillRect(-this.size / 2, -this.size / 2, this.size, this.size);
 
-            currentItem = filteredDataset[Math.floor(Math.random() * filteredDataset.length)];
+        // Viền
+        ctx.strokeStyle = '#000';
+        ctx.lineWidth = 3;
+        ctx.strokeRect(-this.size / 2, -this.size / 2, this.size, this.size);
 
-            document.getElementById('level-badge').textContent = currentItem.level;
-            document.getElementById('type-badge').textContent = currentItem.type;
-            document.getElementById('term-display').textContent = currentItem.term;
-            document.getElementById('phonetic-display').textContent = currentItem.phonetic;
-            document.getElementById('definition-en-display').textContent = currentItem.defEN;
-            document.getElementById('definition-vi-display').textContent = currentItem.defVI;
-            document.getElementById('example-display').textContent = `"${currentItem.example}"`;
+        // Mắt khối vuông
+        ctx.fillStyle = '#000';
+        ctx.fillRect(-6, -8, 5, 5);
+        ctx.fillRect(2, -8, 5, 5);
+        ctx.fillRect(-4, 2, 8, 3);
 
-            document.getElementById('user-guess').value = '';
-            document.getElementById('answer-box').classList.remove('visible');
-            
-            const feedback = document.getElementById('feedback-banner');
-            feedback.style.display = 'none';
-            feedback.className = 'feedback-banner';
-        }
+        ctx.restore();
+      }
+    };
 
-        function checkAnswer() {
-            const userGuess = document.getElementById('user-guess').value.trim().toLowerCase();
-            const feedback = document.getElementById('feedback-banner');
+    // Quản lý Chướng ngại vật
+    let obstacles = [];
+    let spawnTimer = 0;
 
-            if (!userGuess) {
-                feedback.textContent = "⚠️ Please type a guess first!";
-                feedback.className = "feedback-banner feedback-incorrect";
-                feedback.style.display = "block";
-                revealMeaning();
-                return;
-            }
+    function createObstacle() {
+      const types = ['spike', 'double_spike', 'block'];
+      const type = types[Math.floor(Math.random() * types.length)];
 
-            const isMatch = currentItem.keywords.some(kw => userGuess.includes(kw.toLowerCase()));
-
-            if (isMatch) {
-                feedback.textContent = "✓ Correct match!";
-                feedback.className = "feedback-banner feedback-correct";
-            } else {
-                feedback.textContent = "✕ Incorrect. Check the definition below.";
-                feedback.className = "feedback-banner feedback-incorrect";
-            }
-
-            feedback.style.display = "block";
-            revealMeaning();
-        }
-
-        function revealMeaning() {
-            document.getElementById('answer-box').classList.add('visible');
-        }
-
-        // Initialize App by loading external JSON
-        loadDataset();
-
-        document.getElementById('user-guess').addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                checkAnswer();
-            }
+      if (type === 'spike') {
+        obstacles.push({
+          x: canvas.width,
+          y: GROUND_Y,
+          width: 30,
+          height: 30,
+          type: 'spike'
         });
-    </script>
+      } else if (type === 'double_spike') {
+        obstacles.push({
+          x: canvas.width,
+          y: GROUND_Y,
+          width: 60,
+          height: 30,
+          type: 'double_spike'
+        });
+      } else if (type === 'block') {
+        obstacles.push({
+          x: canvas.width,
+          y: GROUND_Y - 30,
+          width: 35,
+          height: 30,
+          type: 'block'
+        });
+      }
+    }
+
+    // Hiệu ứng nổ khi chết
+    let particles = [];
+    function createExplosion(x, y) {
+      particles = [];
+      for (let i = 0; i < 20; i++) {
+        particles.push({
+          x: x,
+          y: y,
+          vx: (Math.random() - 0.5) * 10,
+          vy: (Math.random() - 0.5) * 10,
+          size: Math.random() * 6 + 2,
+          color: '#ffe600',
+          life: 30
+        });
+      }
+    }
+
+    // Vẽ nền và mặt đất
+    let bgOffset = 0;
+    function drawBackground() {
+      // Nền chuyển màu Gradient
+      const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+      gradient.addColorStop(0, '#00112c');
+      gradient.addColorStop(1, '#000511');
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Đường kẻ đệm nền
+      bgOffset = (bgOffset + 1) % 40;
+      ctx.strokeStyle = 'rgba(0, 255, 204, 0.08)';
+      ctx.lineWidth = 1;
+      for (let x = -bgOffset; x < canvas.width; x += 40) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, GROUND_Y);
+        ctx.stroke();
+      }
+
+      // Mặt đất
+      ctx.fillStyle = '#002b47';
+      ctx.fillRect(0, GROUND_Y, canvas.width, canvas.height - GROUND_Y);
+
+      // Đường viền sáng mặt đất
+      ctx.strokeStyle = '#00ffcc';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(0, GROUND_Y);
+      ctx.lineTo(canvas.width, GROUND_Y);
+      ctx.stroke();
+    }
+
+    // Kiểm tra Va chạm
+    function checkCollision(player, obs) {
+      if (obs.type === 'spike' || obs.type === 'double_spike') {
+        // Kiểm tra va chạm hộp thu nhỏ cho Gai
+        const pLeft = player.x + 5;
+        const pRight = player.x + player.size - 5;
+        const pTop = player.y + 5;
+        const pBottom = player.y + player.size;
+
+        const oLeft = obs.x + 5;
+        const oRight = obs.x + obs.width - 5;
+        const oTop = obs.y - obs.height;
+        const oBottom = obs.y;
+
+        return !(pRight < oLeft || pLeft > oRight || pBottom < oTop || pTop > oBottom);
+      } else if (obs.type === 'block') {
+        return (
+          player.x < obs.x + obs.width &&
+          player.x + player.size > obs.x &&
+          player.y < obs.y + obs.height &&
+          player.y + player.size > obs.y
+        );
+      }
+      return false;
+    }
+
+    function triggerGameOver() {
+      gameState = 'GAMEOVER';
+      createExplosion(player.x + player.size / 2, player.y + player.size / 2);
+    }
+
+    function restartGame() {
+      attempts++;
+      score = 0;
+      obstacles = [];
+      spawnTimer = 0;
+      player.reset();
+      gameState = 'PLAYING';
+    }
+
+    // Game Loop Chính
+    function gameLoop() {
+      drawBackground();
+
+      if (gameState === 'START') {
+        player.draw();
+        ctx.fillStyle = '#00ffcc';
+        ctx.font = 'bold 28px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('GEOMETRY DASH MINI', canvas.width / 2, 140);
+        ctx.font = '18px sans-serif';
+        ctx.fillStyle = '#fff';
+        ctx.fillText('Nhấn Space / Click để bắt đầu', canvas.width / 2, 190);
+      } 
+      else if (gameState === 'PLAYING') {
+        score++;
+        player.update();
+        player.draw();
+
+        // Sinh chướng ngại vật
+        spawnTimer++;
+        if (spawnTimer > 80 + Math.random() * 50) {
+          createObstacle();
+          spawnTimer = 0;
+        }
+
+        // Cập nhật và vẽ chướng ngại vật
+        for (let i = obstacles.length - 1; i >= 0; i--) {
+          const obs = obstacles[i];
+          obs.x -= SPEED;
+
+          // Vẽ gai / khối
+          if (obs.type === 'spike') {
+            ctx.fillStyle = '#ff0055';
+            ctx.beginPath();
+            ctx.moveTo(obs.x, obs.y);
+            ctx.lineTo(obs.x + obs.width / 2, obs.y - obs.height);
+            ctx.lineTo(obs.x + obs.width, obs.y);
+            ctx.closePath();
+            ctx.fill();
+            ctx.strokeStyle = '#fff';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+          } else if (obs.type === 'double_spike') {
+            ctx.fillStyle = '#ff0055';
+            for (let j = 0; j < 2; j++) {
+              ctx.beginPath();
+              ctx.moveTo(obs.x + j * 30, obs.y);
+              ctx.lineTo(obs.x + j * 30 + 15, obs.y - obs.height);
+              ctx.lineTo(obs.x + (j + 1) * 30, obs.y);
+              ctx.closePath();
+              ctx.fill();
+              ctx.strokeStyle = '#fff';
+              ctx.lineWidth = 1.5;
+              ctx.stroke();
+            }
+          } else if (obs.type === 'block') {
+            ctx.fillStyle = '#00ccff';
+            ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
+            ctx.strokeStyle = '#fff';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(obs.x, obs.y, obs.width, obs.height);
+          }
+
+          // Kiểm tra va chạm
+          if (checkCollision(player, obs)) {
+            triggerGameOver();
+          }
+
+          // Xóa chướng ngại vật ra khỏi màn hình
+          if (obs.x + obs.width < 0) {
+            obstacles.splice(i, 1);
+          }
+        }
+
+        // Hiển thị điểm & Attempt
+        ctx.fillStyle = '#fff';
+        ctx.font = 'bold 16px sans-serif';
+        ctx.textAlign = 'left';
+        ctx.fillText(`Attempt ${attempts}`, 20, 35);
+        ctx.fillText(`Score: ${Math.floor(score / 10)}m`, 20, 60);
+      } 
+      else if (gameState === 'GAMEOVER') {
+        // Cập nhật hạt nổ
+        particles.forEach((p) => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.life--;
+          ctx.fillStyle = p.color;
+          ctx.fillRect(p.x, p.y, p.size, p.size);
+        });
+
+        ctx.fillStyle = '#ff0055';
+        ctx.font = 'bold 32px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('GAME OVER', canvas.width / 2, 140);
+
+        ctx.fillStyle = '#fff';
+        ctx.font = '18px sans-serif';
+        ctx.fillText(`Score: ${Math.floor(score / 10)}m`, canvas.width / 2, 180);
+        ctx.fillText('Nhấn Space / Click để chơi lại', canvas.width / 2, 220);
+      }
+
+      animationFrameId = requestAnimationFrame(gameLoop);
+    }
+
+    // Sự kiện điều khiển
+    function handleAction() {
+      if (gameState === 'START') {
+        gameState = 'PLAYING';
+      } else if (gameState === 'PLAYING') {
+        player.jump();
+      } else if (gameState === 'GAMEOVER') {
+        restartGame();
+      }
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (e.code === 'Space' || e.code === 'ArrowUp') {
+        e.preventDefault();
+        handleAction();
+      }
+    });
+
+    canvas.addEventListener('mousedown', (e) => {
+      e.preventDefault();
+      handleAction();
+    });
+
+    canvas.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      handleAction();
+    });
+
+    // Chạy Game Loop
+    gameLoop();
+  </script>
 </body>
 </html>
