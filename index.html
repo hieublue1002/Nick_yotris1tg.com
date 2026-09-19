@@ -46,6 +46,7 @@
             transform: translate(-50%, -50%);
             z-index: 9999;
             display: none;
+            will-change: left, top;
         }
         .cyber-card {
             background: rgba(18, 21, 32, 0.9);
@@ -122,6 +123,10 @@
         .target-neon {
             box-shadow: 0 0 15px currentColor;
             animation: pulseGlow 1.5s infinite ease-in-out;
+        }
+        /* Disable native cursor over arena for pristine alignment */
+        .no-cursor {
+            cursor: none !important;
         }
     </style>
 </head>
@@ -279,11 +284,14 @@
             </div>
 
             <!-- Interactive Arena Container -->
-            <div id="arena" class="flex-1 relative cursor-crosshair overflow-hidden pointer-events-auto bg-[#08090d]" onclick="handleArenaClick(event)" onmousemove="handleArenaMouseMove(event)">
+            <div id="arena" class="flex-1 relative no-cursor overflow-hidden pointer-events-auto bg-[#08090d]" onclick="handleArenaClick(event)" onmousemove="handleArenaMouseMove(event)">
+                <!-- OSU Style Motion Canvas -->
+                <canvas id="trail-canvas" class="absolute inset-0 pointer-events-none z-0"></canvas>
+
                 <!-- Keybind Trigger Visual Hint -->
                 <div class="absolute bottom-3 left-4 text-[11px] text-gray-500 font-cyber flex items-center space-x-2 pointer-events-none z-10 opacity-75">
                     <i class="fa-solid fa-keyboard"></i>
-                    <span>Shoot Key: <strong id="hud-keybind-label" class="text-cyber-cyan">Left Click / Spacebar</strong></span>
+                    <span>Shoot Keys: <strong id="hud-keybind-label" class="text-cyber-cyan">Left Click / Spacebar</strong></span>
                 </div>
             </div>
         </div>
@@ -365,25 +373,46 @@
             </div>
 
             <div class="space-y-4">
-                <!-- Keybinds for Shooting -->
+                <!-- Dual Keybind Settings for Shooting -->
                 <div class="space-y-2">
                     <label class="text-xs uppercase font-cyber text-gray-300 flex justify-between items-center">
-                        <span>Shoot Trigger Keybind</span>
-                        <span id="val-keybind-display" class="text-cyber-yellow font-bold bg-cyber-yellow/10 border border-cyber-yellow/30 px-2 py-0.5 rounded text-[11px]">Spacebar</span>
+                        <span>Shoot Trigger Keybinds (Dual Support)</span>
                     </label>
-                    <div class="flex items-center space-x-3">
-                        <button id="btn-bind-key" onclick="startKeybindCapture()" class="flex-1 py-2.5 rounded-xl text-xs font-semibold btn-cyber-yellow transition-all flex items-center justify-center space-x-2">
-                            <i class="fa-solid fa-keyboard"></i>
-                            <span id="btn-bind-key-text">Click to Assign Keybind</span>
-                        </button>
-                        <button onclick="resetKeybind()" class="px-3 py-2.5 rounded-xl text-xs font-semibold bg-cyber-card border border-cyber-border text-gray-400 hover:text-white">
-                            Reset (Mouse Only)
-                        </button>
+                    <div class="grid grid-cols-2 gap-2.5">
+                        <div class="flex flex-col space-y-1">
+                            <span class="text-[10px] text-gray-400">Primary Key</span>
+                            <button id="btn-bind-key-1" onclick="startKeybindCapture(1)" class="py-2.5 rounded-xl text-xs font-semibold btn-cyber-yellow transition-all flex items-center justify-center space-x-1">
+                                <i class="fa-solid fa-keyboard text-xs"></i>
+                                <span id="val-keybind-display-1">Spacebar</span>
+                            </button>
+                        </div>
+                        <div class="flex flex-col space-y-1">
+                            <span class="text-[10px] text-gray-400">Secondary Key</span>
+                            <button id="btn-bind-key-2" onclick="startKeybindCapture(2)" class="py-2.5 rounded-xl text-xs font-semibold btn-cyber-yellow transition-all flex items-center justify-center space-x-1">
+                                <i class="fa-solid fa-keyboard text-xs"></i>
+                                <span id="val-keybind-display-2">None (Unassigned)</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="flex justify-end mt-1">
+                        <button onclick="resetKeybinds()" class="text-[11px] text-gray-400 hover:text-white underline">Reset Keybinds</button>
+                    </div>
+                </div>
+
+                <!-- osu! Style Line Trail Toggle -->
+                <div class="space-y-2 pt-2 border-t border-cyber-border">
+                    <label class="text-xs uppercase font-cyber text-gray-300 flex justify-between items-center">
+                        <span>osu! Cursor Trail Line</span>
+                        <span id="val-trail-display" class="text-cyber-green font-bold text-xs">Enabled</span>
+                    </label>
+                    <div class="grid grid-cols-2 gap-2.5">
+                        <button onclick="toggleCursorTrail(true)" id="btn-trail-on" class="py-2 rounded-xl text-xs font-semibold btn-cyber-cyan">Enabled</button>
+                        <button onclick="toggleCursorTrail(false)" id="btn-trail-off" class="py-2 rounded-xl text-xs font-semibold bg-cyber-card border border-cyber-border text-gray-300 hover:border-cyber-cyan">Disabled</button>
                     </div>
                 </div>
 
                 <!-- Target Size Setting -->
-                <div class="space-y-2">
+                <div class="space-y-2 pt-2 border-t border-cyber-border">
                     <label class="text-xs uppercase font-cyber text-gray-300 flex justify-between">
                         <span>Target Dimension</span>
                         <span id="val-target-size" class="text-cyber-cyan font-bold">Medium (60px)</span>
@@ -494,7 +523,7 @@
 
     <!-- WORLD RECORDS / GLOBAL LEADERBOARD MODAL -->
     <div id="world-records-modal" class="fixed inset-0 bg-black/85 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 pointer-events-auto">
-        <div class="cyber-card-yellow w-full max-w-2xl rounded-3xl p-6 space-y-5 relative border border-cyber-yellow/40 pointer-events-auto max-h-[85vh] flex flex-col">
+        <div class="cyber-card-yellow w-full max-w-2xl rounded-3xl p-6 space-y-5 relative border border-cyber-yellow/40 pointer-events-auto max-h-[85vh] overflow-y-auto">
             <div class="flex items-center justify-between border-b border-cyber-border pb-4">
                 <div class="flex items-center space-x-3">
                     <div class="w-10 h-10 rounded-xl bg-cyber-yellow/10 border border-cyber-yellow/30 flex items-center justify-center text-cyber-yellow">
@@ -502,7 +531,7 @@
                     </div>
                     <div>
                         <h3 class="font-cyber text-2xl font-bold text-white">Global World Records</h3>
-                        <p class="text-[11px] text-gray-400">Live Firebase Global Leaderboard</p>
+                        <p class="text-xs text-gray-400">Cyber Precision Suite Leaderboards</p>
                     </div>
                 </div>
                 <button onclick="closeWorldRecordsModal()" class="text-gray-400 hover:text-white text-lg p-2">
@@ -510,1028 +539,734 @@
                 </button>
             </div>
 
-            <!-- Tab selection -->
-            <div class="flex space-x-2 border-b border-cyber-border pb-3">
-                <button id="tab-lb-gridshot" onclick="switchLeaderboardTab('gridshot')" class="px-4 py-1.5 rounded-lg text-xs font-cyber font-bold btn-cyber-cyan">Gridshot</button>
-                <button id="tab-lb-flick" onclick="switchLeaderboardTab('flick')" class="px-4 py-1.5 rounded-lg text-xs font-cyber font-bold bg-cyber-card border border-cyber-border text-gray-400">Flick Shot</button>
-                <button id="tab-lb-tracking" onclick="switchLeaderboardTab('tracking')" class="px-4 py-1.5 rounded-lg text-xs font-cyber font-bold bg-cyber-card border border-cyber-border text-gray-400">Tracking</button>
+            <div class="space-y-4">
+                <div class="flex space-x-2 border-b border-cyber-border pb-2">
+                    <button onclick="switchLeaderboardTab('gridshot')" id="tab-lb-gridshot" class="px-4 py-1.5 rounded-lg text-xs font-semibold btn-cyber-yellow">Gridshot</button>
+                    <button onclick="switchLeaderboardTab('flick')" id="tab-lb-flick" class="px-4 py-1.5 rounded-lg text-xs font-semibold bg-cyber-card border border-cyber-border text-gray-400">Flick Shot</button>
+                    <button onclick="switchLeaderboardTab('tracking')" id="tab-lb-tracking" class="px-4 py-1.5 rounded-lg text-xs font-semibold bg-cyber-card border border-cyber-border text-gray-400">Tracking</button>
+                </div>
+
+                <div class="space-y-2">
+                    <div id="leaderboard-list" class="space-y-2">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
             </div>
 
-            <!-- Leaderboard Table -->
-            <div class="flex-1 overflow-y-auto pr-1">
-                <table class="w-full text-left text-xs">
-                    <thead>
-                        <tr class="text-gray-400 border-b border-cyber-border font-cyber uppercase tracking-wider text-[11px]">
-                            <th class="py-2 px-3"># Rank</th>
-                            <th class="py-2 px-3">Cyber Pilot</th>
-                            <th class="py-2 px-3 text-right">Score / Performance</th>
-                            <th class="py-2 px-3 text-right">Accuracy</th>
-                        </tr>
-                    </thead>
-                    <tbody id="leaderboard-tbody" class="divide-y divide-cyber-border/40 font-cyber">
-                        <tr>
-                            <td colspan="4" class="py-8 text-center text-gray-500 italic">Connecting to Global Database...</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="pt-3 border-t border-cyber-border flex justify-between items-center text-xs text-gray-400">
-                <span id="lb-user-status">Sign in to publish your scores globally!</span>
-                <button onclick="closeWorldRecordsModal()" class="px-5 py-2 rounded-xl font-semibold btn-cyber-yellow font-cyber text-sm">CLOSE</button>
+            <div class="pt-4 border-t border-cyber-border flex justify-end">
+                <button onclick="closeWorldRecordsModal()" class="px-6 py-2.5 rounded-xl font-semibold btn-cyber-yellow font-cyber text-sm">CLOSE</button>
             </div>
         </div>
     </div>
 
-    <!-- AUTH / USER PROFILE MODAL -->
-    <div id="auth-modal" class="fixed inset-0 bg-black/85 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 pointer-events-auto">
-        <div class="cyber-card w-full max-w-md rounded-3xl p-6 space-y-6 relative border border-cyber-cyan/30 pointer-events-auto">
-            <div class="flex items-center justify-between border-b border-cyber-border pb-4">
-                <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 rounded-xl bg-cyber-cyan/10 border border-cyber-cyan/30 flex items-center justify-center text-cyber-cyan">
-                        <i class="fa-solid fa-user-astronaut"></i>
-                    </div>
-                    <h3 class="font-cyber text-2xl font-bold text-white" id="auth-modal-title">Pilot Identity</h3>
-                </div>
-                <button onclick="closeAuthModal()" class="text-gray-400 hover:text-white text-lg p-2">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
-
-            <!-- Logged out View -->
-            <div id="auth-logged-out-view" class="space-y-4">
-                <p class="text-xs text-gray-400">Sign in to save your personal high scores to Nick's Aim Trainer global world records database.</p>
-                
-                <div class="space-y-3">
-                    <div>
-                        <label class="text-[11px] text-gray-400 font-cyber uppercase">Pilot Handle / Callsign</label>
-                        <input type="text" id="auth-username" placeholder="e.g. CyberFlicker" class="w-full mt-1 bg-cyber-bg border border-cyber-border rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-cyber-cyan">
-                    </div>
-                </div>
-
-                <div class="pt-2 flex flex-col space-y-2">
-                    <button onclick="handleAnonymousSignIn()" class="w-full py-3 rounded-xl font-semibold btn-cyber-cyan font-cyber tracking-wider text-sm flex items-center justify-center space-x-2">
-                        <i class="fa-solid fa-right-to-bracket"></i>
-                        <span>AUTHENTICATE PILOT SESSION</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Logged In View -->
-            <div id="auth-logged-in-view" class="space-y-4 hidden">
-                <div class="cyber-card rounded-2xl p-4 flex items-center space-x-4">
-                    <div class="w-12 h-12 rounded-full bg-cyber-cyan/20 border border-cyber-cyan/40 flex items-center justify-center text-cyber-cyan text-xl">
-                        <i class="fa-solid fa-robot"></i>
-                    </div>
-                    <div class="flex-1 overflow-hidden">
-                        <div id="profile-handle" class="font-cyber font-bold text-white text-lg truncate">Pilot</div>
-                        <div id="profile-uid" class="text-[10px] text-gray-500 font-mono truncate">UID: -</div>
-                    </div>
-                </div>
-
-                <div class="pt-2 border-t border-cyber-border">
-                    <button onclick="handleSignOut()" class="w-full py-2.5 rounded-xl font-semibold bg-red-500/10 border border-red-500/30 text-red-400 hover:bg-red-500/20 font-cyber text-sm">
-                        LOGOUT PILOT SESSION
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-        // Defensive DOM updates to avoid null property assignment errors
-        function setText(id, text) {
-            const el = document.getElementById(id);
-            if (el) el.innerText = String(text);
-        }
-
-        // Firebase Configuration & Global Setup
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'nicks-aim-trainer-default';
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
-            apiKey: "demo-api-key",
-            authDomain: "demo-project.firebaseapp.com",
-            projectId: "demo-project",
-            storageBucket: "demo-project.appspot.com",
-            messagingSenderId: "123456789",
-            appId: "1:123456789:web:123456789"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-
-        window.db = db;
-        window.auth = auth;
-        window.appId = appId;
-
-        class SoundEngine {
-            constructor() {
-                this.ctx = null;
-            }
-            init() {
-                if (!this.ctx) {
-                    const AudioContext = window.AudioContext || window.webkitAudioContext;
-                    this.ctx = new AudioContext();
-                }
-                if (this.ctx.state === 'suspended') {
-                    this.ctx.resume();
-                }
-            }
-            playPop() {
-                try {
-                    this.init();
-                    const osc = this.ctx.createOscillator();
-                    const gain = this.ctx.createGain();
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(500, this.ctx.currentTime);
-                    osc.frequency.exponentialRampToValueAtTime(1200, this.ctx.currentTime + 0.08);
-                    
-                    gain.gain.setValueAtTime(0.2, this.ctx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.08);
-
-                    osc.connect(gain);
-                    gain.connect(this.ctx.destination);
-                    osc.start();
-                    osc.stop(this.ctx.currentTime + 0.08);
-                } catch(e) {}
-            }
-            playMiss() {
-                try {
-                    this.init();
-                    const osc = this.ctx.createOscillator();
-                    const gain = this.ctx.createGain();
-                    osc.type = 'sawtooth';
-                    osc.frequency.setValueAtTime(150, this.ctx.currentTime);
-                    osc.frequency.linearRampToValueAtTime(80, this.ctx.currentTime + 0.1);
-                    
-                    gain.gain.setValueAtTime(0.15, this.ctx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.1);
-
-                    osc.connect(gain);
-                    gain.connect(this.ctx.destination);
-                    osc.start();
-                    osc.stop(this.ctx.currentTime + 0.1);
-                } catch(e) {}
-            }
-            playStart() {
-                try {
-                    this.init();
-                    const osc = this.ctx.createOscillator();
-                    const gain = this.ctx.createGain();
-                    osc.type = 'triangle';
-                    osc.frequency.setValueAtTime(300, this.ctx.currentTime);
-                    osc.frequency.exponentialRampToValueAtTime(880, this.ctx.currentTime + 0.2);
-                    
-                    gain.gain.setValueAtTime(0.25, this.ctx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.2);
-
-                    osc.connect(gain);
-                    gain.connect(this.ctx.destination);
-                    osc.start();
-                    osc.stop(this.ctx.currentTime + 0.2);
-                } catch(e) {}
-            }
-        }
-        const soundEngine = new SoundEngine();
-
-        let settings = {
-            targetSize: 'medium', // small(40), medium(60), large(80)
-            targetStyle: 'neon',  // neon, solid, bullseye
-            crosshairType: 'plus', // dot, plus, circle, classic
-            crosshairColor: '#00f0ff',
-            shootKey: 'Space' // 'Space', 'KeyE', 'KeyF', null
-        };
-
-        let localHighScores = {
-            gridshot: 0,
-            flick: 0,
-            tracking: 0
-        };
-
-        let gameState = {
-            activeMode: null,
-            isRunning: false,
-            score: 0,
-            hits: 0,
-            misses: 0,
-            totalClicks: 0,
-            combo: 0,
-            maxCombo: 0,
-            timeLeft: 30.0,
-            timerInterval: null,
-            animFrame: null,
-            flickTargetsLeft: 25,
-            reactionTimes: [],
-            lastTargetSpawnTime: 0,
-            trackingInsideTime: 0,
-            trackingTotalTime: 0,
-            // Replay recording state
-            sessionReplayData: [],
-            sessionStartTime: 0
-        };
-
-        let cursorPosition = { x: 0, y: 0 };
-        let activeTargets = [];
-        let isCapturingKeybind = false;
-        let currentUser = null;
-        let activeLeaderboardTab = 'gridshot';
-        let leaderboardData = [];
+    <!-- JAVASCRIPT GAME LOGIC -->
+    <script>
+        // --- GAME STATE VARIABLES ---
+        let currentMode = 'gridshot';
+        let isGameRunning = false;
         let isReplaying = false;
+        let score = 0;
+        let hits = 0;
+        let misses = 0;
+        let combo = 0;
+        let maxCombo = 0;
+        let timer = 30.0;
+        let gameLoopTimer = null;
+        let reactionTimes = [];
+        let activeTargets = [];
+        let replayLogs = [];
 
-        async function initAuth() {
-            try {
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                    await signInWithCustomToken(auth, __initial_auth_token);
-                }
-            } catch(e) {
-                console.warn("Custom token auth error, falling back to state listener", e);
+        // Dual Keybinds
+        let primaryKeybind = ' '; // Default: Spacebar
+        let secondaryKeybind = null; // Default: Unassigned
+        let capturingSlot = null; // 1 or 2
+        let currentUser = null;
+
+        // Customization
+        let targetSize = 60; // default medium
+        let targetStyle = 'neon';
+        let crosshairType = 'plus';
+        let crosshairColor = '#00f0ff';
+
+        // osu! Cursor Line Trail Variables
+        let enableCursorTrail = true;
+        let trailPoints = [];
+        let canvas = null;
+        let ctx = null;
+
+        // Tracking mode variables
+        let trackingTarget = { x: 0, y: 0, vx: 3, vy: 3, radius: 30 };
+        let lastFrameTime = performance.now();
+
+        // Local Storage Highscores
+        let highscores = {
+            gridshot: parseInt(localStorage.getItem('hs_gridshot') || '0'),
+            flick: parseInt(localStorage.getItem('hs_flick') || '9999'),
+            tracking: parseInt(localStorage.getItem('hs_tracking') || '0')
+        };
+
+        // --- INITIALIZATION ---
+        window.addEventListener('DOMContentLoaded', () => {
+            updateHomeStatsDisplay();
+            updateCrosshairStyle();
+            setupCrosshairTracker();
+            setupTrailCanvas();
+            renderLeaderboard('gridshot');
+            
+            // Check stored auth
+            const savedUser = localStorage.getItem('cyber_user');
+            if (savedUser) {
+                currentUser = savedUser;
+                document.getElementById('auth-btn-label').innerText = currentUser;
             }
 
-            onAuthStateChanged(auth, (user) => {
-                currentUser = user;
-                updateAuthUI();
-                if (user) {
-                    listenToLeaderboard();
-                }
-            });
+            // Start smooth canvas loop
+            requestAnimationFrame(renderTrailLoop);
+        });
+
+        function updateHomeStatsDisplay() {
+            document.getElementById('home-hs-gridshot').innerText = highscores.gridshot;
+            document.getElementById('home-hs-flick').innerText = highscores.flick === 9999 ? 'N/A' : highscores.flick + ' ms';
+            document.getElementById('home-hs-tracking').innerText = highscores.tracking;
+
+            document.getElementById('modal-hs-gridshot').innerText = highscores.gridshot;
+            document.getElementById('modal-hs-flick').innerText = highscores.flick === 9999 ? 'N/A' : highscores.flick + ' ms';
+            document.getElementById('modal-hs-tracking').innerText = highscores.tracking;
         }
 
-        function updateAuthUI() {
-            const loggedOutView = document.getElementById('auth-logged-out-view');
-            const loggedInView = document.getElementById('auth-logged-in-view');
-
+        // --- AUTH SIMULATION ---
+        function handleAuthClick() {
             if (currentUser) {
-                const name = currentUser.displayName || (currentUser.isAnonymous ? 'Guest Pilot' : 'Cyber Pilot');
-                setText('auth-btn-label', name);
-                if (loggedOutView) loggedOutView.classList.add('hidden');
-                if (loggedInView) loggedInView.classList.remove('hidden');
-                setText('profile-handle', name);
-                setText('profile-uid', 'UID: ' + currentUser.uid);
-                setText('lb-user-status', 'Logged in as: ' + name);
-            } else {
-                setText('auth-btn-label', 'Sign In');
-                if (loggedOutView) loggedOutView.classList.remove('hidden');
-                if (loggedInView) loggedInView.classList.add('hidden');
-                setText('lb-user-status', 'Sign in to record your scores globally!');
-            }
-        }
-
-        window.handleAuthClick = function() {
-            const modal = document.getElementById('auth-modal');
-            if (modal) modal.classList.remove('hidden');
-        }
-
-        window.closeAuthModal = function() {
-            const modal = document.getElementById('auth-modal');
-            if (modal) modal.classList.add('hidden');
-        }
-
-        window.handleAnonymousSignIn = async function() {
-            const usernameInputEl = document.getElementById('auth-username');
-            const usernameInput = usernameInputEl ? usernameInputEl.value.trim() : '';
-            try {
-                let userCred = auth.currentUser;
-                if (!userCred) {
-                    userCred = (await signInAnonymously(auth)).user;
+                if (confirm(`Logged in as ${currentUser}. Sign out?`)) {
+                    currentUser = null;
+                    localStorage.removeItem('cyber_user');
+                    document.getElementById('auth-btn-label').innerText = 'Sign In';
                 }
-                const pilotName = usernameInput || 'Pilot_' + userCred.uid.substring(0, 5);
-                const userDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'users', userCred.uid);
-                await setDoc(userDocRef, {
-                    displayName: pilotName,
-                    updatedAt: Date.now()
-                }, { merge: true });
-
-                currentUser.displayName = pilotName;
-                updateAuthUI();
-                closeAuthModal();
-                publishScoresToGlobal();
-            } catch(e) {
-                console.error("Auth error", e);
+            } else {
+                const username = prompt('Enter Cyber Pilot Callsign:', 'CyberNaut_' + Math.floor(Math.random() * 899 + 100));
+                if (username) {
+                    currentUser = username.trim();
+                    localStorage.setItem('cyber_user', currentUser);
+                    document.getElementById('auth-btn-label').innerText = currentUser;
+                }
             }
         }
 
-        window.handleSignOut = async function() {
-            await signOut(auth);
-            currentUser = null;
-            updateAuthUI();
-            closeAuthModal();
-        }
+        // --- CUSTOM CROSSHAIR RENDERING ---
+        function setupCrosshairTracker() {
+            const crosshair = document.getElementById('custom-crosshair');
 
-        function listenToLeaderboard() {
-            try {
-                const lbRef = collection(db, 'artifacts', appId, 'public', 'data', 'leaderboard');
-                onSnapshot(lbRef, (snapshot) => {
-                    leaderboardData = [];
-                    snapshot.forEach((doc) => {
-                        leaderboardData.push({ id: doc.id, ...doc.data() });
-                    });
-                    renderLeaderboard();
-                }, (error) => {
-                    console.warn("Leaderboard snapshot error", error);
-                });
-            } catch(e) {}
-        }
+            document.addEventListener('mousemove', (e) => {
+                crosshair.style.left = `${e.clientX}px`;
+                crosshair.style.top = `${e.clientY}px`;
 
-        async function publishScoresToGlobal() {
-            if (!currentUser) return;
-            try {
-                const docId = currentUser.uid;
-                const scoreRef = doc(db, 'artifacts', appId, 'public', 'data', 'leaderboard', docId);
-                const pilotName = currentUser.displayName || 'Cyber Pilot';
-                
-                await setDoc(scoreRef, {
-                    pilotName: pilotName,
-                    uid: currentUser.uid,
-                    gridshot: localHighScores.gridshot,
-                    flick: localHighScores.flick,
-                    tracking: localHighScores.tracking,
-                    updatedAt: Date.now()
-                }, { merge: true });
-            } catch(e) {
-                console.error("Error publishing scores", e);
-            }
-        }
-
-        function renderLeaderboard() {
-            const tbody = document.getElementById('leaderboard-tbody');
-            if (!tbody) return;
-
-            let filtered = [...leaderboardData];
-            if (activeLeaderboardTab === 'gridshot') {
-                filtered.sort((a, b) => (b.gridshot || 0) - (a.gridshot || 0));
-            } else if (activeLeaderboardTab === 'flick') {
-                filtered = filtered.filter(item => item.flick && item.flick > 0);
-                filtered.sort((a, b) => (a.flick || 9999) - (b.flick || 9999));
-            } else if (activeLeaderboardTab === 'tracking') {
-                filtered.sort((a, b) => (b.tracking || 0) - (a.tracking || 0));
-            }
-
-            if (filtered.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="4" class="py-8 text-center text-gray-500 italic">No global records established for this mode yet.</td></tr>`;
-                return;
-            }
-
-            let html = '';
-            filtered.forEach((item, index) => {
-                let valDisplay = '0';
-                if (activeLeaderboardTab === 'gridshot') valDisplay = `${item.gridshot || 0} pts`;
-                if (activeLeaderboardTab === 'flick') valDisplay = `${item.flick || 0} ms avg`;
-                if (activeLeaderboardTab === 'tracking') valDisplay = `${item.tracking || 0} pts`;
-
-                const rankColor = index === 0 ? 'text-cyber-yellow font-bold' : index === 1 ? 'text-gray-300' : index === 2 ? 'text-amber-600' : 'text-gray-500';
-                
-                html += `
-                    <tr class="hover:bg-cyber-card/60 transition-colors">
-                        <td class="py-2.5 px-3 font-bold ${rankColor}">#${index + 1}</td>
-                        <td class="py-2.5 px-3 font-semibold text-white">${item.pilotName || 'Pilot'}</td>
-                        <td class="py-2.5 px-3 text-right font-bold text-cyber-cyan">${valDisplay}</td>
-                        <td class="py-2.5 px-3 text-right text-gray-400">Verified</td>
-                    </tr>
-                `;
-            });
-            tbody.innerHTML = html;
-        }
-
-        window.switchLeaderboardTab = function(mode) {
-            activeLeaderboardTab = mode;
-            ['gridshot', 'flick', 'tracking'].forEach(m => {
-                const btn = document.getElementById(`tab-lb-${m}`);
-                if (btn) {
-                    if (m === mode) {
-                        btn.className = 'px-4 py-1.5 rounded-lg text-xs font-cyber font-bold btn-cyber-cyan';
-                    } else {
-                        btn.className = 'px-4 py-1.5 rounded-lg text-xs font-cyber font-bold bg-cyber-card border border-cyber-border text-gray-400';
+                // Add points to cursor trail if inside arena
+                if (enableCursorTrail) {
+                    const arena = document.getElementById('arena');
+                    if (arena) {
+                        const rect = arena.getBoundingClientRect();
+                        if (e.clientX >= rect.left && e.clientX <= rect.right && e.clientY >= rect.top && e.clientY <= rect.bottom) {
+                            trailPoints.push({
+                                x: e.clientX - rect.left,
+                                y: e.clientY - rect.top,
+                                alpha: 1.0,
+                                time: performance.now()
+                            });
+                        }
                     }
                 }
             });
-            renderLeaderboard();
         }
 
-        window.openWorldRecordsModal = function() {
-            const modal = document.getElementById('world-records-modal');
-            if (modal) modal.classList.remove('hidden');
-            renderLeaderboard();
-        }
+        function updateCrosshairStyle() {
+            const crosshair = document.getElementById('custom-crosshair');
+            crosshair.innerHTML = '';
 
-        window.closeWorldRecordsModal = function() {
-            const modal = document.getElementById('world-records-modal');
-            if (modal) modal.classList.add('hidden');
-        }
-
-        window.startKeybindCapture = function() {
-            isCapturingKeybind = true;
-            setText('btn-bind-key-text', "Press ANY key now...");
-            const btn = document.getElementById('btn-bind-key');
-            if (btn) btn.className = "flex-1 py-2.5 rounded-xl text-xs font-semibold btn-cyber-magenta animate-pulse";
-        }
-
-        window.resetKeybind = function() {
-            settings.shootKey = null;
-            setText('val-keybind-display', "Mouse Only");
-            setText('hud-keybind-label', "Left Click");
-            setText('btn-bind-key-text', "Click to Assign Keybind");
-            const btn = document.getElementById('btn-bind-key');
-            if (btn) btn.className = "flex-1 py-2.5 rounded-xl text-xs font-semibold btn-cyber-yellow";
-        }
-
-        document.addEventListener('keydown', (e) => {
-            if (isCapturingKeybind) {
-                e.preventDefault();
-                settings.shootKey = e.code;
-                const displayKey = e.code.replace('Key', 'Key ').replace('Space', 'Spacebar');
-                setText('val-keybind-display', displayKey);
-                setText('hud-keybind-label', `Left Click / ${displayKey}`);
-                setText('btn-bind-key-text', `Assigned: ${displayKey}`);
-                const btn = document.getElementById('btn-bind-key');
-                if (btn) btn.className = "flex-1 py-2.5 rounded-xl text-xs font-semibold btn-cyber-yellow";
-                isCapturingKeybind = false;
-                return;
+            const c = crosshairColor;
+            if (crosshairType === 'dot') {
+                crosshair.innerHTML = `<div style="width: 8px; height: 8px; background-color: ${c}; border-radius: 50%; box-shadow: 0 0 8px ${c}"></div>`;
+            } else if (crosshairType === 'plus') {
+                crosshair.innerHTML = `
+                    <div style="position: relative; width: 20px; height: 20px;">
+                        <div style="position: absolute; top: 9px; left: 0; width: 20px; height: 2px; background-color: ${c}; box-shadow: 0 0 6px ${c}"></div>
+                        <div style="position: absolute; top: 0; left: 9px; width: 2px; height: 20px; background-color: ${c}; box-shadow: 0 0 6px ${c}"></div>
+                    </div>`;
+            } else if (crosshairType === 'circle') {
+                crosshair.innerHTML = `<div style="width: 24px; height: 24px; border: 2px solid ${c}; border-radius: 50%; box-shadow: 0 0 8px ${c}"></div>`;
+            } else if (crosshairType === 'classic') {
+                crosshair.innerHTML = `
+                    <div style="position: relative; width: 24px; height: 24px;">
+                        <div style="position: absolute; top: 11px; left: 0; width: 7px; height: 2px; background-color: ${c}"></div>
+                        <div style="position: absolute; top: 11px; right: 0; width: 7px; height: 2px; background-color: ${c}"></div>
+                        <div style="position: absolute; top: 0; left: 11px; width: 2px; height: 7px; background-color: ${c}"></div>
+                        <div style="position: absolute; bottom: 0; left: 11px; width: 2px; height: 7px; background-color: ${c}"></div>
+                    </div>`;
             }
+        }
 
-            if (gameState.isRunning && settings.shootKey && e.code === settings.shootKey && !isReplaying) {
-                e.preventDefault();
-                triggerShootAtCurrentCursor();
+        // --- OSU! STYLE CURSOR TRAIL ---
+        function setupTrailCanvas() {
+            canvas = document.getElementById('trail-canvas');
+            if (canvas) {
+                ctx = canvas.getContext('2d');
+                resizeCanvas();
+                window.addEventListener('resize', resizeCanvas);
             }
-        });
+        }
 
-        function triggerShootAtCurrentCursor() {
+        function resizeCanvas() {
             const arena = document.getElementById('arena');
-            if (!arena) return;
-            const rect = arena.getBoundingClientRect();
-            if (cursorPosition.x >= rect.left && cursorPosition.x <= rect.right &&
-                cursorPosition.y >= rect.top && cursorPosition.y <= rect.bottom) {
-                
-                const relativeX = cursorPosition.x - rect.left;
-                const relativeY = cursorPosition.y - rect.top;
-                processArenaShoot(relativeX, relativeY);
+            if (canvas && arena) {
+                canvas.width = arena.clientWidth;
+                canvas.height = arena.clientHeight;
             }
         }
 
-        window.handleArenaMouseMove = function(e) {
-            cursorPosition.x = e.clientX;
-            cursorPosition.y = e.clientY;
-            updateCustomCrosshairPosition(e.clientX, e.clientY);
+        function renderTrailLoop(timestamp) {
+            if (ctx && canvas) {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            if (gameState.isRunning) {
-                const arena = document.getElementById('arena');
-                if (arena) {
-                    const rect = arena.getBoundingClientRect();
-                    const rx = e.clientX - rect.left;
-                    const ry = e.clientY - rect.top;
-                    recordReplayEvent('move', { x: rx, y: ry });
+                if (enableCursorTrail && trailPoints.length > 1) {
+                    const now = performance.now();
+                    // Filter out stale points older than 200ms
+                    trailPoints = trailPoints.filter(p => now - p.time < 200);
+
+                    if (trailPoints.length > 1) {
+                        ctx.beginPath();
+                        ctx.moveTo(trailPoints[0].x, trailPoints[0].y);
+
+                        for (let i = 1; i < trailPoints.length; i++) {
+                            const p = trailPoints[i];
+                            ctx.lineTo(p.x, p.y);
+                        }
+
+                        ctx.strokeStyle = crosshairColor;
+                        ctx.lineWidth = 3;
+                        ctx.lineCap = 'round';
+                        ctx.lineJoin = 'round';
+                        ctx.shadowBlur = 8;
+                        ctx.shadowColor = crosshairColor;
+                        ctx.stroke();
+                    }
                 }
             }
+            requestAnimationFrame(renderTrailLoop);
         }
 
-        function updateCustomCrosshairPosition(x, y) {
-            const ch = document.getElementById('custom-crosshair');
-            if (ch) {
-                ch.style.left = x + 'px';
-                ch.style.top = y + 'px';
-            }
+        function toggleCursorTrail(enabled) {
+            enableCursorTrail = enabled;
+            document.getElementById('val-trail-display').innerText = enabled ? 'Enabled' : 'Disabled';
+            document.getElementById('val-trail-display').className = enabled ? 'text-cyber-green font-bold text-xs' : 'text-gray-400 font-bold text-xs';
+
+            document.getElementById('btn-trail-on').className = enabled ? 'py-2 rounded-xl text-xs font-semibold btn-cyber-cyan' : 'py-2 rounded-xl text-xs font-semibold bg-cyber-card border border-cyber-border text-gray-300 hover:border-cyber-cyan';
+            document.getElementById('btn-trail-off').className = !enabled ? 'py-2 rounded-xl text-xs font-semibold btn-cyber-cyan' : 'py-2 rounded-xl text-xs font-semibold bg-cyber-card border border-cyber-border text-gray-300 hover:border-cyber-cyan';
         }
 
-        window.setTargetSize = function(size) {
-            settings.targetSize = size;
-            const sizes = { small: 'Small (40px)', medium: 'Medium (60px)', large: 'Large (80px)' };
-            setText('val-target-size', sizes[size]);
-            ['small', 'medium', 'large'].forEach(s => {
-                const btn = document.getElementById(`btn-size-${s}`);
-                if (btn) {
-                    btn.className = (s === size) ? 'py-2 rounded-xl text-xs font-semibold btn-cyber-cyan' : 'py-2 rounded-xl text-xs font-semibold bg-cyber-card border border-cyber-border text-gray-300 hover:border-cyber-cyan';
-                }
-            });
+        // --- NAVIGATION & VIEWS ---
+        function selectGameMode(mode) {
+            currentMode = mode;
+            document.getElementById('menu-view').classList.add('hidden');
+            document.getElementById('results-view').classList.add('hidden');
+            document.getElementById('game-view').classList.remove('hidden');
+            document.getElementById('custom-crosshair').style.display = 'block';
+
+            document.getElementById('hud-mode-name').innerText = mode;
+            resizeCanvas();
+            startGame();
         }
 
-        window.setTargetStyle = function(style) {
-            settings.targetStyle = style;
-            const styles = { neon: 'Neon Glow', solid: 'Solid Circle', bullseye: 'Bullseye' };
-            setText('val-target-style', styles[style]);
-            ['neon', 'solid', 'bullseye'].forEach(st => {
-                const btn = document.getElementById(`btn-style-${st}`);
-                if (btn) {
-                    btn.className = (st === style) ? 'py-2 rounded-xl text-xs font-semibold btn-cyber-cyan' : 'py-2 rounded-xl text-xs font-semibold bg-cyber-card border border-cyber-border text-gray-300 hover:border-cyber-cyan';
-                }
-            });
+        function returnToMenu() {
+            clearInterval(gameLoopTimer);
+            isGameRunning = false;
+            document.getElementById('custom-crosshair').style.display = 'none';
+            document.getElementById('game-view').classList.add('hidden');
+            document.getElementById('results-view').classList.add('hidden');
+            document.getElementById('menu-view').classList.remove('hidden');
+            updateHomeStatsDisplay();
         }
 
-        window.setCrosshairType = function(type) {
-            settings.crosshairType = type;
-            const names = { dot: 'Dot', plus: 'Plus', circle: 'Circle', classic: 'Classic' };
-            setText('val-crosshair', names[type]);
-            ['dot', 'plus', 'circle', 'classic'].forEach(c => {
-                const btn = document.getElementById(`btn-ch-${c}`);
-                if (btn) {
-                    btn.className = (c === type) ? 'py-2 rounded-xl text-xs font-semibold btn-cyber-cyan' : 'py-2 rounded-xl text-xs font-semibold bg-cyber-card border border-cyber-border text-gray-300';
-                }
-            });
-            renderCrosshairSVG();
+        function quitGame() {
+            returnToMenu();
         }
 
-        window.setCrosshairColor = function(color) {
-            settings.crosshairColor = color;
-            setText('val-ch-color', color);
-            renderCrosshairSVG();
-        }
-
-        function renderCrosshairSVG() {
-            const ch = document.getElementById('custom-crosshair');
-            if (!ch) return;
-            const color = settings.crosshairColor;
-            let svgHtml = '';
-
-            if (settings.crosshairType === 'dot') {
-                svgHtml = `<svg width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" fill="${color}"/></svg>`;
-            } else if (settings.crosshairType === 'plus') {
-                svgHtml = `<svg width="32" height="32" viewBox="0 0 32 32"><line x1="16" y1="4" x2="16" y2="28" stroke="${color}" stroke-width="2"/><line x1="4" y1="16" x2="28" y2="16" stroke="${color}" stroke-width="2"/><circle cx="16" cy="16" r="2" fill="${color}"/></svg>`;
-            } else if (settings.crosshairType === 'circle') {
-                svgHtml = `<svg width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="8" stroke="${color}" stroke-width="2" fill="none"/><circle cx="16" cy="16" r="2" fill="${color}"/></svg>`;
-            } else {
-                svgHtml = `<svg width="36" height="36" viewBox="0 0 36 36"><circle cx="18" cy="18" r="10" stroke="${color}" stroke-width="1.5" stroke-dasharray="4 2" fill="none"/><line x1="18" y1="2" x2="18" y2="10" stroke="${color}" stroke-width="2"/><line x1="18" y1="26" x2="18" y2="34" stroke="${color}" stroke-width="2"/><line x1="2" y1="18" x2="10" y2="18" stroke="${color}" stroke-width="2"/><line x1="26" y1="18" x2="34" y2="18" stroke="${color}" stroke-width="2"/></svg>`;
-            }
-            ch.innerHTML = svgHtml;
-            ch.style.display = 'block';
-        }
-
-        function getTargetSizePx() {
-            if (settings.targetSize === 'small') return 40;
-            if (settings.targetSize === 'large') return 80;
-            return 60;
-        }
-
-        function recordReplayEvent(type, data) {
-            if (!gameState.isRunning || isReplaying) return;
-            const timeOffset = Date.now() - gameState.sessionStartTime;
-            gameState.sessionReplayData.push({
-                time: timeOffset,
-                type: type,
-                data: data
-            });
-        }
-
-        window.selectGameMode = function(mode) {
-            gameState.activeMode = mode;
-            const menuView = document.getElementById('menu-view');
-            const resultsView = document.getElementById('results-view');
-            const gameView = document.getElementById('game-view');
-
-            if (menuView) menuView.classList.add('hidden');
-            if (resultsView) resultsView.classList.add('hidden');
-            if (gameView) gameView.classList.remove('hidden');
-
-            setText('hud-mode-name', mode);
-            initAndStartGame();
-        }
-
-        function initAndStartGame() {
-            const arena = document.getElementById('arena');
-            if (arena) arena.innerHTML = '';
-            activeTargets = [];
+        // --- GAME LOOP & CORE MECHANICS ---
+        function startGame() {
+            isGameRunning = true;
             isReplaying = false;
+            score = 0;
+            hits = 0;
+            misses = 0;
+            combo = 0;
+            maxCombo = 0;
+            reactionTimes = [];
+            replayLogs = [];
+            activeTargets = [];
+            trailPoints = [];
 
-            gameState.isRunning = true;
-            gameState.score = 0;
-            gameState.hits = 0;
-            gameState.misses = 0;
-            gameState.totalClicks = 0;
-            gameState.combo = 0;
-            gameState.maxCombo = 0;
-            gameState.timeLeft = 30.0;
-            gameState.flickTargetsLeft = 25;
-            gameState.reactionTimes = [];
-            gameState.trackingInsideTime = 0;
-            gameState.trackingTotalTime = 0;
-            gameState.sessionReplayData = [];
-            gameState.sessionStartTime = Date.now();
+            const arena = document.getElementById('arena');
+            arena.innerHTML = `
+                <canvas id="trail-canvas" class="absolute inset-0 pointer-events-none z-0"></canvas>
+                <div class="absolute bottom-3 left-4 text-[11px] text-gray-500 font-cyber flex items-center space-x-2 pointer-events-none z-10 opacity-75">
+                    <i class="fa-solid fa-keyboard"></i>
+                    <span>Shoot Keys: <strong id="hud-keybind-label" class="text-cyber-cyan">${getKeybindLabel()}</strong></span>
+                </div>`;
+            setupTrailCanvas();
 
-            soundEngine.playStart();
+            if (currentMode === 'flick') {
+                timer = 25; // 25 targets remaining
+            } else {
+                timer = 30.0; // 30s countdown
+            }
+
             updateHUD();
 
-            if (gameState.timerInterval) clearInterval(gameState.timerInterval);
-            if (gameState.animFrame) cancelAnimationFrame(gameState.animFrame);
-
-            if (gameState.activeMode === 'gridshot') {
-                for (let i = 0; i < 3; i++) {
-                    spawnTarget();
-                }
-                startCountdownTimer();
-            } else if (gameState.activeMode === 'flick') {
-                setText('hud-timer', '25 Targets');
-                spawnTarget();
-            } else if (gameState.activeMode === 'tracking') {
-                spawnTrackingSphere();
-                startCountdownTimer();
-                startTrackingLoop();
+            if (currentMode === 'gridshot') {
+                spawnGridshotBatch();
+            } else if (currentMode === 'flick') {
+                spawnSingleFlickTarget();
+            } else if (currentMode === 'tracking') {
+                initTrackingTarget();
             }
+
+            lastFrameTime = performance.now();
+            clearInterval(gameLoopTimer);
+            gameLoopTimer = setInterval(gameTick, 100);
         }
 
-        function startCountdownTimer() {
-            gameState.timerInterval = setInterval(() => {
-                gameState.timeLeft -= 0.1;
-                if (gameState.timeLeft <= 0) {
-                    gameState.timeLeft = 0;
-                    endGameSession();
+        function getKeybindLabel() {
+            const p1 = primaryKeybind === ' ' ? 'Spacebar' : primaryKeybind ? primaryKeybind.toUpperCase() : 'None';
+            const p2 = secondaryKeybind === ' ' ? 'Spacebar' : secondaryKeybind ? secondaryKeybind.toUpperCase() : 'None';
+            if (secondaryKeybind) {
+                return `Left Click / ${p1} / ${p2}`;
+            }
+            return `Left Click / ${p1}`;
+        }
+
+        function gameTick() {
+            if (!isGameRunning) return;
+
+            if (currentMode === 'tracking') {
+                updateTrackingPhysics();
+            } else {
+                timer -= 0.1;
+                if (timer <= 0) {
+                    timer = 0;
+                    endGame();
                 }
-                updateHUD();
-            }, 100);
+            }
+            updateHUD();
         }
 
         function updateHUD() {
-            setText('hud-score', gameState.score);
-            setText('hud-combo', gameState.combo + 'x');
-            
-            const total = gameState.hits + gameState.misses;
-            const acc = total > 0 ? Math.round((gameState.hits / total) * 100) : 100;
-            setText('hud-accuracy', acc + '%');
+            document.getElementById('hud-score').innerText = Math.floor(score);
+            const totalShots = hits + misses;
+            const acc = totalShots > 0 ? Math.round((hits / totalShots) * 100) : 100;
+            document.getElementById('hud-accuracy').innerText = `${acc}%`;
+            document.getElementById('hud-combo').innerText = `${combo}x`;
 
-            if (gameState.activeMode !== 'flick') {
-                setText('hud-timer', gameState.timeLeft.toFixed(1) + 's');
+            if (currentMode === 'flick') {
+                document.getElementById('hud-timer').innerText = `${Math.max(0, timer)} Left`;
             } else {
-                setText('hud-timer', gameState.flickTargetsLeft + ' Rem.');
+                document.getElementById('hud-timer').innerText = `${timer.toFixed(1)}s`;
             }
         }
 
-        function spawnTarget() {
+        // --- TARGET SPAWNING & HIT DETECTION ---
+        function createTargetElement(id, x, y) {
             const arena = document.getElementById('arena');
-            if (!arena) return;
-            const size = getTargetSizePx();
-            const arenaW = arena.clientWidth;
-            const arenaH = arena.clientHeight;
+            const target = document.createElement('div');
+            target.id = id;
+            target.style.position = 'absolute';
+            target.style.left = `${x}px`;
+            target.style.top = `${y}px`;
+            target.style.width = `${targetSize}px`;
+            target.style.height = `${targetSize}px`;
+            target.style.borderRadius = '50%';
+            target.style.transform = 'translate(-50%, -50%)';
+            target.style.cursor = 'none';
+            target.dataset.spawnTime = performance.now();
 
-            const padding = size + 20;
-            const x = Math.random() * (arenaW - padding * 2) + padding;
-            const y = Math.random() * (arenaH - padding * 2) + padding;
-
-            const targetEl = document.createElement('div');
-            targetEl.className = 'absolute rounded-full cursor-pointer flex items-center justify-center transition-transform hover:scale-105';
-            targetEl.style.width = size + 'px';
-            targetEl.style.height = size + 'px';
-            targetEl.style.left = (x - size / 2) + 'px';
-            targetEl.style.top = (y - size / 2) + 'px';
-
-            const color = gameState.activeMode === 'flick' ? '#ff007f' : '#00f0ff';
-            
-            if (settings.targetStyle === 'neon') {
-                targetEl.style.background = `radial-gradient(circle, ${color} 20%, rgba(10,11,16,0.8) 100%)`;
-                targetEl.style.border = `2px solid ${color}`;
-                targetEl.style.boxShadow = `0 0 15px ${color}`;
-            } else if (settings.targetStyle === 'solid') {
-                targetEl.style.background = color;
-            } else {
-                targetEl.innerHTML = `<div class="w-full h-full rounded-full border-4 border-white flex items-center justify-center"><div class="w-1/2 h-1/2 rounded-full" style="background:${color}"></div></div>`;
+            if (targetStyle === 'neon') {
+                target.className = 'target-neon bg-cyber-cyan text-cyber-cyan border-2 border-white';
+            } else if (targetStyle === 'solid') {
+                target.style.backgroundColor = '#ff007f';
+                target.style.border = '2px solid #ffffff';
+            } else if (targetStyle === 'bullseye') {
+                target.style.backgroundColor = '#f3e600';
+                target.style.border = '6px solid #0a0b10';
+                target.style.boxShadow = '0 0 0 2px #f3e600';
             }
 
-            const targetObj = { id: Date.now() + Math.random(), el: targetEl, x: x, y: y, size: size };
-            activeTargets.push(targetObj);
-            arena.appendChild(targetEl);
-
-            gameState.lastTargetSpawnTime = Date.now();
-            recordReplayEvent('spawn', { x: x, y: y, size: size, id: targetObj.id });
-        }
-
-        function spawnTrackingSphere() {
-            const arena = document.getElementById('arena');
-            if (!arena) return;
-            arena.innerHTML = '';
-            const size = 70;
-            const arenaW = arena.clientWidth;
-            const arenaH = arena.clientHeight;
-
-            const targetEl = document.createElement('div');
-            targetEl.className = 'absolute rounded-full pointer-events-none flex items-center justify-center';
-            targetEl.style.width = size + 'px';
-            targetEl.style.height = size + 'px';
-            targetEl.style.background = 'radial-gradient(circle, #f3e600 30%, rgba(243,230,0,0.2) 100%)';
-            targetEl.style.border = '2px solid #f3e600';
-            targetEl.style.boxShadow = '0 0 20px #f3e600';
-
-            const x = arenaW / 2;
-            const y = arenaH / 2;
-
-            const targetObj = {
-                el: targetEl,
-                x: x,
-                y: y,
-                vx: (Math.random() - 0.5) * 8,
-                vy: (Math.random() - 0.5) * 8,
-                size: size
+            target.onclick = (e) => {
+                e.stopPropagation();
+                handleTargetHit(id, e);
             };
-            activeTargets = [targetObj];
-            arena.appendChild(targetEl);
+
+            arena.appendChild(target);
+            activeTargets.push({ id, x, y, spawnTime: performance.now() });
         }
 
-        function startTrackingLoop() {
-            function loop() {
-                if (!gameState.isRunning || gameState.activeMode !== 'tracking') return;
+        function handleTargetHit(id, event) {
+            if (!isGameRunning || isReplaying) return;
 
-                const arena = document.getElementById('arena');
-                const target = activeTargets[0];
-                if (target && arena) {
-                    const arenaW = arena.clientWidth;
-                    const arenaH = arena.clientHeight;
+            const now = performance.now();
+            const targetIndex = activeTargets.findIndex(t => t.id === id);
+            if (targetIndex !== -1) {
+                const target = activeTargets[targetIndex];
+                const reaction = Math.round(now - target.spawnTime);
+                reactionTimes.push(reaction);
 
-                    target.x += target.vx;
-                    target.y += target.vy;
+                // Log for replay
+                replayLogs.push({ time: timer, type: 'hit', x: target.x, y: target.y });
 
-                    if (target.x - target.size / 2 <= 10 || target.x + target.size / 2 >= arenaW - 10) target.vx *= -1;
-                    if (target.y - target.size / 2 <= 10 || target.y + target.size / 2 >= arenaH - 10) target.vy *= -1;
+                hits++;
+                combo++;
+                if (combo > maxCombo) maxCombo = combo;
 
-                    if (Math.random() < 0.03) {
-                        target.vx += (Math.random() - 0.5) * 3;
-                        target.vy += (Math.random() - 0.5) * 3;
-                    }
+                score += 100 + (combo * 10);
 
-                    target.el.style.left = (target.x - target.size / 2) + 'px';
-                    target.el.style.top = (target.y - target.size / 2) + 'px';
+                // Remove target element
+                const elem = document.getElementById(id);
+                if (elem) elem.remove();
+                activeTargets.splice(targetIndex, 1);
 
-                    const rect = arena.getBoundingClientRect();
-                    const rx = cursorPosition.x - rect.left;
-                    const ry = cursorPosition.y - rect.top;
-
-                    const dist = Math.hypot(rx - target.x, ry - target.y);
-                    gameState.trackingTotalTime += 16;
-                    if (dist <= target.size / 2) {
-                        gameState.trackingInsideTime += 16;
-                        gameState.score += 10;
-                        target.el.style.boxShadow = '0 0 30px #00ff66';
+                // Mode logic
+                if (currentMode === 'gridshot') {
+                    spawnGridshotTarget();
+                } else if (currentMode === 'flick') {
+                    timer--;
+                    if (timer <= 0) {
+                        endGame();
                     } else {
-                        target.el.style.boxShadow = '0 0 15px #f3e600';
-                    }
-                    updateHUD();
-                }
-                gameState.animFrame = requestAnimationFrame(loop);
-            }
-            loop();
-        }
-
-        window.handleArenaClick = function(e) {
-            if (!gameState.isRunning || isReplaying) return;
-            const arena = document.getElementById('arena');
-            if (!arena) return;
-            const rect = arena.getBoundingClientRect();
-            const clickX = e.clientX - rect.left;
-            const clickY = e.clientY - rect.top;
-
-            processArenaShoot(clickX, clickY);
-        }
-
-        function processArenaShoot(x, y) {
-            if (gameState.activeMode === 'tracking') return;
-
-            gameState.totalClicks++;
-            let hitIndex = -1;
-
-            for (let i = 0; i < activeTargets.length; i++) {
-                const t = activeTargets[i];
-                const dist = Math.hypot(x - t.x, y - t.y);
-                if (dist <= t.size / 2) {
-                    hitIndex = i;
-                    break;
-                }
-            }
-
-            if (hitIndex !== -1) {
-                const hitTarget = activeTargets[hitIndex];
-                soundEngine.playPop();
-                gameState.hits++;
-                gameState.score += 100 + (gameState.combo * 10);
-                gameState.combo++;
-                if (gameState.combo > gameState.maxCombo) gameState.maxCombo = gameState.combo;
-
-                const reactionTime = Date.now() - gameState.lastTargetSpawnTime;
-                gameState.reactionTimes.push(reactionTime);
-
-                recordReplayEvent('hit', { x: x, y: y, targetId: hitTarget.id });
-
-                hitTarget.el.remove();
-                activeTargets.splice(hitIndex, 1);
-
-                if (gameState.activeMode === 'gridshot') {
-                    spawnTarget();
-                } else if (gameState.activeMode === 'flick') {
-                    gameState.flickTargetsLeft--;
-                    if (gameState.flickTargetsLeft > 0) {
-                        spawnTarget();
-                    } else {
-                        endGameSession();
+                        spawnSingleFlickTarget();
                     }
                 }
-            } else {
-                soundEngine.playMiss();
-                gameState.misses++;
-                gameState.combo = 0;
-                recordReplayEvent('miss', { x: x, y: y });
             }
+        }
+
+        function handleArenaClick(e) {
+            if (!isGameRunning || isReplaying || currentMode === 'tracking') return;
+            
+            // Missed shot
+            misses++;
+            combo = 0;
+            replayLogs.push({ time: timer, type: 'miss', x: e.offsetX, y: e.offsetY });
             updateHUD();
         }
 
-        function endGameSession() {
-            gameState.isRunning = false;
-            if (gameState.timerInterval) clearInterval(gameState.timerInterval);
-            if (gameState.animFrame) cancelAnimationFrame(gameState.animFrame);
+        function handleArenaMouseMove(e) {
+            if (isGameRunning && currentMode === 'tracking' && !isReplaying) {
+                const arena = document.getElementById('arena').getBoundingClientRect();
+                const mouseX = e.clientX - arena.left;
+                const mouseY = e.clientY - arena.top;
 
-            let finalScore = gameState.score;
-            let avgReaction = 0;
+                const dx = mouseX - trackingTarget.x;
+                const dy = mouseY - trackingTarget.y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
 
-            if (gameState.reactionTimes.length > 0) {
-                avgReaction = Math.round(gameState.reactionTimes.reduce((a, b) => a + b, 0) / gameState.reactionTimes.length);
+                if (dist <= trackingTarget.radius) {
+                    score += 15;
+                    hits++;
+                    combo++;
+                    if (combo > maxCombo) maxCombo = combo;
+                } else {
+                    misses++;
+                    combo = 0;
+                }
             }
-
-            if (gameState.activeMode === 'flick') {
-                finalScore = avgReaction;
-            }
-
-            let isNewHs = false;
-            if (gameState.activeMode === 'gridshot' && finalScore > localHighScores.gridshot) {
-                localHighScores.gridshot = finalScore;
-                isNewHs = true;
-            } else if (gameState.activeMode === 'flick' && (localHighScores.flick === 0 || finalScore < localHighScores.flick)) {
-                localHighScores.flick = finalScore;
-                isNewHs = true;
-            } else if (gameState.activeMode === 'tracking' && finalScore > localHighScores.tracking) {
-                localHighScores.tracking = finalScore;
-                isNewHs = true;
-            }
-
-            saveLocalScores();
-            publishScoresToGlobal();
-
-            setText('res-score', gameState.activeMode === 'flick' ? `${finalScore} ms` : finalScore);
-            const hudAccEl = document.getElementById('hud-accuracy');
-            setText('res-accuracy', hudAccEl ? hudAccEl.innerText : '100%');
-            setText('res-reaction', avgReaction > 0 ? `${avgReaction} ms` : 'N/A');
-            setText('res-hits-misses', `${gameState.hits} / ${gameState.misses}`);
-            setText('res-combo', `${gameState.maxCombo}x`);
-            setText('results-mode-subtitle', `${gameState.activeMode ? gameState.activeMode.toUpperCase() : ''} SESSION RESULT`);
-
-            const newHsBadge = document.getElementById('res-new-highscore');
-            if (newHsBadge) {
-                if (isNewHs) newHsBadge.classList.remove('hidden');
-                else newHsBadge.classList.add('hidden');
-            }
-
-            const gameView = document.getElementById('game-view');
-            const resultsView = document.getElementById('results-view');
-            if (gameView) gameView.classList.add('hidden');
-            if (resultsView) resultsView.classList.remove('hidden');
         }
 
-        window.startReplayPlayback = function() {
-            isReplaying = true;
-            const resultsView = document.getElementById('results-view');
-            const gameView = document.getElementById('game-view');
-            if (resultsView) resultsView.classList.add('hidden');
-            if (gameView) gameView.classList.remove('hidden');
+        // --- GRIDSHOT PROTOCOL ---
+        function spawnGridshotBatch() {
+            for (let i = 0; i < 3; i++) {
+                spawnGridshotTarget();
+            }
+        }
+
+        function spawnGridshotTarget() {
+            const arena = document.getElementById('arena');
+            const w = arena.clientWidth - 100;
+            const h = arena.clientHeight - 100;
+
+            const x = Math.floor(Math.random() * w) + 50;
+            const y = Math.floor(Math.random() * h) + 50;
+            const id = 'target-' + Math.random().toString(36).substr(2, 9);
+
+            createTargetElement(id, x, y);
+        }
+
+        // --- FLICK SHOT PROTOCOL ---
+        function spawnSingleFlickTarget() {
+            const arena = document.getElementById('arena');
+            const w = arena.clientWidth - 120;
+            const h = arena.clientHeight - 120;
+
+            const x = Math.floor(Math.random() * w) + 60;
+            const y = Math.floor(Math.random() * h) + 60;
+            const id = 'flick-' + Math.random().toString(36).substr(2, 9);
+
+            createTargetElement(id, x, y);
+        }
+
+        // --- TRACKING SPHERE PROTOCOL ---
+        function initTrackingTarget() {
+            const arena = document.getElementById('arena');
+            trackingTarget.x = arena.clientWidth / 2;
+            trackingTarget.y = arena.clientHeight / 2;
+            trackingTarget.vx = 4;
+            trackingTarget.vy = 3;
+
+            const sphere = document.createElement('div');
+            sphere.id = 'tracking-sphere';
+            sphere.style.position = 'absolute';
+            sphere.style.width = `${trackingTarget.radius * 2}px`;
+            sphere.style.height = `${trackingTarget.radius * 2}px`;
+            sphere.style.borderRadius = '50%';
+            sphere.style.transform = 'translate(-50%, -50%)';
+            sphere.className = 'bg-cyber-yellow border-2 border-white shadow-lg shadow-cyber-yellow/50';
+            arena.appendChild(sphere);
+        }
+
+        function updateTrackingPhysics() {
+            const arena = document.getElementById('arena');
+            const sphere = document.getElementById('tracking-sphere');
+            if (!sphere) return;
+
+            trackingTarget.x += trackingTarget.vx;
+            trackingTarget.y += trackingTarget.vy;
+
+            const r = trackingTarget.radius;
+            if (trackingTarget.x - r < 0 || trackingTarget.x + r > arena.clientWidth) {
+                trackingTarget.vx *= -1;
+            }
+            if (trackingTarget.y - r < 0 || trackingTarget.y + r > arena.clientHeight) {
+                trackingTarget.vy *= -1;
+            }
+
+            sphere.style.left = `${trackingTarget.x}px`;
+            sphere.style.top = `${trackingTarget.y}px`;
+        }
+
+        // --- DUAL KEYBIND SHOOT TRIGGERS ---
+        document.addEventListener('keydown', (e) => {
+            if (capturingSlot !== null) {
+                if (capturingSlot === 1) {
+                    primaryKeybind = e.key;
+                    document.getElementById('val-keybind-display-1').innerText = e.key === ' ' ? 'Spacebar' : e.key.toUpperCase();
+                } else if (capturingSlot === 2) {
+                    secondaryKeybind = e.key;
+                    document.getElementById('val-keybind-display-2').innerText = e.key === ' ' ? 'Spacebar' : e.key.toUpperCase();
+                }
+                capturingSlot = null;
+                return;
+            }
+
+            if (isGameRunning && (e.key === primaryKeybind || (secondaryKeybind && e.key === secondaryKeybind))) {
+                // Find element under crosshair
+                const ch = document.getElementById('custom-crosshair');
+                const rect = ch.getBoundingClientRect();
+                const targetElem = document.elementFromPoint(rect.left, rect.top);
+
+                if (targetElem && targetElem.id && (targetElem.id.startsWith('target-') || targetElem.id.startsWith('flick-'))) {
+                    handleTargetHit(targetElem.id, e);
+                } else {
+                    const arenaRect = document.getElementById('arena').getBoundingClientRect();
+                    handleArenaClick({ offsetX: rect.left - arenaRect.left, offsetY: rect.top - arenaRect.top });
+                }
+            }
+        });
+
+        // --- GAME OVER & PERFORMANCE RESULTS ---
+        function endGame() {
+            isGameRunning = false;
+            clearInterval(gameLoopTimer);
 
             const arena = document.getElementById('arena');
-            if (!arena) return;
             arena.innerHTML = '';
 
-            const replayLabel = document.createElement('div');
-            replayLabel.className = 'absolute top-3 left-4 px-3 py-1 rounded bg-cyber-yellow/20 border border-cyber-yellow text-cyber-yellow text-xs font-cyber font-bold animate-pulse z-30 pointer-events-none';
-            replayLabel.innerText = 'REPLAY PLAYBACK IN PROGRESS...';
-            arena.appendChild(replayLabel);
+            document.getElementById('game-view').classList.add('hidden');
+            document.getElementById('results-view').classList.remove('hidden');
 
-            let replayTargets = {};
-            const events = [...gameState.sessionReplayData];
-            if (events.length === 0) return;
+            const totalShots = hits + misses;
+            const accuracyVal = totalShots > 0 ? Math.round((hits / totalShots) * 100) : 0;
+            const avgReactionVal = reactionTimes.length > 0 ? Math.round(reactionTimes.reduce((a, b) => a + b, 0) / reactionTimes.length) : 0;
 
-            let startTime = Date.now();
-
-            function replayStep() {
-                const elapsed = Date.now() - startTime;
-
-                while (events.length > 0 && events[0].time <= elapsed) {
-                    const ev = events.shift();
-                    
-                    if (ev.type === 'spawn') {
-                        const targetEl = document.createElement('div');
-                        targetEl.className = 'absolute rounded-full flex items-center justify-center';
-                        targetEl.style.width = ev.data.size + 'px';
-                        targetEl.style.height = ev.data.size + 'px';
-                        targetEl.style.left = (ev.data.x - ev.data.size / 2) + 'px';
-                        targetEl.style.top = (ev.data.y - ev.data.size / 2) + 'px';
-                        targetEl.style.background = 'radial-gradient(circle, #00f0ff 20%, rgba(10,11,16,0.8) 100%)';
-                        targetEl.style.border = '2px solid #00f0ff';
-
-                        replayTargets[ev.data.id] = targetEl;
-                        arena.appendChild(targetEl);
-                    } else if (ev.type === 'move') {
-                        updateCustomCrosshairPosition(ev.data.x + arena.getBoundingClientRect().left, ev.data.y + arena.getBoundingClientRect().top);
-                    } else if (ev.type === 'hit') {
-                        if (replayTargets[ev.data.targetId]) {
-                            replayTargets[ev.data.targetId].remove();
-                            delete replayTargets[ev.data.targetId];
-                        }
-                        showShotMarker(ev.data.x, ev.data.y, '#00ff66');
-                    } else if (ev.type === 'miss') {
-                        showShotMarker(ev.data.x, ev.data.y, '#ff007f');
-                    }
-                }
-
-                if (events.length > 0) {
-                    requestAnimationFrame(replayStep);
-                } else {
-                    setTimeout(() => {
-                        isReplaying = false;
-                        if (gameView) gameView.classList.add('hidden');
-                        if (resultsView) resultsView.classList.remove('hidden');
-                    }, 1000);
-                }
+            let finalScore = score;
+            if (currentMode === 'flick') {
+                finalScore = avgReactionVal; // lower latency is better
             }
-            requestAnimationFrame(replayStep);
+
+            document.getElementById('res-score').innerText = Math.floor(score);
+            document.getElementById('res-accuracy').innerText = `${accuracyVal}%`;
+            document.getElementById('res-reaction').innerText = `${avgReactionVal} ms`;
+            document.getElementById('res-hits-misses').innerText = `${hits} / ${misses}`;
+            document.getElementById('res-combo').innerText = `${maxCombo}x`;
+            document.getElementById('results-mode-subtitle').innerText = `${currentMode} Protocol`;
+
+            // Check High Scores
+            let newHighscore = false;
+            if (currentMode === 'gridshot' && score > highscores.gridshot) {
+                highscores.gridshot = Math.floor(score);
+                localStorage.setItem('hs_gridshot', highscores.gridshot);
+                newHighscore = true;
+            } else if (currentMode === 'flick' && (avgReactionVal < highscores.flick || highscores.flick === 9999) && avgReactionVal > 0) {
+                highscores.flick = avgReactionVal;
+                localStorage.setItem('hs_flick', highscores.flick);
+                newHighscore = true;
+            } else if (currentMode === 'tracking' && score > highscores.tracking) {
+                highscores.tracking = Math.floor(score);
+                localStorage.setItem('hs_tracking', highscores.tracking);
+                newHighscore = true;
+            }
+
+            document.getElementById('res-new-highscore').style.display = newHighscore ? 'inline-block' : 'none';
         }
 
-        function showShotMarker(x, y, color) {
+        function restartCurrentGame() {
+            selectGameMode(currentMode);
+        }
+
+        // --- REPLAY PLAYBACK SYSTEM ---
+        function startReplayPlayback() {
+            document.getElementById('results-view').classList.add('hidden');
+            document.getElementById('game-view').classList.remove('hidden');
+
             const arena = document.getElementById('arena');
-            if (!arena) return;
-            const marker = document.createElement('div');
-            marker.className = 'absolute w-4 h-4 rounded-full -translate-x-1/2 -translate-y-1/2 pointer-events-none animate-ping';
-            marker.style.left = x + 'px';
-            marker.style.top = y + 'px';
-            marker.style.backgroundColor = color;
-            arena.appendChild(marker);
-            setTimeout(() => marker.remove(), 400);
+            arena.innerHTML = `<div class="absolute top-4 left-4 px-3 py-1 bg-cyber-yellow/20 border border-cyber-yellow text-cyber-yellow rounded font-cyber text-xs">REPLAY PLAYBACK MODE</div>`;
+
+            isReplaying = true;
+            let logIndex = 0;
+
+            const replayTimer = setInterval(() => {
+                if (logIndex >= replayLogs.length) {
+                    clearInterval(replayTimer);
+                    setTimeout(() => {
+                        document.getElementById('game-view').classList.add('hidden');
+                        document.getElementById('results-view').classList.remove('hidden');
+                    }, 1000);
+                    return;
+                }
+
+                const log = replayLogs[logIndex];
+                const dot = document.createElement('div');
+                dot.style.position = 'absolute';
+                dot.style.left = `${log.x}px`;
+                dot.style.top = `${log.y}px`;
+                dot.style.width = '12px';
+                dot.style.height = '12px';
+                dot.style.borderRadius = '50%';
+                dot.style.backgroundColor = log.type === 'hit' ? '#00ff66' : '#ff007f';
+                dot.style.transform = 'translate(-50%, -50%)';
+                arena.appendChild(dot);
+
+                logIndex++;
+            }, 150);
         }
 
-        // Local Storage Helpers
-        function saveLocalScores() {
-            localStorage.setItem('nicks_aim_hs', JSON.stringify(localHighScores));
-            updateScoreDisplays();
-        }
+        // --- MODALS & SETTINGS LOGIC ---
+        function openSettingsModal() { document.getElementById('settings-modal').classList.remove('hidden'); }
+        function closeSettingsModal() { document.getElementById('settings-modal').classList.add('hidden'); }
 
-        function loadLocalScores() {
-            const data = localStorage.getItem('nicks_aim_hs');
-            if (data) {
-                try {
-                    localHighScores = JSON.parse(data);
-                } catch(e) {}
+        function openStatsModal() {
+            updateHomeStatsDisplay();
+            document.getElementById('stats-modal').classList.remove('hidden');
+        }
+        function closeStatsModal() { document.getElementById('stats-modal').classList.add('hidden'); }
+
+        function openWorldRecordsModal() { document.getElementById('world-records-modal').classList.remove('hidden'); }
+        function closeWorldRecordsModal() { document.getElementById('world-records-modal').classList.add('hidden'); }
+
+        function startKeybindCapture(slot) {
+            capturingSlot = slot;
+            if (slot === 1) {
+                document.getElementById('val-keybind-display-1').innerText = 'PRESS KEY...';
+            } else {
+                document.getElementById('val-keybind-display-2').innerText = 'PRESS KEY...';
             }
-            updateScoreDisplays();
         }
 
-        function updateScoreDisplays() {
-            setText('home-hs-gridshot', localHighScores.gridshot);
-            setText('modal-hs-gridshot', localHighScores.gridshot);
-
-            setText('home-hs-flick', localHighScores.flick > 0 ? `${localHighScores.flick} ms` : '0 ms');
-            setText('modal-hs-flick', localHighScores.flick > 0 ? `${localHighScores.flick} ms` : '0 ms');
-
-            setText('home-hs-tracking', localHighScores.tracking);
-            setText('modal-hs-tracking', localHighScores.tracking);
+        function resetKeybinds() {
+            primaryKeybind = ' ';
+            secondaryKeybind = null;
+            document.getElementById('val-keybind-display-1').innerText = 'Spacebar';
+            document.getElementById('val-keybind-display-2').innerText = 'None (Unassigned)';
         }
 
-        window.clearLocalScores = function() {
-            localHighScores = { gridshot: 0, flick: 0, tracking: 0 };
-            saveLocalScores();
-            closeStatsModal();
+        function setTargetSize(size) {
+            if (size === 'small') { targetSize = 40; document.getElementById('val-target-size').innerText = 'Small (40px)'; }
+            if (size === 'medium') { targetSize = 60; document.getElementById('val-target-size').innerText = 'Medium (60px)'; }
+            if (size === 'large') { targetSize = 80; document.getElementById('val-target-size').innerText = 'Large (80px)'; }
         }
 
-        // Navigation Modals & General UI Controls
-        window.openSettingsModal = function() {
-            const modal = document.getElementById('settings-modal');
-            if (modal) modal.classList.remove('hidden');
-        }
-        window.closeSettingsModal = function() {
-            const modal = document.getElementById('settings-modal');
-            if (modal) modal.classList.add('hidden');
-        }
-        window.openStatsModal = function() {
-            const modal = document.getElementById('stats-modal');
-            if (modal) modal.classList.remove('hidden');
-        }
-        window.closeStatsModal = function() {
-            const modal = document.getElementById('stats-modal');
-            if (modal) modal.classList.add('hidden');
-        }
-        window.quitGame = function() {
-            gameState.isRunning = false;
-            if (gameState.timerInterval) clearInterval(gameState.timerInterval);
-            if (gameState.animFrame) cancelAnimationFrame(gameState.animFrame);
-            returnToMenu();
-        }
-        window.restartCurrentGame = function() {
-            selectGameMode(gameState.activeMode);
-        }
-        window.returnToMenu = function() {
-            const gameView = document.getElementById('game-view');
-            const resultsView = document.getElementById('results-view');
-            const menuView = document.getElementById('menu-view');
-
-            if (gameView) gameView.classList.add('hidden');
-            if (resultsView) resultsView.classList.add('hidden');
-            if (menuView) menuView.classList.remove('hidden');
+        function setTargetStyle(style) {
+            targetStyle = style;
+            document.getElementById('val-target-style').innerText = style.toUpperCase();
         }
 
-        window.addEventListener('load', () => {
-            initAuth();
-            loadLocalScores();
-            renderCrosshairSVG();
-        });
+        function setCrosshairType(type) {
+            crosshairType = type;
+            document.getElementById('val-crosshair').innerText = type.toUpperCase();
+            updateCrosshairStyle();
+        }
+
+        function setCrosshairColor(color) {
+            crosshairColor = color;
+            updateCrosshairStyle();
+        }
+
+        function clearLocalScores() {
+            if (confirm('Reset all personal local high scores?')) {
+                localStorage.removeItem('hs_gridshot');
+                localStorage.removeItem('hs_flick');
+                localStorage.removeItem('hs_tracking');
+                highscores = { gridshot: 0, flick: 9999, tracking: 0 };
+                updateHomeStatsDisplay();
+            }
+        }
+
+        // --- GLOBAL LEADERBOARDS ---
+        const dummyLeaderboards = {
+            gridshot: [
+                { rank: 1, user: 'Viper_Aero', score: '94,200', acc: '98%' },
+                { rank: 2, user: 'Ghost_FPS', score: '88,900', acc: '95%' },
+                { rank: 3, user: 'Nick_Pro', score: '82,400', acc: '94%' },
+                { rank: 4, user: 'PixelHunter', score: '76,100', acc: '91%' }
+            ],
+            flick: [
+                { rank: 1, user: 'SwiftFlick', score: '142 ms', acc: '100%' },
+                { rank: 2, user: 'Viper_Aero', score: '158 ms', acc: '96%' },
+                { rank: 3, user: 'ReflexGod', score: '165 ms', acc: '92%' }
+            ],
+            tracking: [
+                { rank: 1, user: 'SmoothOperator', score: '45,800', acc: '99%' },
+                { rank: 2, user: 'Nick_Pro', score: '39,200', acc: '92%' }
+            ]
+        };
+
+        function switchLeaderboardTab(mode) {
+            renderLeaderboard(mode);
+        }
+
+        function renderLeaderboard(mode) {
+            const list = document.getElementById('leaderboard-list');
+            list.innerHTML = '';
+
+            const data = dummyLeaderboards[mode] || [];
+            data.forEach(item => {
+                const row = document.createElement('div');
+                row.className = 'cyber-card rounded-xl p-3 flex items-center justify-between text-xs';
+                row.innerHTML = `
+                    <div class="flex items-center space-x-3">
+                        <span class="font-cyber font-bold text-cyber-yellow w-6">#${item.rank}</span>
+                        <span class="font-semibold text-white">${item.user}</span>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <span class="text-gray-400">Acc: ${item.acc}</span>
+                        <span class="font-cyber font-bold text-cyber-cyan">${item.score}</span>
+                    </div>`;
+                list.appendChild(row);
+            });
+        }
     </script>
 </body>
 </html>
